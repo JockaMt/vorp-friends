@@ -1,0 +1,129 @@
+.postInput {
+    display: flex;
+    align-items: start;
+    margin-bottom: 1em;
+    gap: 1em;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--gray-alpha-200);
+}
+
+.postTitle {
+    font-size: 1em;
+    font-weight: 500;
+    margin-bottom: 0.5em;
+    color: var(--foreground);
+}
+
+.postInputContainer {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    width: 100%;
+    gap: 0.5em;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--gray-alpha-200);
+}
+
+.charCount {
+    font-size: 0.8em;
+    color: var(--gray-alpha-300);
+}
+
+.postActions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5em;
+}
+
+.submitButton {
+    background-color: var(--accent-color);
+    color: var(--background);
+    border: none;
+    padding: 0.5em 1em;
+    border-radius: var(--rounded-md);
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.submitButton:hover {
+    background-color: var(--accent-color-hover);
+}
+
+.iconActions {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.iconButton {
+    background: none;
+    border: none;
+    color: var(--gray-alpha-400);
+    font-size: 1em;
+    cursor: pointer;
+    padding: 0.3em;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.iconButton:hover {
+    background-color: var(--gray-alpha-100);
+    color: var(--foreground);
+}
+
+.submitActions {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.postEditable {
+    position: relative; /* ADICIONADO: permite placeholder absoluto */
+    flex: 1 1 auto;
+    min-width: 0;
+    box-sizing: border-box;
+    border: 1px solid var(--gray-alpha-200);
+    border-radius: var(--rounded-md);
+    padding: 1em;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+    max-height: 12em;
+    min-height: 4em;
+    overflow: auto;
+
+}
+
+.postEditable:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+.postEditable.empty::before {
+    content: attr(data-placeholder);
+    position: absolute;
+    left: 1em;
+    top: 1em;
+    right: 1em;
+    color: var(--gray-alpha-300);
+    font-style: italic;
+    pointer-events: none;
+    white-space: pre-wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.postEditable:empty::before {
+    content: attr(data-placeholder);
+    position: absolute;
+    left: 1em;
+    top: 1em;
+    right: 1em;
+    color: var(--gray-alpha-300);
+    font-style: italic;
+    pointer-events: none;
+}

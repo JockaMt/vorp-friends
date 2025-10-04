@@ -1,0 +1,101 @@
+.postContainer {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background-light); /* Um pouco mais claro que o fundo principal */
+    border: 1px solid var(--gray-alpha-200);
+    border-radius: var(--rounded-md);
+    padding: 1.2em;
+    width: 100%;
+    margin-top: 1.5em;
+}
+
+.postHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.8em;
+    margin-bottom: 1em;
+}
+
+.avatar {
+    color: var(--gray-alpha-300);
+}
+
+.headerInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.ownerName {
+    font-weight: 600;
+    font-size: 1em;
+    color: var(--foreground);
+}
+
+.ownerInfo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.3em;
+}
+
+.postDate {
+    font-size: 0.8em;
+    color: var(--gray-alpha-500);
+}
+
+.postText {
+    margin-bottom: 1em;
+    line-height: 1.5;
+    color: var(--foreground-secondary);
+    white-space: pre-wrap; /* Preserva quebras de linha e espaços */
+}
+
+.mediaContainer {
+    margin-top: 0.5em;
+    border-radius: var(--rounded-md);
+    overflow: hidden;
+    max-height: 400px; /* Limita a altura máxima da imagem */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1em;
+    background-color: var(--gray-alpha-100); /* Cor de fundo enquanto a imagem carrega */
+}
+
+.postImage {
+    width: 100%;
+    height: auto;
+    object-fit: cover; /* Cobre o container, cortando se necessário */
+}
+
+.postVideo {
+    width: 100%;
+    border-radius: var(--rounded-md);
+}
+
+.postActions {
+    display: flex;
+    border-top: 1px solid var(--gray-alpha-200);
+    padding-top: 0.5em;
+}
+
+.postActionButton {
+    background: none;
+    border: none;
+    color: var(--gray-alpha-500);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.6em;
+    border-radius: var(--rounded-md);
+    font-size: 0.9em;
+    font-weight: 500;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.postActionButton:hover {
+    background-color: var(--gray-alpha-100);
+    color: var(--foreground);
+}

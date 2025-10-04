@@ -1,0 +1,61 @@
+.customSelect {
+    position: relative;
+    width: 120px; /* Ajuste a largura conforme necessário */
+}
+
+.selectButton {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0.5em 0.8em;
+    background-color: var(--background);
+    border: 1px solid var(--gray-alpha-200);
+    border-radius: var(--rounded-md);
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.9em;
+    color: var(--foreground);
+    gap: 0.5em;
+}
+
+.selectButton:hover {
+    background-color: var(--gray-alpha-200);
+}
+
+.selectedIcon {
+    display: flex;
+    align-items: center;
+}
+
+.optionsList {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--background);
+    border: 1px solid var(--gray-alpha-200);
+    border-radius: var(--rounded-md);
+    list-style: none;
+    margin-top: 0.3em;
+    z-index: 10;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    padding: 0.4em 0.8em;
+    cursor: pointer;
+    border-radius: var(--rounded-sm);
+    gap: 0.5em;
+}
+
+.option:hover {
+    background-color: var(--gray-alpha-100);
+}
+
+.optionIcon {
+    display: flex;
+    align-items: center;
+    color: var(--gray-alpha-400);
+}

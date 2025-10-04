@@ -1,0 +1,248 @@
+.aside {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--gray-alpha-200);
+    border-radius: var(--rounded-md);
+    padding: 1em;
+    box-sizing: border-box;
+    height: fit-content;
+    font-family: var(--font-geist-sans);
+}
+
+/* Profile styles */
+.profileImageContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid var(--gray-alpha-200);
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    /* keep layout box square but don't rely on this for pointer shape */
+}
+
+/* limit hover to the visible circular area using clip-path */
+.profileImageWrapper {
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+    /* make the pointer target follow the circular shape */
+    -webkit-clip-path: circle(50% at 50% 50%);
+    clip-path: circle(50% at 50% 50%);
+}
+
+.profileImageWrapper:hover .editPhoto {
+    display: flex;
+}
+
+.profileImage {
+    display: flex;
+    position: relative;
+    flex: 0 1 8em;
+    width: 10em;
+    height: 10em;
+    background-color: var(--gray-alpha-100);
+    border: 1px solid var(--gray-alpha-200);
+    border-radius: 50%;
+    object-fit: cover; /* if you use an <img> inside, ensure it fills the circle */
+}
+
+.editPhoto {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    font-size: 0.8em;
+    color: var(--accent-color);
+    cursor: pointer;
+    text-decoration: underline;
+    border-radius: 50%;
+    pointer-events: auto; /* allow clicks on the overlay */
+}
+
+.profileImagePlaceholder {
+    display: flex;
+    flex: 0 1 10em;
+    width: 10em;
+    height: 10em;
+    color: var(--gray-alpha-300);
+}
+
+.profileName {
+    margin: 0.8em 0 0.5em 0;
+    font-size: 1em;
+    color: var(--foreground);
+}
+
+.profileLink {
+    text-decoration: none;
+}
+
+.profileName:hover {
+    color: var(--accent-color);
+}
+
+.profileStatus {
+    font-size: 0.9em;
+    margin: 0.5em 0 1em 0;
+    color: var(--gray-alpha-500);
+}
+
+.statusSelect {
+    padding: 0.2em;
+    border: 1px solid var(--gray-alpha-200);
+    border-radius: var(--rounded-md);
+    background-color: var(--background);
+    color: var(--foreground);
+    cursor: pointer;
+    font-size: 0.9em;
+    outline: none;
+}
+
+.statusOption {
+    background-color: var(--background);
+    color: var(--foreground);
+}
+
+.statusIndicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-left: 0.5em;
+    vertical-align: middle;
+    background-color: var(--gray-alpha-300);
+}
+
+/* Cores por data-status (atributo) */
+.statusIndicator[data-status="online"],
+.statusIndicator.online {
+    background-color: var(--online-color);
+}
+
+.statusIndicator[data-status="offline"],
+.statusIndicator.offline {
+    background-color: var(--offline-color, #95a5a6);
+}
+
+.statusIndicator[data-status="busy"] {
+    background-color: var(--busy-color, #e74c3c);
+}
+
+.statusIndicator[data-status="away"] {
+    background-color: var(--away-color, #f39c12);
+}
+
+
+.profileActions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    /* Alinha botões à esquerda */
+    gap: 0.5em;
+    width: 100%;
+    transition: all 0.5s ease;
+}
+
+.profileActions button {
+    width: 100%;
+    padding: 0.5em;
+    font-size: 0.9em;
+    border: 1px solid var(--gray-alpha-200);
+    border-radius: var(--rounded-md);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.profileActions button:hover:first-child {
+    background-color: var(--accent-color-hover);
+}
+
+.profileActions button:hover {
+    background-color: var(--gray-alpha-100);
+}
+
+.profileStats {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    flex: 1 0 100%;
+    padding: 1em 0.5em 0 0.5em;
+    gap: 1em;
+    font-size: small;
+    color: var(--foreground);
+}
+
+.statsItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2em;
+    text-decoration: none;
+    color: var(--foreground);
+    transition: color 0.2s ease;
+}
+
+.statsItem:hover {
+    color: var(--accent-color);
+}
+
+.statsIcon {
+    margin-right: 0.5em;
+    font-size: 1.2em;
+}
+
+/* Friend Section Styles */
+.friendSection {
+    border-top: 1px solid var(--gray-alpha-200);
+    padding-top: 1em;
+    margin-top: 1em;
+}
+
+.sectionTitle {
+    margin: 0 0 0.8em 0;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+.friendList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
+}
+
+.friendItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.friendName {
+    font-size: 0.9em;
+}
+
+.statusIndicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.online {
+    background-color: #2ecc71;
+    /* Verde para online */
+}
+
+.offline {
+    background-color: #95a5a6;
+    /* Cinza para offline */
+}
