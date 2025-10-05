@@ -1,0 +1,257 @@
+.chatShell {
+    display: flex;
+    gap: 1rem;
+    border: 1px solid var(--gray-alpha-200);
+    border-radius: 0.5em 0.5em 0 0;
+    overflow: hidden;
+    background: var(--background);
+    height: 360px;
+}
+
+.friendsScreen {
+    width: 280px;
+    background: var(--background-2);
+    /* make the screen layout a column so header + list stack and the list can flex */
+    display: flex;
+    flex-direction: column;
+}
+
+.friendsList {
+    list-style: none;
+    margin: 0;
+    /* allow the list to take remaining vertical space and scroll if needed */
+    padding: 0.5rem 0.5rem 0.5rem; /* extra bottom padding so last item isn't flush to the edge */
+    flex: 1 1 auto;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.hideFriends {
+    width: 0 !important;
+    opacity: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.friendsHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+    padding-left: 0.8rem;
+    color: white;
+    background-color: var(--accent-color);
+}
+
+.friendItem {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.45rem;
+    border-radius: var(--rounded-sm);
+    cursor: pointer;
+}
+
+.friendItem:hover {
+    background: var(--gray-alpha-100);
+}
+
+.statusDot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+}
+
+.online {
+    background: var(--online-color);
+}
+
+.offline {
+    background: var(--offline-color, #95a5a6);
+}
+
+.friendName {
+    font-size: 0.95em;
+}
+
+.chatWindow {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Floating widget + button */
+.chatWidget {
+    position: fixed;
+    right: 1.5rem;
+    bottom: 0rem;
+    z-index: 1200;
+    display: flex;
+    align-items: flex-end;
+}
+
+.floatingButton {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1.5rem;
+    border-radius: 1em;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    cursor: pointer;
+    z-index: 1300; /* ensure it's above other elements */
+}
+
+.chatShell {
+    margin-left: 0.6rem;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+}
+
+.chatHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--accent-color);
+    color: white;
+    border-bottom: 1px solid var(--gray-alpha-200);
+}
+
+.chatHeaderLeft {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.backButton {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 0.8rem 0.8rem;
+}
+
+.backButton:hover {
+    background: var(--gray-alpha-100);
+}
+
+.minimizeButton {
+    margin-left: 0.6rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 0.8rem 0.8rem;
+}
+
+.minimizeButton:hover {
+    background: var(--gray-alpha-100);
+}
+
+.chatTitle {
+    font-weight: 600;
+}
+
+.chatMeta {
+    font-size: 0.85em;
+    color: var(--gray-alpha-500);
+}
+
+.messages {
+    padding: 0.8rem;
+    flex: 1 1 auto;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.02) 100%);
+}
+
+.emptyConversation {
+    display: none;
+}
+
+.messageRow {
+    display: flex;
+}
+
+.me {
+    justify-content: flex-end;
+}
+
+.friend {
+    justify-content: flex-start;
+}
+
+.bubble {
+    max-width: 65%;
+    background: var(--gray-alpha-100);
+    color: var(--foreground);
+    padding: 0.6rem 0.8rem;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+
+.me .bubble {
+    background: var(--accent-color);
+    color: white;
+}
+
+.messageText {
+    white-space: pre-wrap;
+}
+
+.messageTime {
+    font-size: 0.75em;
+    color: var(--gray-alpha-500);
+    margin-top: 0.4rem;
+    text-align: right;
+}
+
+.chatInputRow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-top: 1px solid var(--gray-alpha-200);
+}
+
+.iconButton {
+    background: none;
+    border: none;
+    padding: 0.4rem;
+    cursor: pointer;
+    color: var(--gray-alpha-500);
+}
+
+.inputWrapper {
+    flex: 1 1 auto;
+}
+
+.input {
+    min-height: 36px;
+    border: 1px solid var(--gray-alpha-200);
+    padding: 0.5rem;
+    border-radius: 8px;
+    outline: none;
+}
+
+.input[contenteditable][data-placeholder]:empty:before {
+    content: attr(data-placeholder);
+    color: var(--gray-alpha-400);
+}
+
+.sendButton {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 0.5rem 0.7rem;
+    border-radius: 8px;
+    cursor: pointer;
+}

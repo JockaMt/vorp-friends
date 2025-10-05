@@ -57,7 +57,7 @@ export function Post(props: PostType) {
                 <div className={styles.headerInfo}>
                     <div className={styles.ownerInfo}>
                         <div className={styles.ownerName}>{owner}</div>
-                        {location && <div className={styles.location}> - <FaLocationDot size={12} /> {location}</div>}
+                        {location && <div className={styles.location}> – <FaLocationDot size={12} /> {location}</div>}
                     </div>
                     <div className={styles.postDate}>{formatTimeAgo(date)}</div>
                 </div>

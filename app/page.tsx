@@ -5,10 +5,12 @@ import { ProfileSidebar } from "@/components/ProfileSidebar";
 import { CustomSelect } from "@/components/CustomSelect";
 import { FaUserFriends } from "react-icons/fa";
 import { FaGlobe } from "react-icons/fa6";
+import { ChatComponent } from "@/components/ChatComponent";
 
 export default function Home() {
   return (
     <div className={styles.page}>
+      <ChatComponent />
       <div className={styles.mainContent}>
         <ProfileSidebar imageUrl="https://avatars.githubusercontent.com/u/74666954?v=4" />
         <main className={styles.content}>
