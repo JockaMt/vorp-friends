@@ -1,6 +1,6 @@
 .postInput {
     display: flex;
-    align-items: start;
+    align-items: flex-start;
     margin-bottom: 1em;
     gap: 1em;
     padding-bottom: 1em;

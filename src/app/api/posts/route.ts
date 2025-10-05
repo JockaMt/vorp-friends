@@ -103,27 +103,3 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 });
   }
 }
-
-export async function DELETE(request: NextRequest, { params }: { params: { postId: string } }) {
-  try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
-    }
-
-    const db = await getDatabase();
-    const postsCollection = db.collection<PostDocument>('posts');
-
-    const post = await postsCollection.findOne({ _id: new ObjectId(params.postId), authorId: userId });
-    if (!post) {
-      return NextResponse.json({ error: 'Post não encontrado ou você não tem permissão para deletá-lo' }, { status: 404 });
-    }
-
-    await postsCollection.deleteOne({ _id: new ObjectId(params.postId) });
-
-    return NextResponse.json({ message: 'Post deletado com sucesso' }, { status: 200 });
-  } catch (error) {
-    console.error('Erro ao deletar post:', error);
-    return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 });
-  }
-}
