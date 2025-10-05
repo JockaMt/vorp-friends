@@ -6,7 +6,6 @@
     border-radius: var(--rounded-md);
     padding: 1.2em;
     width: 100%;
-    margin-top: 1.5em;
 }
 
 .postHeader {
@@ -14,10 +13,149 @@
     align-items: center;
     gap: 0.8em;
     margin-bottom: 1em;
+    position: relative;
+}
+
+.postOptions {
+    margin-left: auto;
+    position: relative;
+}
+
+.optionsButton {
+    background: none;
+    border: none;
+    color: var(--gray-alpha-500);
+    cursor: pointer;
+    padding: 0.5em;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.optionsButton:hover {
+    background-color: var(--gray-alpha-100);
+    color: var(--foreground);
+}
+
+.optionsMenu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid var(--gray-alpha-200);
+    border-radius: var(--rounded-md);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    min-width: 120px;
+}
+
+.optionItem {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    width: 100%;
+    padding: 0.75em 1em;
+    background: none;
+    border: none;
+    color: var(--foreground);
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease;
+}
+
+.optionItem:hover {
+    background-color: var(--gray-alpha-100);
+}
+
+.optionItem:last-child {
+    color: var(--danger, #dc2626);
+}
+
+.optionItem:last-child:hover {
+    background-color: var(--danger-light, #fef2f2);
+}
+
+.editContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
+}
+
+.editTextarea {
+    width: 100%;
+    padding: 0.75em;
+    border: 1px solid var(--gray-alpha-200);
+    border-radius: var(--rounded-md);
+    font-family: inherit;
+    font-size: inherit;
+    line-height: 1.5;
+    resize: vertical;
+    min-height: 60px;
+}
+
+.editTextarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.editActions {
+    display: flex;
+    gap: 0.5em;
+    justify-content: flex-end;
+}
+
+.cancelButton,
+.saveButton {
+    padding: 0.5em 1em;
+    border: none;
+    border-radius: var(--rounded-md);
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cancelButton {
+    background: var(--gray-alpha-100);
+    color: var(--foreground);
+}
+
+.cancelButton:hover {
+    background: var(--gray-alpha-200);
+}
+
+.saveButton {
+    background: var(--accent-color);
+    color: white;
+}
+
+.saveButton:hover:not(:disabled) {
+    background: var(--accent-color-hover);
+}
+
+.saveButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .avatar {
+    border-radius: 50%;
     color: var(--gray-alpha-300);
+}
+
+.location {
+    display: flex;
+    align-items: center;
+    font-size: 0.8em;
+    color: var(--gray-alpha-500);
+    gap: 0.2em;
+    margin-left: 0.3em;
+}
+
+.locationIcon {
+    margin-left: 0.4em;
 }
 
 .headerInfo {
@@ -29,6 +167,13 @@
     font-weight: 600;
     font-size: 1em;
     color: var(--foreground);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.ownerName:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
 }
 
 .ownerInfo {
@@ -88,14 +233,44 @@
     align-items: center;
     gap: 0.5em;
     padding: 0.6em;
-    border-radius: var(--rounded-md);
+    border-radius: 2em;
     font-size: 0.9em;
     font-weight: 500;
     justify-content: center;
     transition: background-color 0.2s ease;
+    background-color: var(--gray-alpha-200);
+}
+
+.postActionButton + .postActionButton {
+    margin-left: 0.5em;
+}
+
+.count {
+    padding-left: .5em;
+    font-weight: 400;
+    color: var(--foreground);
+    border-left: 1px solid var(--gray-alpha-300);
+}
+
+.icon {
+    display: flex;
+    width: 1em;
+    height: 1em;
+    padding-right: 0.5em;
+    border-right: 1px solid var(--gray-alpha-300);
 }
 
 .postActionButton:hover {
     background-color: var(--gray-alpha-100);
     color: var(--foreground);
+}
+
+.postActionButton.liked {
+    color: var(--danger, #dc2626);
+    background-color: var(--danger-light, #fef2f2);
+}
+
+.postActionButton.liked:hover {
+    background-color: var(--danger-light, #fef2f2);
+    color: var(--danger, #dc2626);
 }

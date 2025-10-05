@@ -37,33 +37,6 @@
   font-size: 1em;
 }
 
-.headerNav {
-  display: flex;
-  align-items: center;
-  height: 100%;
-}
-
-.headerNavList {
-  display: flex;
-  list-style: none;
-  gap: 1em;
-  margin-left: 1em;
-  font-size: small;
-  padding: 0;
-}
-
-.headerNavItem a {
-  display: flex;
-  align-items: center;
-  color: var(--background);
-  text-decoration: none;
-}
-
-.headerNavItem a:hover {
-  --nav-darken: 40%;
-  color: color-mix(in srgb, rgb(255, 255, 255) var(--nav-darken), var(--accent-color));
-}
-
 .active {
   color: var(--background);
   font-weight: 600;
@@ -86,6 +59,12 @@
 .navButton:hover {
   --nav-darken: 40%;
   color: color-mix(in srgb, rgb(255, 255, 255) var(--nav-darken), var(--accent-color));
+}
+
+.userButton {
+  display: flex;
+  align-items: center;
+  margin-left: 0.5em;
 }
 
 /* Main content styles */

@@ -1,12 +1,12 @@
-import { apiClient } from './api';
-import { API_ENDPOINTS } from '@/constants';
 import type { Post, CreatePostData, Comment, CreateCommentData, PaginatedResponse } from '@/types';
 
 class PostService {
   async getFeed(page = 1, limit = 10): Promise<PaginatedResponse<Post>> {
-    return apiClient.get<PaginatedResponse<Post>>(
-      `${API_ENDPOINTS.POSTS.FEED}?page=${page}&limit=${limit}`
-    );
+    const response = await fetch(`/api/posts/feed?page=${page}&limit=${limit}`);
+    if (!response.ok) {
+      throw new Error('Erro ao buscar feed');
+    }
+    return response.json();
   }
 
   async createPost(postData: CreatePostData): Promise<Post> {
@@ -14,44 +14,77 @@ class PostService {
     formData.append('content', postData.content);
     
     if (postData.images) {
-      postData.images.forEach((image, index) => {
-        formData.append(`images`, image);
+      postData.images.forEach((image) => {
+        formData.append('images', image);
       });
     }
 
-    const response = await apiClient.upload<{ data: Post }>(
-      API_ENDPOINTS.POSTS.CREATE,
-      formData
-    );
+    const response = await fetch('/api/posts', {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!response.ok) {
+      throw new Error('Erro ao criar post');
+    }
     
-    return response.data;
+    const result = await response.json();
+    return result.data;
   }
 
   async deletePost(postId: string): Promise<void> {
-    await apiClient.delete(`${API_ENDPOINTS.POSTS.DELETE}/${postId}`);
+    const response = await fetch(`/api/posts/${postId}`, {
+      method: 'DELETE'
+    });
+
+    if (!response.ok) {
+      throw new Error('Erro ao deletar post');
+    }
   }
 
   async likePost(postId: string): Promise<void> {
-    await apiClient.post(`${API_ENDPOINTS.POSTS.LIKE}/${postId}`);
+    const response = await fetch(`/api/posts/like/${postId}`, {
+      method: 'POST'
+    });
+
+    if (!response.ok) {
+      throw new Error('Erro ao curtir post');
+    }
   }
 
   async unlikePost(postId: string): Promise<void> {
-    await apiClient.delete(`${API_ENDPOINTS.POSTS.UNLIKE}/${postId}`);
+    const response = await fetch(`/api/posts/like/${postId}`, {
+      method: 'DELETE'
+    });
+
+    if (!response.ok) {
+      throw new Error('Erro ao descurtir post');
+    }
   }
 
   async getComments(postId: string, page = 1, limit = 10): Promise<PaginatedResponse<Comment>> {
-    return apiClient.get<PaginatedResponse<Comment>>(
-      `${API_ENDPOINTS.POSTS.COMMENTS}/${postId}?page=${page}&limit=${limit}`
-    );
+    const response = await fetch(`/api/posts/comments/${postId}?page=${page}&limit=${limit}`);
+    if (!response.ok) {
+      throw new Error('Erro ao buscar comentários');
+    }
+    return response.json();
   }
 
   async createComment(commentData: CreateCommentData): Promise<Comment> {
-    const response = await apiClient.post<{ data: Comment }>(
-      `${API_ENDPOINTS.POSTS.COMMENTS}/${commentData.postId}`,
-      { content: commentData.content }
-    );
+    const response = await fetch(`/api/posts/comments/${commentData.postId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ content: commentData.content })
+    });
+
+    if (!response.ok) {
+      throw new Error('Erro ao criar comentário');
+    }
     
-    return response.data;
+    const result = await response.json();
+    return result.data;
   }
 }
 

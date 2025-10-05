@@ -9,6 +9,7 @@ export interface Post {
     avatar?: string;
   };
   images?: string[];
+  location?: string;
   likesCount: number;
   commentsCount: number;
   isLiked?: boolean;

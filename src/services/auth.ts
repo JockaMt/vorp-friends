@@ -1,89 +1,75 @@
-import { apiClient } from './api';
-import { API_ENDPOINTS } from '@/constants';
-import type { AuthUser, User } from '@/types';
-
-export interface LoginCredentials {
-  email: string;
-  password: string;
-}
-
-export interface RegisterData {
-  username: string;
-  email: string;
-  password: string;
-  displayName: string;
-}
+import { auth, currentUser } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
+import { clerkServerUserToUser } from '@/types';
+import type { User } from '@/types';
 
 class AuthService {
-  async login(credentials: LoginCredentials): Promise<AuthUser> {
-    const response = await apiClient.post<{ data: AuthUser }>(
-      API_ENDPOINTS.AUTH.LOGIN,
-      credentials
-    );
-    
-    if (response.data.accessToken) {
-      this.setAuthToken(response.data.accessToken);
-    }
-    
-    return response.data;
+  // Verificar se o usuário está autenticado
+  async isAuthenticated(): Promise<boolean> {
+    const { userId } = await auth();
+    return !!userId;
   }
 
-  async register(userData: RegisterData): Promise<AuthUser> {
-    const response = await apiClient.post<{ data: AuthUser }>(
-      API_ENDPOINTS.AUTH.REGISTER,
-      userData
-    );
-    
-    if (response.data.accessToken) {
-      this.setAuthToken(response.data.accessToken);
-    }
-    
-    return response.data;
-  }
-
-  async logout(): Promise<void> {
+  // Obter o usuário atual
+  async getCurrentUser(): Promise<User | null> {
     try {
-      await apiClient.post(API_ENDPOINTS.AUTH.LOGOUT);
-    } finally {
-      this.removeAuthToken();
+      const clerkUser = await currentUser();
+      if (!clerkUser) return null;
+      
+      return clerkServerUserToUser(clerkUser);
+    } catch (error) {
+      console.error('Erro ao obter usuário atual:', error);
+      return null;
     }
   }
 
-  async getCurrentUser(): Promise<User> {
-    const response = await apiClient.get<{ data: User }>(API_ENDPOINTS.AUTH.ME);
-    return response.data;
+  // Obter ID do usuário autenticado
+  async getUserId(): Promise<string | null> {
+    const { userId } = await auth();
+    return userId;
   }
 
-  async refreshToken(): Promise<string> {
-    const response = await apiClient.post<{ data: { accessToken: string } }>(
-      API_ENDPOINTS.AUTH.REFRESH
-    );
+  // Verificar se o usuário tem uma role específica
+  async hasRole(role: string): Promise<boolean> {
+    const { sessionClaims } = await auth();
+    const roles = (sessionClaims?.metadata as any)?.roles as string[] || [];
+    return roles.includes(role);
+  }
+
+  // Verificar se o usuário tem permissão de administrador
+  async isAdmin(): Promise<boolean> {
+    return this.hasRole('admin');
+  }
+
+  // Verificar se o usuário tem permissão de moderador
+  async isModerator(): Promise<boolean> {
+    return this.hasRole('moderator') || this.hasRole('admin');
+  }
+
+  // Proteger rota - redirecionar se não autenticado
+  async protect(): Promise<void> {
+    const { userId } = await auth();
+    if (!userId) {
+      redirect('/sign-in');
+    }
+  }
+
+  // Proteger rota com role específica
+  async protectWithRole(requiredRole: string): Promise<void> {
+    await this.protect();
     
-    this.setAuthToken(response.data.accessToken);
-    return response.data.accessToken;
-  }
-
-  private setAuthToken(token: string): void {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('auth_token', token);
+    const hasRequiredRole = await this.hasRole(requiredRole);
+    if (!hasRequiredRole) {
+      redirect('/unauthorized');
     }
   }
 
-  private removeAuthToken(): void {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('auth_token');
+  // Redirecionar se já autenticado (para páginas de login/registro)
+  async redirectIfAuthenticated(redirectTo: string = '/'): Promise<void> {
+    const { userId } = await auth();
+    if (userId) {
+      redirect(redirectTo);
     }
-  }
-
-  getAuthToken(): string | null {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('auth_token');
-    }
-    return null;
-  }
-
-  isAuthenticated(): boolean {
-    return !!this.getAuthToken();
   }
 }
 

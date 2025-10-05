@@ -1,0 +1,1 @@
+export { PostsProvider, usePosts } from './PostsContext';

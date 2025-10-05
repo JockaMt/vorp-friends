@@ -1,6 +1,7 @@
 export * from './user';
 export * from './post';
 export * from './chat';
+export * from './serializedUser';
 
 export interface ApiResponse<T> {
   data: T;

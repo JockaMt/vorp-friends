@@ -38,16 +38,27 @@ body {
   color: var(--background);
   border: none;
   border-radius: var(--rounded-md);
-    padding: 0.5em 0.8em;
+  padding: 0.5em 0.8em;
   cursor: pointer;
   font-size: medium;
   transition: background-color 0.2s ease;
 }
 
+.buttonPrimary:hover {
+  background-color: var(--accent-color-hover);
+}
+
 .buttonSecondary {
   background-color: transparent;
   color: var(--foreground);
-  border: none;
+  border: 1px solid var(--gray-alpha-300);
+  border-radius: var(--rounded-md);
+  padding: 0.5em 0.8em;
   cursor: pointer;
   font-size: medium;
+  transition: all 0.2s ease;
+}
+
+.buttonSecondary:hover {
+  background-color: var(--gray-alpha-100);
 }

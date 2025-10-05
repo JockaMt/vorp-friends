@@ -26,7 +26,19 @@
 
 .charCount {
     font-size: 0.8em;
-    color: var(--gray-alpha-300);
+    color: var(--gray-alpha-400);
+    text-align: right;
+    margin-top: 0.25em;
+}
+
+.error {
+    background-color: var(--danger-light, #fef2f2);
+    color: var(--danger, #dc2626);
+    padding: 0.5em;
+    border-radius: var(--rounded-md);
+    font-size: 0.85em;
+    margin-top: 0.5em;
+    border: 1px solid var(--danger-border, #fecaca);
 }
 
 .postActions {
@@ -48,14 +60,28 @@
     transition: background-color 0.2s ease;
 }
 
-.submitButton:hover {
+.submitButton:hover:not(:disabled) {
     background-color: var(--accent-color-hover);
+}
+
+.submitButton:disabled {
+    background-color: var(--gray-alpha-300);
+    cursor: not-allowed;
+    opacity: 0.6;
 }
 
 .iconActions {
     display: flex;
     align-items: center;
     gap: 0.5em;
+}
+
+.emojiContainer {
+    position: relative;
+}
+
+.locationContainer {
+    position: relative;
 }
 
 .iconButton {
@@ -69,11 +95,75 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.2s ease;
 }
 
 .iconButton:hover {
     background-color: var(--gray-alpha-100);
     color: var(--foreground);
+}
+
+.iconButton.active {
+    color: var(--primary-color);
+    background-color: var(--primary-light, var(--primary-color));
+}
+
+.selectedLocation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.locationTag {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--gray-alpha-100);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--rounded-md);
+}
+
+.selectedLocationInfo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.selectedLocationText {
+    flex: 1;
+}
+
+.selectedLocationName {
+    font-weight: 500;
+    color: var(--foreground);
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.selectedLocationAddress {
+    color: var(--gray-alpha-500);
+    margin: 0;
+    font-size: 0.8rem;
+}
+
+.removeLocationButton {
+    background: none;
+    border: none;
+    color: var(--gray-alpha-400);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.removeLocationButton:hover {
+    background-color: var(--gray-alpha-100);
+    color: var(--red-500, #ef4444);
 }
 
 .submitActions {

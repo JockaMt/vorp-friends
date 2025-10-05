@@ -1,0 +1,16 @@
+.postsFeed {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  width: 100%;
+  padding-top: 1em;
+}
+
+.loading {
+  padding: 2rem;
+  text-align: center;
+  background-color: var(--background);
+  border-radius: var(--rounded-md);
+  border: 1px solid var(--gray-alpha-200);
+  margin-top: 1em;
+}

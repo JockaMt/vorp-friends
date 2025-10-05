@@ -1,0 +1,8 @@
+.page {
+    display: flex;
+    height: calc(100vh - 4em);
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}

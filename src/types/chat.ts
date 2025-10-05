@@ -16,7 +16,6 @@ export interface Conversation {
     username: string;
     displayName: string;
     avatar?: string;
-    isOnline: boolean;
   }[];
   lastMessage?: ChatMessage;
   unreadCount: number;

@@ -1,0 +1,137 @@
+
+.headerContainer {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-right: 0.5em;
+  text-align: center;
+  color: var(--background);
+}
+
+.headerTitle {
+  margin: 0;
+  font-size: 1em;
+}
+
+.active {
+  color: var(--background);
+  font-weight: 600;
+}
+
+.navButton {
+  display: flex;
+  background: none;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  color: var(--background);
+  cursor: pointer;
+  font-size: medium;
+  width: 2.5em;
+  height: 100%;
+  transition: color 0.2s ease;
+}
+
+.navButton:hover {
+  --nav-darken: 40%;
+  color: color-mix(in srgb, rgb(255, 255, 255) var(--nav-darken), var(--accent-color));
+}
+
+.userButton {
+  display: flex;
+  align-items: center;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+/* Main content styles */
+.mainContent {
+  display: flex;
+  max-width: 1200px;
+  width: 100%;
+  flex: 1 1 auto;
+  padding: 1em;
+  gap: 1em;
+}
+
+.filterContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 1em;
+}
+
+.content {
+  flex: 0 1 80em;
+  width: 100%;
+  border: 1px solid var(--gray-alpha-200);
+  border-radius: var(--rounded-md);
+  padding: 1em;
+  box-sizing: border-box;
+  resize: vertical;
+  font-family: var(--font-geist-sans);
+  max-width: 45em;
+}
+
+/* Aside styles */
+.aside {
+  flex: 0 1 25em;
+  border: 1px solid var(--gray-alpha-200);
+  border-radius: var(--rounded-md);
+  padding: 1em;
+  height: fit-content;
+}
+
+.rightSidebar {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  flex: 0 1 25em;
+  gap: 1em;
+}
+
+.rightAside {
+  border: 1px solid var(--gray-alpha-200);
+  border-radius: var(--rounded-md);
+  padding: 1em;
+  height: fit-content;
+}
+
+@media (prefers-color-scheme: dark) {
+  .page {
+    --gray-rgb: 255, 255, 255;
+    --gray-alpha-200: rgba(var(--gray-rgb), 0.145);
+    --gray-alpha-100: rgba(var(--gray-rgb), 0.06);
+
+    --button-primary-hover: #ccc;
+    --button-secondary-hover: #1a1a1a;
+  }
+}
+
+.headerNav {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.headerNavList {
+  display: flex;
+  list-style: none;
+  gap: 1em;
+  margin-left: 1em;
+  font-size: small;
+  padding: 0;
+}
+
+.headerNavItem a {
+  display: flex;
+  align-items: center;
+  color: var(--background);
+  text-decoration: none;
+}
+
+.headerNavItem a:hover {
+  --nav-darken: 40%;
+  color: color-mix(in srgb, rgb(255, 255, 255) var(--nav-darken), var(--accent-color));
+}

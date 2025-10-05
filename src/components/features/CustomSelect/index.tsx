@@ -9,11 +9,29 @@ interface OptionType {
     icon: React.ReactNode;
 }
 
-export function CustomSelect(props: { options: OptionType[] }) {
-    const { options } = props;
+interface CustomSelectProps {
+    options: OptionType[];
+    value?: string;
+    onChange?: (value: string) => void;
+}
+
+export function CustomSelect(props: CustomSelectProps) {
+    const { options, value, onChange } = props;
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState<OptionType>(options[0] || { value: '', label: '', icon: null });
+    const [selectedOption, setSelectedOption] = useState<OptionType>(
+        options.find(opt => opt.value === value) || options[0] || { value: '', label: '', icon: null }
+    );
     const selectRef = useRef<HTMLDivElement>(null);
+
+    // Atualizar selectedOption quando value prop mudar
+    useEffect(() => {
+        if (value) {
+            const option = options.find(opt => opt.value === value);
+            if (option) {
+                setSelectedOption(option);
+            }
+        }
+    }, [value, options]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -31,6 +49,11 @@ export function CustomSelect(props: { options: OptionType[] }) {
     const handleSelect = (option: typeof options[0]) => {
         setSelectedOption(option);
         setIsOpen(false);
+        
+        // Chamar onChange se fornecido
+        if (onChange) {
+            onChange(option.value);
+        }
     };
 
     return (

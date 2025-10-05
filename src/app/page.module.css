@@ -116,26 +116,13 @@
   resize: vertical;
   font-family: var(--font-geist-sans);
   max-width: 45em;
+  background-color: var(--background);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Aside styles */
 .aside {
   flex: 0 1 25em;
-  border: 1px solid var(--gray-alpha-200);
-  border-radius: var(--rounded-md);
-  padding: 1em;
-  height: fit-content;
-}
-
-.rightSidebar {
-  display: flex;
-  flex-direction: column;
-  height: auto;
-  flex: 0 1 25em;
-  gap: 1em;
-}
-
-.rightAside {
   border: 1px solid var(--gray-alpha-200);
   border-radius: var(--rounded-md);
   padding: 1em;

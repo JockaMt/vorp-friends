@@ -1,0 +1,27 @@
+.rightSidebar {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    flex: 0 1 25em;
+    gap: 1em;
+}
+
+.rightAside {
+    border: 1px solid var(--gray-alpha-200);
+    border-radius: var(--rounded-md);
+    padding: 1em;
+    height: fit-content;
+    background-color: var(--background);
+    box-shadow: var(--shadow-sm);
+}
+
+.rightAsideTitle {
+    margin: 0 0 0.8em 0;
+    font-size: 1em;
+    font-weight: 600;
+}
+
+.rightAsideText {
+    font-size: 0.9em;
+    color: var(--gray-700);
+}

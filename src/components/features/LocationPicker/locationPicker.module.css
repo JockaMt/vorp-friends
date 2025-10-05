@@ -1,0 +1,234 @@
+.locationPicker {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background: white;
+  border: 1px solid var(--gray-alpha-200);
+  border-radius: var(--rounded-lg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 350px;
+  max-height: 400px;
+  z-index: 1000;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--gray-alpha-200);
+  background: var(--gray-alpha-50);
+  padding: 8px;
+  gap: 8px;
+}
+
+.searchContainer {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  background: white;
+  border: 1px solid var(--gray-alpha-200);
+  border-radius: var(--rounded-md);
+  padding: 8px 12px;
+  gap: 8px;
+}
+
+.searchIcon {
+  color: var(--gray-alpha-400);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.searchInput {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 14px;
+  color: var(--foreground);
+}
+
+.searchInput::placeholder {
+  color: var(--gray-alpha-400);
+}
+
+.clearButton {
+  background: none;
+  border: none;
+  color: var(--gray-alpha-400);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.clearButton:hover {
+  background: var(--gray-alpha-100);
+  color: var(--gray-alpha-600);
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  padding: 8px;
+  font-size: 14px;
+  color: var(--gray-alpha-500);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  border-radius: var(--rounded-sm);
+}
+
+.closeButton:hover {
+  background: var(--gray-alpha-100);
+  color: var(--gray-alpha-700);
+}
+
+.content {
+  overflow-y: auto;
+  flex: 1;
+  max-height: 320px;
+}
+
+.section {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--gray-alpha-100);
+}
+
+.section:last-child {
+  border-bottom: none;
+}
+
+.sectionTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-alpha-600);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 8px 0;
+  padding: 0 12px;
+}
+
+.locationItem {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.locationItem:hover {
+  background: var(--gray-alpha-50);
+}
+
+.locationIcon {
+  color: var(--primary-color);
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.locationInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.locationName {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.locationAddress {
+  font-size: 12px;
+  color: var(--gray-alpha-500);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.loading {
+  padding: 20px;
+  text-align: center;
+  color: var(--gray-alpha-500);
+}
+
+.noResults {
+  padding: 20px;
+  text-align: center;
+  color: var(--gray-alpha-500);
+}
+
+.noResults p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.searchHint {
+  padding: 20px;
+  text-align: center;
+  color: var(--gray-alpha-500);
+}
+
+.searchHint p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* Scrollbar customizado */
+.content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: var(--gray-alpha-100);
+  border-radius: 3px;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: var(--gray-alpha-300);
+  border-radius: 3px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-alpha-400);
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+  .locationPicker {
+    width: 320px;
+    max-height: 350px;
+  }
+  
+  .content {
+    max-height: 270px;
+  }
+  
+  .locationItem {
+    padding: 10px 12px;
+  }
+  
+  .locationName {
+    font-size: 13px;
+  }
+  
+  .locationAddress {
+    font-size: 11px;
+  }
+}

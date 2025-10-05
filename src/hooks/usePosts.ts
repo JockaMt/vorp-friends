@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { postService } from '@/services';
+import { useAuthenticatedFetch } from './useAuthenticatedFetch';
 import type { Post, PaginatedResponse, CreatePostData } from '@/types';
 
 interface UsePostsReturn {
@@ -23,12 +23,16 @@ export function usePosts(): UsePostsReturn {
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
 
+  const { authenticatedFetch } = useAuthenticatedFetch();
+
   const loadPosts = useCallback(async (pageNum: number, append = false) => {
     try {
       setIsLoading(true);
       setError(null);
       
-      const response: PaginatedResponse<Post> = await postService.getFeed(pageNum);
+      const response: PaginatedResponse<Post> = await authenticatedFetch(
+        `/api/posts/feed?page=${pageNum}&limit=10`
+      );
       
       if (append) {
         setPosts(prev => [...prev, ...response.data]);
@@ -42,7 +46,7 @@ export function usePosts(): UsePostsReturn {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [authenticatedFetch]);
 
   useEffect(() => {
     loadPosts(1);
@@ -58,8 +62,25 @@ export function usePosts(): UsePostsReturn {
 
   const createPost = async (postData: CreatePostData) => {
     try {
-      const newPost = await postService.createPost(postData);
-      setPosts(prev => [newPost, ...prev]);
+      const formData = new FormData();
+      formData.append('content', postData.content);
+      
+      if (postData.images) {
+        postData.images.forEach((image) => {
+          formData.append('images', image);
+        });
+      }
+
+      const response = await authenticatedFetch<{ data: Post }>(
+        '/api/posts',
+        {
+          method: 'POST',
+          body: formData,
+          headers: {}, // Não definir Content-Type para FormData
+        }
+      );
+      
+      setPosts(prev => [response.data, ...prev]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create post');
       throw err;
@@ -68,7 +89,10 @@ export function usePosts(): UsePostsReturn {
 
   const likePost = async (postId: string) => {
     try {
-      await postService.likePost(postId);
+      await authenticatedFetch(`/api/posts/like/${postId}`, {
+        method: 'POST',
+      });
+      
       setPosts(prev => prev.map(post => 
         post.id === postId 
           ? { ...post, isLiked: true, likesCount: post.likesCount + 1 }
@@ -81,7 +105,10 @@ export function usePosts(): UsePostsReturn {
 
   const unlikePost = async (postId: string) => {
     try {
-      await postService.unlikePost(postId);
+      await authenticatedFetch(`/api/posts/like/${postId}`, {
+        method: 'DELETE',
+      });
+      
       setPosts(prev => prev.map(post => 
         post.id === postId 
           ? { ...post, isLiked: false, likesCount: post.likesCount - 1 }

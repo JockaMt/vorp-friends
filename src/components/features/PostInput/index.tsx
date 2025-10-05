@@ -2,13 +2,34 @@
 import { useRef, useEffect, useState } from "react";
 import styles from "./postInput.module.css";
 import { CustomSelect } from "../CustomSelect";
-import { FaCamera, FaMapMarkerAlt, FaSmile, FaYoutube, FaUserFriends } from 'react-icons/fa';
+import { EmojiPicker } from "../EmojiPicker";
+import { LocationPicker } from "../LocationPicker";
+import { FaCamera, FaMapMarkerAlt, FaSmile, FaYoutube, FaUserFriends, FaTimes } from 'react-icons/fa';
 import { FaGlobe } from "react-icons/fa6";
+import { useAuth } from "@clerk/nextjs";
+import { usePosts } from "@/contexts/PostsContext";
+
+interface Location {
+  id: string;
+  name: string;
+  address: string;
+  type: 'recent' | 'popular' | 'search';
+    coordinates?: { lat: number; lng: number } | null;
+}
 
 export function PostInput() {
     const divRef = useRef<HTMLDivElement>(null);
+    const emojiButtonRef = useRef<HTMLButtonElement>(null);
+    const locationButtonRef = useRef<HTMLButtonElement>(null);
     const maxLength = 500;
     const [length, setLength] = useState(0);
+    const [isPosting, setIsPosting] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const [showLocationPicker, setShowLocationPicker] = useState(false);
+    const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
+    const { isSignedIn } = useAuth();
+    const { actions } = usePosts();
 
     useEffect(() => {
         const el = divRef.current;
@@ -42,8 +63,127 @@ export function PostInput() {
         }
     };
 
+    const handleSubmit = async () => {
+        if (!isSignedIn) {
+            setError('Você precisa estar logado para postar');
+            return;
+        }
+
+        const el = divRef.current;
+        if (!el) return;
+
+        const content = (el.textContent || "").trim();
+        if (content.length === 0) {
+            setError('Digite algo para postar');
+            return;
+        }
+
+        setIsPosting(true);
+        setError(null);
+
+            try {
+                // include location if selected
+                const locationPayload = selectedLocation ? {
+                    name: selectedLocation.name,
+                    address: selectedLocation.address,
+                    coordinates: selectedLocation.coordinates ? { lat: selectedLocation.coordinates.lat, lng: selectedLocation.coordinates.lng } : undefined
+                } : undefined;
+
+                await actions.createPost(content, locationPayload);
+            
+            // Limpar o conteúdo após sucesso
+            el.textContent = '';
+            el.classList.add(styles.empty);
+            setLength(0);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Erro ao criar post');
+        } finally {
+            setIsPosting(false);
+        }
+    };
+
+    const handleEmojiSelect = (emoji: string) => {
+        const el = divRef.current;
+        if (!el) return;
+
+        // Obter posição atual do cursor
+        const selection = window.getSelection();
+        if (selection && selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0);
+            
+            // Verificar se o cursor está dentro do elemento editável
+            if (el.contains(range.commonAncestorContainer)) {
+                // Inserir emoji na posição do cursor
+                const emojiNode = document.createTextNode(emoji);
+                range.deleteContents();
+                range.insertNode(emojiNode);
+                
+                // Mover cursor para após o emoji
+                range.setStartAfter(emojiNode);
+                range.setEndAfter(emojiNode);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            } else {
+                // Se não há cursor válido, adicionar no final
+                el.textContent = (el.textContent || '') + emoji;
+                
+                // Mover cursor para o final
+                const newRange = document.createRange();
+                newRange.selectNodeContents(el);
+                newRange.collapse(false);
+                selection.removeAllRanges();
+                selection.addRange(newRange);
+            }
+        } else {
+            // Se não há seleção, adicionar no final
+            el.textContent = (el.textContent || '') + emoji;
+            
+            // Mover cursor para o final
+            const newSelection = window.getSelection();
+            const newRange = document.createRange();
+            newRange.selectNodeContents(el);
+            newRange.collapse(false);
+            newSelection?.removeAllRanges();
+            newSelection?.addRange(newRange);
+        }
+
+        // Focar no elemento e atualizar contador
+        el.focus();
+        handleInput();
+        
+        // Remover classe empty se necessário
+        if (el.textContent && el.textContent.trim().length > 0) {
+            el.classList.remove(styles.empty);
+        }
+    };
+
+    const handleLocationSelect = (location: Location) => {
+        setSelectedLocation(location);
+        setShowLocationPicker(false);
+    };
+
+    const removeLocation = () => {
+        setSelectedLocation(null);
+    };
+
     return (
         <div className={styles.postInputContainer}>
+            {selectedLocation && (
+                <div className={styles.selectedLocation}>
+                    <div className={styles.locationTag}>
+                        
+                        <span className={styles.locationTagText}>{selectedLocation.name}</span>
+                        <button
+                            onClick={removeLocation}
+                            className={styles.removeLocationButton}
+                            type="button"
+                            title="Remover localização"
+                        >
+                            <FaTimes />
+                        </button>
+                    </div>
+                </div>
+            )}
             <div
                 ref={divRef}
                 className={styles.postEditable}
@@ -52,20 +192,66 @@ export function PostInput() {
                 onInput={handleInput}
                 data-placeholder="O que você está pensando hoje?"
             ></div>
+            {error && (
+                <div className={styles.error}>
+                    {error}
+                </div>
+            )}
             <div className={styles.postActions}>
                 <div className={styles.iconActions}>
-                    <button className={styles.iconButton}><FaSmile /></button>
-                    <button className={styles.iconButton}><FaCamera /></button>
-                    <button className={styles.iconButton}><FaMapMarkerAlt /></button>
-                    <button className={styles.iconButton}><FaYoutube /></button>
+                    <div className={styles.emojiContainer}>
+                        <button 
+                            ref={emojiButtonRef}
+                            className={styles.iconButton}
+                            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                            type="button"
+                        >
+                            <FaSmile />
+                        </button>
+                        <EmojiPicker
+                            isOpen={showEmojiPicker}
+                            onClose={() => setShowEmojiPicker(false)}
+                            onEmojiSelect={handleEmojiSelect}
+                            buttonRef={emojiButtonRef}
+                        />
+                    </div>
+                    <button className={styles.iconButton} type="button"><FaCamera /></button>
+                    <div className={styles.locationContainer}>
+                        <button 
+                            ref={locationButtonRef}
+                            className={`${styles.iconButton} ${selectedLocation ? styles.active : ''}`}
+                            onClick={() => setShowLocationPicker(!showLocationPicker)}
+                            type="button"
+                            title={selectedLocation ? selectedLocation.name : "Adicionar localização"}
+                        >
+                            <FaMapMarkerAlt />
+                        </button>
+                        <LocationPicker
+                            isOpen={showLocationPicker}
+                            onClose={() => setShowLocationPicker(false)}
+                            onLocationSelect={handleLocationSelect}
+                            buttonRef={locationButtonRef}
+                        />
+                    </div>
+                    <button className={styles.iconButton} type="button"><FaYoutube /></button>
                 </div>
                 <div className={styles.submitActions}>
                     <CustomSelect options={[
                         { value: 'public', label: 'Público', icon: <FaGlobe /> },
                         { value: 'friends', label: 'Amigos', icon: <FaUserFriends /> },
                     ]} />
-                    <button className={styles.submitButton}>Postar</button>
+                    <button 
+                        className={styles.submitButton}
+                        onClick={handleSubmit}
+                        disabled={isPosting || !isSignedIn}
+                    >
+                        {isPosting ? 'Postando...' : 'Postar'}
+                    </button>
                 </div>
+            </div>
+            
+            <div className={styles.charCount}>
+                {length}/{maxLength}
             </div>
         </div>
     );

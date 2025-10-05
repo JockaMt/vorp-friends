@@ -7,6 +7,8 @@
     box-sizing: border-box;
     height: fit-content;
     font-family: var(--font-geist-sans);
+    background-color: var(--background);
+    box-shadow: var(--shadow-sm);
 }
 
 /* Profile styles */
@@ -45,7 +47,21 @@
     background-color: var(--gray-alpha-100);
     border: 1px solid var(--gray-alpha-200);
     border-radius: 50%;
-    object-fit: cover; /* if you use an <img> inside, ensure it fills the circle */
+    object-fit: cover;
+    /* if you use an <img> inside, ensure it fills the circle */
+}
+
+.bioText {
+    /* Preserve line breaks and allow long words to break if needed */
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    /* modern browsers: break anywhere if needed */
+    word-wrap: break-word;
+    /* legacy fallback */
+    word-break: break-word;
+    /* non-standard fallback */
+    text-align: center;
+    color: var(--foreground);
 }
 
 .editPhoto {
@@ -64,7 +80,8 @@
     cursor: pointer;
     text-decoration: underline;
     border-radius: 50%;
-    pointer-events: auto; /* allow clicks on the overlay */
+    pointer-events: auto;
+    /* allow clicks on the overlay */
 }
 
 .profileImagePlaceholder {
@@ -83,9 +100,10 @@
 
 .profileLink {
     text-decoration: none;
+    transition: all 0.2s ease;
 }
 
-.profileName:hover {
+.profileLink:hover .profileName {
     color: var(--accent-color);
 }
 
@@ -218,13 +236,20 @@
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.75em;
 }
 
 .friendItem {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    text-decoration: none;
+    color: var(--foreground);
+    padding: 0.5em 0.5em;
+}
+
+.friendItem:hover {
+    background-color: var(--gray-alpha-100);
+    border-radius: var(--rounded-md);
 }
 
 .friendName {
