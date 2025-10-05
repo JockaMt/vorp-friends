@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VORP Friends - Rede Social
 
-## Getting Started
+Uma rede social moderna construída com Next.js 13+ e TypeScript.
 
-First, run the development server:
+## 🚀 Estrutura do Projeto
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+src/
+├── app/                    # App Router do Next.js 13+
+│   ├── layout.tsx         # Layout principal
+│   ├── page.tsx           # Página inicial
+│   ├── globals.css        # Estilos globais
+│   └── api/               # API routes
+├── components/
+│   ├── ui/                # Componentes de interface básicos
+│   │   ├── Button/
+│   │   ├── Input/
+│   │   └── index.ts
+│   ├── features/          # Componentes específicos da aplicação
+│   │   ├── ChatComponent/
+│   │   ├── Post/
+│   │   ├── PostInput/
+│   │   ├── ProfileSidebar/
+│   │   └── CustomSelect/
+│   ├── layout/            # Componentes de layout
+│   │   ├── Header/
+│   │   └── index.ts
+│   └── index.ts
+├── hooks/                 # Hooks customizados
+│   ├── useAuth.ts
+│   ├── usePosts.ts
+│   └── index.ts
+├── services/              # Serviços de API
+│   ├── api.ts
+│   ├── auth.ts
+│   ├── posts.ts
+│   └── index.ts
+├── types/                 # Definições de tipos TypeScript
+│   ├── user.ts
+│   ├── post.ts
+│   ├── chat.ts
+│   └── index.ts
+├── utils/                 # Utilitários e helpers
+│   ├── formatters.ts
+│   ├── validators.ts
+│   └── index.ts
+├── constants/             # Constantes da aplicação
+│   ├── api.ts
+│   ├── app.ts
+│   └── index.ts
+├── styles/                # Estilos globais e variáveis
+│   ├── variables.css
+│   └── globals.css
+└── store/                 # Estado global (para Zustand/Redux)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Tecnologias
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Next.js 13+** - Framework React com App Router
+- **TypeScript** - Tipagem estática
+- **CSS Modules** - Estilos com escopo local
+- **React Icons** - Biblioteca de ícones
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📦 Funcionalidades
 
-## Learn More
+- ✅ Sistema de autenticação
+- ✅ Feed de posts
+- ✅ Sistema de chat
+- ✅ Perfil de usuário
+- ✅ Sistema de amizades
+- ✅ Notificações
+- ✅ Upload de imagens
+- ✅ Tema dark/light
 
-To learn more about Next.js, take a look at the following resources:
+## 🚀 Como executar
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# Instalar dependências
+npm install
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Executar em desenvolvimento
+npm run dev
 
-## Deploy on Vercel
+# Build para produção
+npm run build
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Executar em produção
+npm start
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🎨 Design System
+
+O projeto utiliza um design system consistente com:
+
+- **Cores**: Definidas em CSS custom properties
+- **Tipografia**: Font families Geist Sans e Geist Mono
+- **Espaçamento**: Sistema baseado em rem
+- **Componentes**: Modularizados e reutilizáveis
+
+## 📁 Convenções
+
+- **Componentes**: PascalCase (ex: `ChatComponent`)
+- **Arquivos**: camelCase (ex: `useAuth.ts`)
+- **Pastas**: camelCase (ex: `components/ui`)
+- **CSS Modules**: camelCase (ex: `styles.button`)
+
+## 🔧 Configuração
+
+- **Path aliases**: `@/*` aponta para `./src/*`
+- **TypeScript**: Configuração estrita habilitada
+- **CSS**: Modules com variáveis customizadas

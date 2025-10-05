@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import styles from "./page.module.css";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "@/styles/variables.css";
+import "@/styles/globals.css";
 import { RiNotificationBadgeFill } from "react-icons/ri";
 import { FaMessage } from "react-icons/fa6";
 import { IoLogOut } from "react-icons/io5";

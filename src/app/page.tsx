@@ -1,11 +1,11 @@
-import { Post } from "@/components/Post";
+import { Post } from "@/components/features/Post";
 import styles from "./page.module.css";
-import { PostInput } from "@/components/PostInput";
-import { ProfileSidebar } from "@/components/ProfileSidebar";
-import { CustomSelect } from "@/components/CustomSelect";
+import { PostInput } from "@/components/features/PostInput";
+import { ProfileSidebar } from "@/components/features/ProfileSidebar";
+import { CustomSelect } from "@/components/features/CustomSelect";
 import { FaUserFriends } from "react-icons/fa";
 import { FaGlobe } from "react-icons/fa6";
-import { ChatComponent } from "@/components/ChatComponent";
+import { ChatComponent } from "@/components/features/ChatComponent";
 
 export default function Home() {
   return (
