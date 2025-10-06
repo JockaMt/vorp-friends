@@ -16,7 +16,7 @@
   justify-content: space-between;
   width: 100%;
   background-color: var(--accent-color);
-  padding: .7em;
+  padding: var(--header-padding);
   box-sizing: border-box;
   position: sticky;
   top: 0;
@@ -27,7 +27,7 @@
   display: flex;
   width: 100%;
   justify-content: space-between;
-  margin-right: 0.5em;
+  margin-right: var(--spacing-sm);
   text-align: center;
 }
 
@@ -48,7 +48,7 @@
   border: none;
   cursor: pointer;
   font-size: medium;
-  width: 2.5em;
+  width: var(--nav-button-size);
   height: 100%;
   transition: color 0.2s ease;
 }
@@ -67,11 +67,11 @@
 /* Main content styles */
 .mainContent {
   display: flex;
-  max-width: 1200px;
+  max-width: var(--container-max-width);
   width: 100%;
   flex: 1 1 auto;
   padding: 1em;
-  gap: 1em;
+  gap: var(--spacing-md);
 }
 
 .filterContainer {
@@ -87,19 +87,19 @@
   width: 100%;
   border: 1px solid var(--gray-alpha-200);
   border-radius: var(--rounded-md);
-  padding: 1em;
+  padding: var(--spacing-md);
   box-sizing: border-box;
   resize: vertical;
   font-family: var(--font-geist-sans);
-  max-width: 45em;
+  max-width: var(--content-max-width);
 }
 
 /* Aside styles */
 .aside {
-  flex: 0 1 25em;
+  flex: 0 1 var(--aside-width);
   border: 1px solid var(--gray-alpha-200);
   border-radius: var(--rounded-md);
-  padding: 1em;
+  padding: var(--spacing-md);
   height: fit-content;
 }
 

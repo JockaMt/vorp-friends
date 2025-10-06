@@ -124,6 +124,7 @@ export function PostsFeed({ filter = 'all' }: PostsFeedProps) {
                   userIdentifier={post.author.username}
                   authorId={post.authorId}
                   likes={post.likesCount}
+                  commentsCount={post.commentsCount}
                   comments={[]}
                   shares={0}
                   date={new Date(post.createdAt).toISOString()}

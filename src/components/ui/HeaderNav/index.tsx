@@ -1,4 +1,5 @@
 'use client'
+import React, { useEffect, useState } from 'react';
 import { useAuth, UserButton } from '@clerk/nextjs';
 import styles from './headerNav.module.css';
 import { UserSearch } from '@/components/features';
@@ -12,12 +13,17 @@ interface HeaderProps {
 
 export default function HeaderNav({ onOpenChat, onOpenNotifications }: HeaderProps) {
     const { isSignedIn } = useAuth();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     return (
         <div className={styles.headerContainer}>
             <nav className={styles.headerNav}>
                 <h1 className={styles.headerTitle}>VORP Friends</h1>
-                {isSignedIn &&
+                {mounted && isSignedIn &&
                     <ul className={styles.headerNavList}>
                         <li className={styles.headerNavItem}>
                             <a className={styles.active} href="/">Início</a>
@@ -37,7 +43,7 @@ export default function HeaderNav({ onOpenChat, onOpenNotifications }: HeaderPro
                     </ul>
                 }
             </nav>
-            {isSignedIn ? (
+            {mounted && isSignedIn ? (
             <nav className={styles.headerNav}>
                 <UserSearch
                     placeholder="Pesquisar usuários..."

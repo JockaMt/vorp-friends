@@ -17,16 +17,24 @@ export async function GET(
 
     const { postId } = await params;
     const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '10');
+  const page = parseInt(searchParams.get('page') || '1');
+  const limit = parseInt(searchParams.get('limit') || '10');
     const skip = (page - 1) * limit;
+  const parentId = searchParams.get('parentId') || null; // if provided, fetch replies for this parent
 
     const db = await getDatabase();
     const commentsCollection = db.collection<CommentDocument>('comments');
 
     // Buscar comentários do post
+    const query: any = { postId };
+    if (parentId === 'root') {
+      query.parentId = { $in: [null, undefined] };
+    } else if (parentId) {
+      query.parentId = parentId;
+    }
+
     const comments = await commentsCollection
-      .find({ postId })
+      .find(query)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
@@ -43,6 +51,7 @@ export async function GET(
       content: comment.content,
       postId: comment.postId,
       authorId: comment.authorId,
+      parentId: comment.parentId ?? null,
       author: authorsMap.get(comment.authorId) || {
         id: comment.authorId,
         username: 'user',
@@ -84,9 +93,9 @@ export async function POST(
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 
-    const { postId } = await params;
-    const body = await request.json();
-    const { content } = body;
+  const { postId } = await params;
+  const body = await request.json();
+  const { content, parentId } = body;
 
     if (!content || content.trim().length === 0) {
       return NextResponse.json({ error: 'Conteúdo do comentário é obrigatório' }, { status: 400 });
@@ -111,6 +120,7 @@ export async function POST(
       content: content.trim(),
       postId,
       authorId: userId,
+      parentId: parentId ?? null,
       createdAt: now,
       updatedAt: now
     };
@@ -121,14 +131,16 @@ export async function POST(
       return NextResponse.json({ error: 'Erro ao criar comentário' }, { status: 500 });
     }
 
-    // Incrementar contador de comentários no post
-    await postsCollection.updateOne(
-      { _id: new ObjectId(postId) },
-      {
-        $inc: { commentsCount: 1 },
-        $set: { updatedAt: new Date() }
-      }
-    );
+    // Incrementar contador de comentários no post apenas para comentários de nível superior
+    if (!parentId) {
+      await postsCollection.updateOne(
+        { _id: new ObjectId(postId) },
+        {
+          $inc: { commentsCount: 1 },
+          $set: { updatedAt: new Date() }
+        }
+      );
+    }
 
     // Buscar informações do autor
     const author = await getUserInfo(userId);
@@ -139,6 +151,7 @@ export async function POST(
       content: commentDocument.content,
       postId: commentDocument.postId,
       authorId: commentDocument.authorId,
+      parentId: commentDocument.parentId ?? null,
       author,
       createdAt: commentDocument.createdAt,
       updatedAt: commentDocument.updatedAt

@@ -3,9 +3,9 @@
   display: flex;
   width: 100%;
   justify-content: space-between;
-  margin-right: 0.5em;
+  margin-right: var(--spacing-sm);
   text-align: center;
-  color: white;
+  color: var(--on-accent);
 }
 
 .headerTitle {
@@ -23,10 +23,10 @@
   justify-content: center;
   align-items: center;
   border: none;
-  color: white;
+  color: var(--on-accent);
   cursor: pointer;
   font-size: medium;
-  width: 2.5em;
+  width: var(--nav-button-size);
   height: 100%;
   transition: color 0.2s ease;
 }
@@ -117,8 +117,8 @@
 .headerNavList {
   display: flex;
   list-style: none;
-  gap: 1em;
-  margin-left: 1em;
+  gap: var(--spacing-md);
+  margin-left: var(--spacing-md);
   font-size: small;
   padding: 0;
 }
@@ -126,7 +126,7 @@
 .headerNavItem a {
   display: flex;
   align-items: center;
-  color: white;
+  color: var(--on-accent);
   text-decoration: none;
 }
 
