@@ -5,8 +5,13 @@
   --foreground: #1e293b;
 
   --accent-color: #ff6f31;
-  --accent-color-hover: #e4530f;
-  --accent-color-alpha: rgba(59, 130, 246, 0.1);
+  --accent-color: #ff8a4b;
+  --accent-color-hover: #ff6f31;
+  --accent-color-alpha: rgba(255, 111, 49, 0.08);
+
+  /* Text color to use on accent backgrounds */
+  --on-accent: #ffffff;
+  --on-accent-rgb: 255, 255, 255;
 
   --danger-color: #ef4444;
   --danger-color-hover: #dc2626;
@@ -65,45 +70,80 @@
   --spacing-lg: 1.5rem;
   --spacing-xl: 2rem;
   --spacing-2xl: 3rem;
+  /* Layout sizes */
+  --container-max-width: 1200px;
+  --content-max-width: 45em;
+  --aside-width: 25em;
+  --header-padding: 0.7em;
+  --nav-button-size: 2.5em;
+
+  /* Emoji picker */
+  --emoji-picker-offset: 0.5rem; /* used in calc(100% + var(--emoji-picker-offset)) */
+  --emoji-picker-max-height: 300px;
+  --emoji-grid-max-height: 220px;
+  --emoji-button-size: 32px;
+  --emoji-button-font-size: 20px;
+  --emoji-grid-gap: 4px;
+  --scrollbar-width: 6px;
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #171717;
-    --foreground: #e4e4e4;
-    --gray-alpha-100: #1a1a1a;
-    --gray-alpha-200: #2c2c2c;
-    --gray-alpha-300: #525252;
-    --gray-alpha-400: #737373;
-    --gray-alpha-500: #a3a3a3;
-    --gray-alpha-600: #d4d4d4;
-    --gray-alpha-700: #e4e4e4;
-    --gray-alpha-800: #f3f3f3;
-    --gray-alpha-900: #fafafa;
-    --accent-color: #ff6f31;
-    --accent-color-hover: #ff7f43;
+    /* Background & foreground */
+    --background: #0b1220; /* deep navy */
+    --background-2: #0f1724; /* slightly lighter surface */
+    --foreground: #e6eef6; /* soft, slightly cool foreground */
 
-    --danger-color: #723434;
-    --danger-color-hover: #5c1a1a;
-    --like-color: #ef4444;
-    --like-color-hover: #dc2626;
-    --like-background: rgba(239, 68, 68, 0.1);
-    --like-background-hover: rgba(220, 38, 38, 0.3);
+    /* Greys expressed as white overlays on dark backgrounds */
+    --gray-50: #0b1220;
+    --gray-100: #0f1724;
+    --gray-200: #111827;
+    --gray-300: #1f2937;
+    --gray-400: #374151;
+    --gray-500: #6b7280;
+    --gray-600: #9ca3af;
+    --gray-700: #c7ccd1;
+    --gray-800: #e6eef6;
+
+    /* Alpha overlays for subtle surfaces */
+    --gray-alpha-50: rgba(255, 255, 255, 0.02);
+    --gray-alpha-100: rgba(255, 255, 255, 0.04);
+    --gray-alpha-200: rgba(255, 255, 255, 0.06);
+    --gray-alpha-300: rgba(255, 255, 255, 0.08);
+    --gray-alpha-400: rgba(255, 255, 255, 0.14);
+    --gray-alpha-500: rgba(255, 255, 255, 0.24);
+
+  /* Accent - a warm, softer orange for links and highlights */
+  --accent-color: #ff8a4b; /* soft warm orange */
+  --accent-color-hover: #ff6f31; /* active */
+  --accent-color-alpha: rgba(255, 111, 49, 0.08);
+
+    /* Feedback colors (adjusted for dark background) */
+    --danger-color: #f87171;
+    --danger-color-hover: #ef4444;
+    --like-color: #fb7185;
+    --like-color-hover: #f43f5e;
+    --like-background: rgba(251, 113, 133, 0.08);
+    --like-background-hover: rgba(244, 63, 94, 0.18);
 
     color-scheme: dark;
   }
 }
 
 [data-theme="dark"] {
-  --background: #0f172a;
-  --background-2: #1e293b;
-  --foreground: #f1f5f9;
+  --background: #0b1220; /* deep navy */
+  --background-2: #0f1724; /* slightly lighter */
+  --foreground: #e6eef6; /* soft foreground */
 
   --gray-alpha-50: rgba(255, 255, 255, 0.02);
-  --gray-alpha-100: rgba(255, 255, 255, 0.05);
-  --gray-alpha-200: rgba(255, 255, 255, 0.1);
-  --gray-alpha-300: rgba(255, 255, 255, 0.15);
-  --gray-alpha-400: rgba(255, 255, 255, 0.25);
-  --gray-alpha-500: rgba(255, 255, 255, 0.4);
+  --gray-alpha-100: rgba(255, 255, 255, 0.04);
+  --gray-alpha-200: rgba(255, 255, 255, 0.06);
+  --gray-alpha-300: rgba(255, 255, 255, 0.08);
+  --gray-alpha-400: rgba(255, 255, 255, 0.14);
+  --gray-alpha-500: rgba(255, 255, 255, 0.24);
+
+  /* Keep accent consistent with prefers-color-scheme */
+  --accent-color: #ff8a4b; /* soft warm orange */
+  --accent-color-hover: #ff6f31;
 }

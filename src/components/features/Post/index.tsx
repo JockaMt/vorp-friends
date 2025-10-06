@@ -7,6 +7,8 @@ import { FaHeart, FaComment, FaShare, FaUserCircle, FaEdit, FaTrash, FaEllipsisV
 import { FaLocationDot } from "react-icons/fa6";
 import Image from "next/image";
 import { useAuth } from "@clerk/nextjs";
+import Comments from '@/components/features/Comments';
+import { postService } from '@/services/posts';
 import { formatTimeAgo } from "@/utils/formatters";
 
 interface PostType {
@@ -17,6 +19,7 @@ interface PostType {
     authorId?: string; // ID do autor para verificar permissões
     likes?: number;
     comments?: [];
+    commentsCount?: number;
     shares?: number;
     date?: string;
     text: string;
@@ -30,7 +33,11 @@ interface PostType {
 }
 
 export function Post(props: PostType) {
-    const { id, avatar, owner, userIdentifier, authorId, likes, date, text, image, video, location, isLiked, onLike, onEdit, onDelete } = props;
+    const { id, avatar, owner, userIdentifier, authorId, likes, date, text, image, video, location, isLiked, onLike, onEdit, onDelete, commentsCount: initialCommentsCount = 0 } = props;
+    const [commentsCount, setCommentsCount] = useState<number>(() => {
+        return initialCommentsCount ?? (props.comments ? props.comments.length : 0);
+    });
+    const [showComments, setShowComments] = useState(false);
     const [isLiking, setIsLiking] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editContent, setEditContent] = useState(text);
@@ -86,7 +93,7 @@ export function Post(props: PostType) {
 
     const handleDelete = async () => {
         if (!onDelete || !id) return;
-        
+
         if (window.confirm('Tem certeza que deseja deletar este post?')) {
             setIsDeleting(true);
             try {
@@ -106,7 +113,7 @@ export function Post(props: PostType) {
 
     return (
         <div className={styles.postContainer}>
-            <div className={styles.postHeader}> 
+            <div className={styles.postHeader}>
                 <Image
                     src={avatar || '/default-avatar.png'}
                     alt={`${owner}'s avatar`}
@@ -137,7 +144,7 @@ export function Post(props: PostType) {
                 </div>
                 {isAuthor && (
                     <div className={styles.postOptions} ref={optionsRef}>
-                        <button 
+                        <button
                             className={styles.optionsButton}
                             onClick={() => setShowOptions(!showOptions)}
                         >
@@ -145,7 +152,7 @@ export function Post(props: PostType) {
                         </button>
                         {showOptions && (
                             <div className={styles.optionsMenu}>
-                                <button 
+                                <button
                                     className={styles.optionItem}
                                     onClick={() => {
                                         setIsEditing(true);
@@ -154,7 +161,7 @@ export function Post(props: PostType) {
                                 >
                                     <FaEdit /> Editar
                                 </button>
-                                <button 
+                                <button
                                     className={styles.optionItem}
                                     onClick={handleDelete}
                                     disabled={isDeleting}
@@ -169,7 +176,7 @@ export function Post(props: PostType) {
             <div className={styles.postText}>
                 {isEditing ? (
                     <div className={styles.editContainer}>
-                        <textarea 
+                        <textarea
                             value={editContent}
                             onChange={(e) => setEditContent(e.target.value)}
                             className={styles.editTextarea}
@@ -177,13 +184,13 @@ export function Post(props: PostType) {
                             rows={3}
                         />
                         <div className={styles.editActions}>
-                            <button 
+                            <button
                                 className={styles.cancelButton}
                                 onClick={handleCancelEdit}
                             >
                                 Cancelar
                             </button>
-                            <button 
+                            <button
                                 className={styles.saveButton}
                                 onClick={handleEdit}
                                 disabled={editContent.trim().length === 0}
@@ -210,20 +217,32 @@ export function Post(props: PostType) {
                 )}
             </div>
             <div className={styles.postActions}>
-                <button 
+                <button
                     className={`${styles.postActionButton} ${isLiked ? styles.liked : ''}`}
                     onClick={handleLike}
                     disabled={isLiking}
                 >
                     <FaHeart /> <span className={styles.count}>{likes || 0}</span>
                 </button>
-                <button className={styles.postActionButton}>
-                    <FaComment /> <span className={styles.count}>{props.comments?.length || 0}</span>
+                <button className={styles.postActionButton} onClick={() => setShowComments(s => !s)}>
+                    <FaComment /> <span className={styles.count}>{commentsCount || 0}</span>
                 </button>
                 <button className={styles.postActionButton}>
                     <FaShare /> <span className={styles.count}>{props.shares || 0}</span>
                 </button>
             </div>
+                    <div className={styles.postFooter}>
+                        <div className={styles.commentSection}>
+                            </div>
+                                {showComments && (
+                                    <Comments
+                                        postId={id!}
+                                        load={showComments}
+                                        onCreateTopComment={() => setCommentsCount(c => c + 1)}
+                                        onDeleteTopComment={() => setCommentsCount(c => Math.max(0, c - 1))}
+                                    />
+                                )}
+                    </div>
         </div>
     )
 }

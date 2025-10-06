@@ -22,6 +22,7 @@ export interface CommentDocument {
   content: string;
   postId: string;
   authorId: string;
+  parentId?: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -55,6 +56,7 @@ export interface CommentData {
   content: string;
   postId: string;
   authorId: string;
+  parentId?: string | null;
   author: {
     id: string;
     username: string;

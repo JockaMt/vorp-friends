@@ -1,13 +1,13 @@
 .emojiPicker {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + var(--emoji-picker-offset));
   left: 0;
   background: var(--background);
   border: 1px solid var(--gray-alpha-200);
   border-radius: var(--rounded-lg);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
   width: auto;
-  max-height: 300px;
+  max-height: var(--emoji-picker-max-height);
   z-index: 1000;
   overflow: hidden;
   display: flex;
@@ -19,19 +19,22 @@
   align-items: center;
   border-bottom: 1px solid var(--gray-alpha-200);
   background: var(--gray-alpha-50);
+  padding: 0.5rem;
 }
 
 .categories {
   display: flex;
   overflow-x: auto;
   flex: 1;
+  gap: var(--emoji-grid-gap);
+  padding: 12px;
 }
 
 .closeButton {
   background: none;
   border: none;
   padding: 8px 12px;
-  font-size: 14px;
+  font-size: var(--emoji-button-font-size);
   color: var(--gray-alpha-500);
   cursor: pointer;
   transition: all 0.2s ease;
@@ -63,27 +66,27 @@
 }
 
 .categoryButton.active {
-  color: var(--primary-color);
-  border-bottom-color: var(--primary-color);
+  color: var(--accent-color);
+  border-bottom-color: var(--accent-color);
   background: var(--gray-alpha-100);
 }
 
 .emojiGrid {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  gap: 4px;
+  gap: var(--emoji-grid-gap);
   padding: 12px;
   overflow-y: auto;
   flex: 1;
-  max-height: 220px;
+  max-height: var(--emoji-grid-max-height);
 }
 
 .emojiButton {
   background: none;
   border: none;
-  font-size: 20px;
-  width: 32px;
-  height: 32px;
+  font-size: var(--emoji-button-font-size);
+  width: var(--emoji-button-size);
+  height: var(--emoji-button-size);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -102,14 +105,14 @@
 }
 
 .emojiButton.selected {
-  background: var(--primary-color);
-  color: white;
+  background: var(--accent-color);
+  color: var(--on-accent);
   transform: scale(1.15);
 }
 
 /* Scrollbar customizado */
 .emojiGrid::-webkit-scrollbar {
-  width: 6px;
+  width: var(--scrollbar-width);
 }
 
 .emojiGrid::-webkit-scrollbar-track {

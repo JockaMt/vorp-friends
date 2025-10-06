@@ -1,0 +1,14 @@
+.container {
+  padding: var(--spacing-2xl);
+}
+
+.userListItem {
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md);
+  border: 1px solid var(--gray-alpha-200);
+  border-radius: var(--rounded);
+}
+
+.hr {
+  margin: calc(var(--spacing-2xl) * 0.666) 0;
+}

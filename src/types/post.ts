@@ -30,6 +30,7 @@ export interface Comment {
   };
   createdAt: Date;
   updatedAt: Date;
+  parentId?: string | null;
 }
 
 export interface CreatePostData {
@@ -40,4 +41,5 @@ export interface CreatePostData {
 export interface CreateCommentData {
   content: string;
   postId: string;
+  parentId?: string | null;
 }

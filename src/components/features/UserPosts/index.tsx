@@ -123,6 +123,7 @@ export function UserPosts({ authorId }: UserPostsProps) {
               authorId={p.authorId}
               likes={p.likesCount}
               comments={[]}
+              commentsCount={typeof p.commentsCount === 'number' ? p.commentsCount : Number(p.commentsCount) || 0}
               shares={0}
               date={new Date(p.createdAt).toISOString()}
               text={p.content}
