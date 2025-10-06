@@ -25,7 +25,11 @@ export default function Comments({ postId, load = false, onCreateTopComment, onD
   const [newCommentText, setNewCommentText] = useState('');
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editingText, setEditingText] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { userId } = useAuth();
+  
+  // Ref para focar no input de resposta
+  const replyInputRef = React.useRef<HTMLInputElement>(null);
 
   const loadComments = async () => {
     setLoading(true);
@@ -48,13 +52,24 @@ export default function Comments({ postId, load = false, onCreateTopComment, onD
     }
   }, [postId, load]);
 
+  // Focar no input de resposta quando começar a responder
+  useEffect(() => {
+    if (replyingTo && replyInputRef.current) {
+      // Pequeno delay para garantir que o elemento já foi renderizado
+      setTimeout(() => {
+        replyInputRef.current?.focus();
+      }, 100);
+    }
+  }, [replyingTo]);
+
   const handleReply = (parentId: string) => {
     setReplyingTo(parentId);
     setReplyText('');
   }
 
   const submitReply = async (parentId: string) => {
-    if (!replyText.trim()) return;
+    if (!replyText.trim() || isSubmitting) return;
+    setIsSubmitting(true);
     try {
       const newComment = await postService.createComment({ postId, content: replyText.trim(), parentId });
       // append replies so newest are at the bottom
@@ -64,6 +79,8 @@ export default function Comments({ postId, load = false, onCreateTopComment, onD
       // replies do not change the post commentsCount
     } catch (err) {
       console.error('Erro ao enviar reply', err);
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -170,8 +187,40 @@ export default function Comments({ postId, load = false, onCreateTopComment, onD
           </div>
           {replyingTo === comment.id && (
             <div className={styles.replyForm}>
-              <input className={styles.replyInput} placeholder='Adicionar uma resposta...' value={replyText} onChange={(e) => setReplyText(e.target.value)} />
-              <button className={styles.sendReplyButton} onClick={() => submitReply(comment.id)}>Enviar</button>
+              <input 
+                ref={replyInputRef}
+                className={styles.replyInput} 
+                placeholder='Adicionar uma resposta...' 
+                value={replyText} 
+                onChange={(e) => setReplyText(e.target.value)}
+                onBlur={() => {
+                  // Só fecha se não estiver enviando E se o input estiver vazio
+                  if (!isSubmitting && !replyText.trim()) {
+                    setTimeout(() => {
+                      if (!isSubmitting && !replyText.trim()) {
+                        setReplyingTo(null);
+                        setReplyText('');
+                      }
+                    }, 100);
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    submitReply(comment.id);
+                  } else if (e.key === 'Escape') {
+                    setReplyingTo(null);
+                    setReplyText('');
+                  }
+                }}
+              />
+              <button 
+                className={styles.sendReplyButton} 
+                onClick={() => submitReply(comment.id)}
+                disabled={isSubmitting || !replyText.trim()}
+              >
+                {isSubmitting ? 'Enviando...' : 'Enviar'}
+              </button>
             </div>
           )}
         </div>
@@ -183,7 +232,18 @@ export default function Comments({ postId, load = false, onCreateTopComment, onD
     <div className={styles.commentsContainer}>
       {/* New top-level comment form */}
       <div className={styles.replyForm} style={{ marginBottom: '0.5rem' }}>
-        <input className={styles.replyInput} placeholder="Adicionar um comentário..." value={newCommentText} onChange={(e) => setNewCommentText(e.target.value)} />
+        <input 
+          className={styles.replyInput} 
+          placeholder="Adicionar um comentário..." 
+          value={newCommentText} 
+          onChange={(e) => setNewCommentText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              submitNewComment();
+            }
+          }}
+        />
         <button className={styles.sendReplyButton} onClick={submitNewComment} disabled={!userId || !newCommentText.trim()}>Enviar</button>
       </div>
 
