@@ -3,22 +3,27 @@
   --background: #ffffff;
   --background-2: #f8fafc;
   --foreground: #1e293b;
-  
-  --accent-color: #3b82f6;
-  --accent-color-hover: #2563eb;
+
+  --accent-color: #ff6f31;
+  --accent-color-hover: #e4530f;
   --accent-color-alpha: rgba(59, 130, 246, 0.1);
-  
+
   --danger-color: #ef4444;
   --danger-color-hover: #dc2626;
   --danger-color-alpha: rgba(239, 68, 68, 0.1);
-  
+
   --success-color: #10b981;
   --warning-color: #f59e0b;
   --info-color: #3b82f6;
-  
+
   --online-color: #10b981;
   --offline-color: #6b7280;
-  
+
+  --like-color: #ef4444;
+  --like-color-hover: #dc2626;
+  --like-background: rgba(239, 68, 68, 0.1);
+  --like-background-hover: rgba(220, 38, 38, 0.3);
+
   /* Gray scale */
   --gray-50: #f9fafb;
   --gray-100: #f3f4f6;
@@ -30,7 +35,7 @@
   --gray-700: #374151;
   --gray-800: #1f2937;
   --gray-900: #111827;
-  
+
   /* Alpha colors */
   --gray-alpha-50: rgba(0, 0, 0, 0.02);
   --gray-alpha-100: rgba(0, 0, 0, 0.05);
@@ -38,21 +43,21 @@
   --gray-alpha-300: rgba(0, 0, 0, 0.15);
   --gray-alpha-400: rgba(0, 0, 0, 0.25);
   --gray-alpha-500: rgba(0, 0, 0, 0.4);
-  
+
   /* Border radius */
   --rounded-sm: 0.25rem;
   --rounded: 0.375rem;
   --rounded-md: 0.5rem;
   --rounded-lg: 0.75rem;
   --rounded-xl: 1rem;
-  
+
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  
+
   /* Spacing */
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
@@ -60,13 +65,41 @@
   --spacing-lg: 1.5rem;
   --spacing-xl: 2rem;
   --spacing-2xl: 3rem;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #171717;
+    --foreground: #e4e4e4;
+    --gray-alpha-100: #1a1a1a;
+    --gray-alpha-200: #2c2c2c;
+    --gray-alpha-300: #525252;
+    --gray-alpha-400: #737373;
+    --gray-alpha-500: #a3a3a3;
+    --gray-alpha-600: #d4d4d4;
+    --gray-alpha-700: #e4e4e4;
+    --gray-alpha-800: #f3f3f3;
+    --gray-alpha-900: #fafafa;
+    --accent-color: #ff6f31;
+    --accent-color-hover: #ff7f43;
+
+    --danger-color: #723434;
+    --danger-color-hover: #5c1a1a;
+    --like-color: #ef4444;
+    --like-color-hover: #dc2626;
+    --like-background: rgba(239, 68, 68, 0.1);
+    --like-background-hover: rgba(220, 38, 38, 0.3);
+
+    color-scheme: dark;
+  }
 }
 
 [data-theme="dark"] {
   --background: #0f172a;
   --background-2: #1e293b;
   --foreground: #f1f5f9;
-  
+
   --gray-alpha-50: rgba(255, 255, 255, 0.02);
   --gray-alpha-100: rgba(255, 255, 255, 0.05);
   --gray-alpha-200: rgba(255, 255, 255, 0.1);

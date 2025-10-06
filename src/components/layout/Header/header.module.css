@@ -29,7 +29,6 @@
   justify-content: space-between;
   margin-right: 0.5em;
   text-align: center;
-  color: var(--background);
 }
 
 .headerTitle {
@@ -38,7 +37,6 @@
 }
 
 .active {
-  color: var(--background);
   font-weight: 600;
 }
 
@@ -48,7 +46,6 @@
   justify-content: center;
   align-items: center;
   border: none;
-  color: var(--background);
   cursor: pointer;
   font-size: medium;
   width: 2.5em;

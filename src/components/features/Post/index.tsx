@@ -7,6 +7,7 @@ import { FaHeart, FaComment, FaShare, FaUserCircle, FaEdit, FaTrash, FaEllipsisV
 import { FaLocationDot } from "react-icons/fa6";
 import Image from "next/image";
 import { useAuth } from "@clerk/nextjs";
+import { formatTimeAgo } from "@/utils/formatters";
 
 interface PostType {
     id?: string; // ID do post para operações
@@ -103,38 +104,6 @@ export function Post(props: PostType) {
         setIsEditing(false);
     };
 
-    function formatTimeAgo(postDateStr?: string) {
-        if (!postDateStr) {
-            return null;
-        }
-
-        const postDate = new Date(postDateStr);
-        const now = new Date();
-        const seconds = Math.floor((now.getTime() - postDate.getTime()) / 1000);
-
-        let interval = seconds / 31536000; // Anos
-        if (interval > 1) {
-            return `há ${Math.floor(interval)} anos`;
-        }
-        interval = seconds / 2592000; // Meses
-        if (interval > 1) {
-            return `há ${Math.floor(interval)} meses`;
-        }
-        interval = seconds / 86400; // Dias
-        if (interval > 1) {
-            return `há ${Math.floor(interval)} dias`;
-        }
-        interval = seconds / 3600; // Horas
-        if (interval > 1) {
-            return `há ${Math.floor(interval)} horas`;
-        }
-        interval = seconds / 60; // Minutos
-        if (interval > 1) {
-            return `há ${Math.floor(interval)} minutos`;
-        }
-        return "agora mesmo";
-    }
-
     return (
         <div className={styles.postContainer}>
             <div className={styles.postHeader}> 
@@ -162,7 +131,9 @@ export function Post(props: PostType) {
                             </div>
                         )}
                     </div>
-                    <div className={styles.postDate}>{formatTimeAgo(date)}</div>
+                    <div className={styles.postDate}>
+                        {formatTimeAgo(date)}
+                    </div>
                 </div>
                 {isAuthor && (
                     <div className={styles.postOptions} ref={optionsRef}>

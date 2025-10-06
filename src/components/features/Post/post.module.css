@@ -43,12 +43,13 @@
     position: absolute;
     top: 100%;
     right: 0;
-    background: white;
+    background: var(--background);
     border: 1px solid var(--gray-alpha-200);
     border-radius: var(--rounded-md);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     z-index: 10;
     min-width: 120px;
+    overflow: hidden;
 }
 
 .optionItem {
@@ -63,6 +64,7 @@
     cursor: pointer;
     font-size: 0.9em;
     transition: background-color 0.2s ease;
+    overflow: hidden;
 }
 
 .optionItem:hover {
@@ -267,10 +269,10 @@
 
 .postActionButton.liked {
     color: var(--danger, #dc2626);
-    background-color: var(--danger-light, #fef2f2);
+    background-color: var(--like-background);
 }
 
 .postActionButton.liked:hover {
-    background-color: var(--danger-light, #fef2f2);
+    background-color: var(--like-background-hover);
     color: var(--danger, #dc2626);
 }

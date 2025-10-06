@@ -76,7 +76,7 @@
   top: calc(100% + 0.25rem);
   left: 0;
   right: 0;
-  background: white;
+  background: var(--gray-alpha-100);
   border: 1px solid var(--gray-alpha-200);
   border-radius: var(--rounded-md);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -93,6 +93,7 @@
   text-transform: uppercase;
   letter-spacing: 0.025em;
   border-bottom: 1px solid var(--gray-alpha-100);
+  background-color: var(--gray-alpha-50);
 }
 
 .resultItem {
@@ -106,10 +107,11 @@
   text-align: left;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  background-color: var(--background);
 }
 
 .resultItem:hover {
-  background-color: var(--gray-alpha-50);
+  background-color: var(--gray-alpha-100);
 }
 
 .resultItem:focus {

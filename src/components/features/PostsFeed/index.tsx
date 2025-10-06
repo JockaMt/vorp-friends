@@ -1,5 +1,5 @@
 'use client';
-
+import '@/styles/globals.css';
 import { Post } from '@/components/features/Post';
 import styles from './postFeed.module.css';
 import { usePosts } from '@/contexts/PostsContext';
@@ -80,15 +80,6 @@ export function PostsFeed({ filter = 'all' }: PostsFeedProps) {
     }
   };
 
-  const formatDate = (date: Date | string) => {
-    const d = new Date(date);
-    return d.toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
-  };
-
   if (isLoading && posts.length === 0) {
     return (
       <div className={styles.loading}>
@@ -99,14 +90,7 @@ export function PostsFeed({ filter = 'all' }: PostsFeedProps) {
 
   if (error && posts.length === 0) {
     return (
-      <div style={{ 
-        padding: '2rem', 
-        textAlign: 'center', 
-        color: 'var(--danger)',
-        backgroundColor: 'white',
-        borderRadius: 'var(--rounded-md)',
-        border: '1px solid var(--gray-alpha-200)'
-      }}>
+      <div className={styles.error}>
         <p>Erro: {error}</p>
         <button 
           onClick={() => actions.refresh()}
@@ -122,14 +106,7 @@ export function PostsFeed({ filter = 'all' }: PostsFeedProps) {
   return (
     <div className={styles.postsFeed}>
       {posts.length === 0 ? (
-        <div style={{ 
-          padding: '2rem', 
-          textAlign: 'center', 
-          color: 'var(--gray-alpha-500)',
-          backgroundColor: 'white',
-          borderRadius: 'var(--rounded-md)',
-          border: '1px solid var(--gray-alpha-200)'
-        }}>
+        <div className={styles.noPosts}>
           <p>Nenhum post ainda!</p>
           <small>Seja o primeiro a postar algo.</small>
         </div>
@@ -149,7 +126,7 @@ export function PostsFeed({ filter = 'all' }: PostsFeedProps) {
                   likes={post.likesCount}
                   comments={[]}
                   shares={0}
-                  date={formatDate(post.createdAt)}
+                  date={new Date(post.createdAt).toISOString()}
                   text={post.content}
                   image={post.images?.[0]}
                   location={post.location}

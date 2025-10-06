@@ -2,7 +2,7 @@
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
-  background: white;
+  background: var(--background);
   border: 1px solid var(--gray-alpha-200);
   border-radius: var(--rounded-lg);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -65,7 +65,7 @@
 .categoryButton.active {
   color: var(--primary-color);
   border-bottom-color: var(--primary-color);
-  background: white;
+  background: var(--gray-alpha-100);
 }
 
 .emojiGrid {

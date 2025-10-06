@@ -14,3 +14,22 @@
   border: 1px solid var(--gray-alpha-200);
   margin-top: 1em;
 }
+
+.error {
+  background-color: var(--danger-light, #fef2f2);
+  color: var(--danger, #dc2626);
+  padding: 1em;
+  border-radius: var(--rounded-md);
+  font-size: 0.9em;
+  border: 1px solid var(--danger-border, #fecaca);
+  text-align: center;
+}
+
+.noPosts {
+  padding: 2rem;
+  text-align: center;
+  color: var(--gray-alpha-500);
+  background-color: var(--background);
+  border-radius: var(--rounded-md);
+  border: 1px solid var(--gray-alpha-200);
+}

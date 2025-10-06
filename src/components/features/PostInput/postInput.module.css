@@ -50,7 +50,7 @@
 
 .submitButton {
     background-color: var(--accent-color);
-    color: var(--background);
+    color: white;
     border: none;
     padding: 0.5em 1em;
     border-radius: var(--rounded-md);

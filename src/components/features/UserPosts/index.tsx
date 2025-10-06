@@ -108,14 +108,7 @@ export function UserPosts({ authorId }: UserPostsProps) {
       <h2 style={{ marginBottom: '1rem' }}>Posts</h2>
       
       {posts.length === 0 && !isLoading ? (
-        <div style={{ 
-          padding: '2rem', 
-          textAlign: 'center', 
-          color: 'var(--gray-alpha-500)', 
-          backgroundColor: 'white', 
-          borderRadius: 'var(--rounded-md)', 
-          border: '1px solid var(--gray-alpha-200)'
-        }}>
+        <div className={styles.noPosts}>
           <p>Nenhum post ainda!</p>
         </div>
       ) : (
