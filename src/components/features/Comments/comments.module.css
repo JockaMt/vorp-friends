@@ -49,6 +49,34 @@
 
 .authorName {
   font-weight: 700;
+  color: var(--foreground);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.authorName:hover {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.mentionedUser {
+  color: var(--foreground);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.mentionedUser:hover {
+  color: var(--accent-color-hover);
+  text-decoration: underline;
+}
+
+.replyTo {
+  display: flex;
+  color: var(--gray-500);
+  font-size: 0.85rem;
+  font-weight: 500;
+  gap: .3em;
 }
 
 .commentText {
@@ -91,6 +119,7 @@
   padding: 0.5rem;
   outline: none;
   border: 1px solid var(--gray-alpha-200);
+  background-color: var(--background);
   border-radius: var(--rounded-md);
 }
 

@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import styles from './comments.module.css';
 import { postService } from '@/services/posts';
 import type { Comment } from '@/types/post';
@@ -120,7 +121,6 @@ export default function Comments({ postId, load = false, onCreateTopComment, onD
 
   const renderedComments = comments.map(comment => {
     const parent = comment.parentId ? comments.find(c => c.id === comment.parentId) : undefined;
-    const parentName = parent?.author?.displayName;
 
     return (
       <div key={comment.id} className={styles.commentItem}>
@@ -129,9 +129,23 @@ export default function Comments({ postId, load = false, onCreateTopComment, onD
         </div>
         <div className={styles.commentContent}>
           <div className={styles.commentAuthor}>
-            <span className={styles.authorName}>{comment.author.displayName}</span>
-            {comment.parentId && parentName && (
-              <span className={styles.replyIndicator}><span>•</span><span>resposta a {parentName}</span></span>
+            <Link 
+              href={`/profile/${comment.author.username || comment.author.id}`} 
+              className={styles.authorName}
+            >
+              {comment.author.displayName}
+            </Link>
+            {comment.parentId && parent && (
+              <span className={styles.replyIndicator}>
+                <span>•</span>
+                <span className={styles.replyTo}>resposta a 
+                <Link 
+                  href={`/profile/${parent.author.username || parent.author.id}`}
+                  className={styles.mentionedUser}
+                >
+                  {parent.author.displayName}
+                </Link></span>
+              </span>
             )}
           </div>
           {editingCommentId === comment.id ? (
@@ -156,8 +170,8 @@ export default function Comments({ postId, load = false, onCreateTopComment, onD
           </div>
           {replyingTo === comment.id && (
             <div className={styles.replyForm}>
-              <input className={styles.replyInput} value={replyText} onChange={(e) => setReplyText(e.target.value)} />
-              <button onClick={() => submitReply(comment.id)}>Enviar</button>
+              <input className={styles.replyInput} placeholder='Adicionar uma resposta...' value={replyText} onChange={(e) => setReplyText(e.target.value)} />
+              <button className={styles.sendReplyButton} onClick={() => submitReply(comment.id)}>Enviar</button>
             </div>
           )}
         </div>
