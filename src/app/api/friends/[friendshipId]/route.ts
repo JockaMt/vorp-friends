@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import type { RouteHandlerContext } from 'next';
 import { auth } from '@clerk/nextjs/server';
 import { getDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
@@ -7,7 +8,7 @@ import type { FriendshipDocument } from '@/lib/models';
 // PUT /api/friends/[friendshipId] - Responder solicitação de amizade
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { friendshipId: string } }
+  context: RouteHandlerContext
 ) {
   try {
     const { userId } = await auth();
@@ -15,7 +16,7 @@ export async function PUT(
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 
-    const { friendshipId } = params;
+  const { friendshipId } = context.params;
     const { action } = await request.json(); // 'accept', 'reject', ou 'block'
 
     if (!['accept', 'reject', 'block'].includes(action)) {
@@ -78,7 +79,7 @@ export async function PUT(
 // DELETE /api/friends/[friendshipId] - Remover amizade
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { friendshipId: string } }
+  context: RouteHandlerContext
 ) {
   try {
     const { userId } = await auth();
@@ -86,7 +87,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 
-    const { friendshipId } = params;
+  const { friendshipId } = context.params;
 
     const db = await getDatabase();
     const friendshipsCollection = db.collection<FriendshipDocument>('friendships');
