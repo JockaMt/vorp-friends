@@ -18,8 +18,32 @@
   --danger-color-alpha: rgba(239, 68, 68, 0.1);
 
   --success-color: #10b981;
+  --success-color-hover: #059669;
+  --success-color-dark: #047857;
+  --success-color-light: rgba(16, 185, 129, 0.1);
+  
   --warning-color: #f59e0b;
   --info-color: #3b82f6;
+
+  /* Semantic colors */
+  --color-primary: var(--accent-color);
+  --color-primary-dark: var(--accent-color-hover);
+  --color-secondary: var(--gray-100);
+  --color-success: var(--success-color);
+  --color-success-dark: var(--success-color-hover);
+  --color-danger: var(--danger-color);
+  --color-danger-light: var(--danger-color-alpha);
+  --color-warning: var(--warning-color);
+  --color-info: var(--info-color);
+
+  /* Text colors */
+  --color-text-primary: var(--foreground);
+  --color-text-secondary: var(--gray-600);
+  --color-text-tertiary: var(--gray-400);
+
+  /* UI colors */
+  --color-card: var(--background);
+  --color-border: var(--gray-200);
 
   --online-color: #10b981;
   --offline-color: #6b7280;
@@ -126,6 +150,32 @@
     --like-color-hover: #f43f5e;
     --like-background: rgba(251, 113, 133, 0.08);
     --like-background-hover: rgba(244, 63, 94, 0.18);
+
+    /* Success color for dark theme */
+    --success-color: #34d399;
+    --success-color-hover: #10b981;
+    --success-color-dark: #059669;
+    --success-color-light: rgba(52, 211, 153, 0.1);
+
+    /* Semantic colors for dark theme */
+    --color-primary: var(--accent-color);
+    --color-primary-dark: var(--accent-color-hover);
+    --color-secondary: var(--gray-200);
+    --color-success: var(--success-color);
+    --color-success-dark: var(--success-color-hover);
+    --color-danger: var(--danger-color);
+    --color-danger-light: rgba(248, 113, 113, 0.1);
+    --color-warning: #fbbf24;
+    --color-info: #60a5fa;
+
+    /* Text colors for dark theme */
+    --color-text-primary: var(--foreground);
+    --color-text-secondary: var(--gray-600);
+    --color-text-tertiary: var(--gray-500);
+
+    /* UI colors for dark theme */
+    --color-card: var(--gray-100);
+    --color-border: var(--gray-300);
 
     color-scheme: dark;
   }

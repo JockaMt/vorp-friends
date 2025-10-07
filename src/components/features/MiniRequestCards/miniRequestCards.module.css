@@ -1,0 +1,107 @@
+.requestList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.requestItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.requestLink {
+    display: inline-flex;
+    flex: 1;
+    align-items: center;
+    justify-content: start;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    text-decoration: none;
+}
+
+.avatarContainer {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-100);
+}
+
+.avatarImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatarPlaceholder {
+    font-weight: 600;
+    color: var(--primary-700);
+}
+
+.actions {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+}
+
+.miniButton {
+    padding: 0.35rem;
+    border-radius: 50%;
+    border: none;
+    background-color: var(--gray-alpha-100);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+}
+
+.miniAcceptButton {
+    color: var(--success-color);
+}
+
+.miniAcceptButton:hover {
+    background-color: var(--gray-alpha-200);
+}
+
+.miniRejectButton {
+    color: var(--danger-color-hover);
+}
+
+.miniRejectButton:hover {
+    background-color: var(--gray-alpha-200);
+}
+
+.miniButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.noRequests {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 1rem 0;
+}
+
+.moreRequests {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--gray-alpha-200);
+    margin-top: 0.5rem;
+}

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Post } from '@/components/features/Post';
 import { usePosts } from '@/contexts/PostsContext';
 import styles from './userPosts.module.css';
+import { SkeletonPost } from '@/components/ui/Skeleton';
 
 interface UserPostsProps {
   authorId: string;
@@ -107,7 +108,13 @@ export function UserPosts({ authorId }: UserPostsProps) {
     <div>
       <h2 style={{ marginBottom: '1rem' }}>Posts</h2>
       
-      {posts.length === 0 && !isLoading ? (
+      {isLoading && posts.length === 0 ? (
+        <div className={styles.list}>
+          {[...Array(3)].map((_, index) => (
+            <SkeletonPost key={index} />
+          ))}
+        </div>
+      ) : posts.length === 0 ? (
         <div className={styles.noPosts}>
           <p>Nenhum post ainda!</p>
         </div>
@@ -136,14 +143,18 @@ export function UserPosts({ authorId }: UserPostsProps) {
             />
           ))}
 
-          {hasMore && (
+          {isLoading && posts.length > 0 && (
+            <SkeletonPost />
+          )}
+
+          {hasMore && !isLoading && (
             <div style={{ textAlign: 'center', padding: '1rem' }}>
               <button 
                 className="buttonPrimary" 
                 onClick={handleLoadMore} 
                 disabled={isLoading}
               >
-                {isLoading ? 'Carregando...' : 'Carregar mais'}
+                Carregar mais
               </button>
             </div>
           )}

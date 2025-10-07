@@ -27,6 +27,15 @@ export interface CommentDocument {
   updatedAt: Date;
 }
 
+export interface FriendshipDocument {
+  _id?: ObjectId;
+  requesterId: string; // ID do usuário que enviou a solicitação
+  addresseeId: string; // ID do usuário que recebeu a solicitação
+  status: 'pending' | 'accepted' | 'rejected' | 'blocked';
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 // Tipos para a API (sem campos internos do MongoDB)
 export interface PostData {
   id: string;
@@ -58,6 +67,27 @@ export interface CommentData {
   authorId: string;
   parentId?: string | null;
   author: {
+    id: string;
+    username: string;
+    displayName: string;
+    avatar?: string;
+  };
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface FriendshipData {
+  id: string;
+  requesterId: string;
+  addresseeId: string;
+  status: 'pending' | 'accepted' | 'rejected' | 'blocked';
+  requester: {
+    id: string;
+    username: string;
+    displayName: string;
+    avatar?: string;
+  };
+  addressee: {
     id: string;
     username: string;
     displayName: string;

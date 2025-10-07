@@ -7,6 +7,7 @@ import { postService } from '@/services/posts';
 import type { Comment } from '@/types/post';
 import Image from 'next/image';
 import { useAuth } from '@clerk/nextjs';
+import { SkeletonAvatar, SkeletonText } from '@/components/ui/Skeleton';
 
 interface CommentsProps {
   postId: string;
@@ -248,6 +249,19 @@ export default function Comments({ postId, load = false, onCreateTopComment, onD
       </div>
 
       {renderedComments}
+      {loading && (
+        <div className={styles.loadingComments}>
+          {[...Array(3)].map((_, index) => (
+            <div key={index} className={styles.commentItem}>
+              <SkeletonAvatar size={35} className={styles.skeletonAvatar} />
+              <div className={styles.commentContent}>
+                <SkeletonText lines={1} className={styles.skeletonName} />
+                <SkeletonText lines={2} className={styles.skeletonText} />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
       {comments.length === 0 && !loading && (
         <div className={styles.noComments}>Nenhum comentário ainda. Seja o primeiro a comentar!</div>
       )}

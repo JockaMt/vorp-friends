@@ -11,6 +11,12 @@
     box-shadow: var(--shadow-sm);
 }
 
+.loading {
+    display: flex;
+    max-width: 250px;
+    width: 100%;
+}
+
 /* Profile styles */
 .profileImageContainer {
     display: flex;
@@ -270,4 +276,109 @@
 .offline {
     background-color: #95a5a6;
     /* Cinza para offline */
+}
+
+/* Skeleton styles */
+.skeletonAvatar {
+    width: 10em !important;
+    height: 10em !important;
+    border-radius: 50% !important;
+    margin-bottom: 0.8em;
+}
+
+.skeletonContent {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.skeletonName {
+    width: 60% !important;
+    height: 1.2em !important;
+}
+
+.skeletonBio {
+    width: 80% !important;
+    height: 0.9em !important;
+}
+
+.skeletonNav {
+    width: 100%;
+    padding: 1em 0;
+}
+
+/* Small skeletons for friend list */
+.skeletonAvatarSmall {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important;
+}
+
+.skeletonContentSmall {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 0.6rem;
+}
+
+.skeletonNameSmall {
+    width: 120px !important;
+    height: 12px !important;
+}
+
+/* Friend preview inside sidebar */
+.friendPreview {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.friendAvatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.friendAvatarPlaceholder {
+    width: 36px;
+    height: 36px;
+    color: var(--gray-alpha-400);
+}
+
+.friendMeta {
+    display: flex;
+    flex-direction: column;
+}
+
+.friendUsername {
+    font-size: 0.8em;
+    color: var(--gray-alpha-500);
+}
+
+.showMore {
+    margin-top: 0.6em;
+    display: flex;
+    justify-content: center;
+}
+
+.showMoreButton {
+    padding: 0.45em 0.75em;
+    border-radius: var(--rounded-sm);
+    background: transparent;
+    border: 1px solid var(--gray-alpha-200);
+    color: var(--foreground);
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+.showMoreButton:hover {
+    background: var(--gray-alpha-100);
+}
+
+.emptyStateText {
+    color: var(--gray-alpha-500);
+    font-size: 0.9em;
 }

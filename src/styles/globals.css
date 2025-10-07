@@ -10,6 +10,26 @@
 body {
   width: 100vw;
   overflow-x: hidden;
+  background-color: var(--background);
+}
+
+/* Remove text decorations from links by default */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+/* Override for specific link contexts where underlines are wanted */
+.content-links a {
+  text-decoration: underline;
+}
+
+html {
+  background-color: var(--background-2);
 }
 
 .buttonPrimary {

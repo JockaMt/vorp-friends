@@ -16,7 +16,7 @@
 .input {
   width: 100%;
   padding: 0.3em 0.5rem;
-  border: 1px solid var(--gray-100);
+  border: 1px solid white;
   appearance: none;
   border-radius: 0.5rem;
   font-size: 0.875rem;

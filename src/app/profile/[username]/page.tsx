@@ -5,6 +5,7 @@ import profileStyles from "./profile.module.css";
 import { ProfileSidebar } from "@/components/features/ProfileSidebar";
 import { UserPosts } from '@/components/features/UserPosts';
 import { PostInput } from '@/components/features/PostInput';
+import { FriendButton } from '@/components/features/FriendButton';
 import type { User } from "@clerk/nextjs/server";
 import type { SerializedUser } from "@/types/serializedUser";
 

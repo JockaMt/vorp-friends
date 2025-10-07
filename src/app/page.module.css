@@ -4,6 +4,7 @@
   width: 100%;
   align-items: center;
   justify-content: center;
+  background-color: var(--background-2);
 }
 
 /* Header styles */

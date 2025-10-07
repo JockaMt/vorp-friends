@@ -1,0 +1,121 @@
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.skeleton {
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    var(--color-secondary) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    var(--color-secondary) 100%
+  );
+  background-size: 200px 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+.textLine {
+  margin-bottom: 0.5rem;
+}
+
+.textLine:last-child {
+  margin-bottom: 0;
+}
+
+.subtitle {
+  margin-top: 0.25rem;
+  opacity: 0.7;
+}
+
+/* Card skeleton */
+.card {
+  padding: 1.5rem;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.cardInfo {
+  flex: 1;
+}
+
+.cardContent {
+  margin-top: 1rem;
+}
+
+/* Post skeleton */
+.post {
+  padding: 1.5rem;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.postHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.postInfo {
+  flex: 1;
+}
+
+.postContent {
+  margin-bottom: 1rem;
+}
+
+.postImage {
+  margin-top: 1rem;
+}
+
+.postActions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* Dark theme adjustments */
+@media (prefers-color-scheme: dark) {
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--gray-300) 0%,
+      rgba(255, 255, 255, 0.05) 50%,
+      var(--gray-300) 100%
+    );
+  }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .card,
+  .post {
+    padding: 1rem;
+  }
+  
+  .cardHeader,
+  .postHeader {
+    gap: 0.75rem;
+  }
+  
+  .postActions {
+    gap: 0.75rem;
+  }
+}

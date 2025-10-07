@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { SkeletonAvatar, SkeletonText } from '@/components/ui/Skeleton';
 import styles from './userSearch.module.css';
 import { FaSearch, FaTimes, FaUser } from 'react-icons/fa';
 import Image from 'next/image';
@@ -137,10 +138,19 @@ export function UserSearch({ placeholder = "Pesquisar usuários...", className }
       {isOpen && (query.trim().length >= 2) && (
         <div className={styles.resultsDropdown}>
           {isLoading && (
-            <div className={styles.loadingItem}>
-              <div className={styles.loadingSpinner}></div>
-              Pesquisando...
-            </div>
+            <>
+              <div className={styles.resultsHeader}>
+                Pesquisando...
+              </div>
+              {Array.from({ length: 3 }).map((_, index) => (
+                <div key={index} className={styles.resultItem}>
+                  <SkeletonAvatar size={32} />
+                  <div className={styles.userInfo}>
+                    <SkeletonText lines={2} />
+                  </div>
+                </div>
+              ))}
+            </>
           )}
 
           {error && !isLoading && (

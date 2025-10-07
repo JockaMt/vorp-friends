@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
 
     const searchParams = request.nextUrl.searchParams;
     const query = searchParams.get('q');
+    const exact = searchParams.get('exact') === 'true';
     
     if (!query || query.trim().length < 2) {
       return NextResponse.json({ 
@@ -33,16 +34,27 @@ export async function GET(request: NextRequest) {
         const lastName = user.lastName?.toLowerCase() || '';
         const username = user.username?.toLowerCase() || '';
         const email = user.emailAddresses?.[0]?.emailAddress?.toLowerCase() || '';
+        const fullName = `${firstName} ${lastName}`.trim();
         
-        return (
-          firstName.includes(searchQuery) ||
-          lastName.includes(searchQuery) ||
-          username.includes(searchQuery) ||
-          email.includes(searchQuery) ||
-          `${firstName} ${lastName}`.includes(searchQuery)
-        );
+        if (exact) {
+          // Busca exata: verifica se algum campo é exatamente igual
+          return (
+            username === searchQuery ||
+            user.id === query.trim() || // Permite busca por ID também
+            email === searchQuery
+          );
+        } else {
+          // Busca por substring (comportamento original)
+          return (
+            firstName.includes(searchQuery) ||
+            lastName.includes(searchQuery) ||
+            username.includes(searchQuery) ||
+            email.includes(searchQuery) ||
+            fullName.includes(searchQuery)
+          );
+        }
       })
-      .filter(user => user.id !== userId) // Remove o próprio usuário dos resultados
+      .filter(user => exact || user.id !== userId) // Remove o próprio usuário apenas para buscas não-exatas
       .map(user => ({
         id: user.id,
         username: user.username,

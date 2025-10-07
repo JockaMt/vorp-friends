@@ -130,3 +130,26 @@
   border-radius: 50%;
   overflow: hidden;
 }
+
+/* Skeleton styles for comments */
+.loadingComments {
+  margin-top: 1em;
+}
+
+.skeletonAvatar {
+  width: 35px !important;
+  height: 35px !important;
+  border-radius: 50% !important;
+  flex-shrink: 0;
+}
+
+.skeletonName {
+  width: 100px !important;
+  height: 14px !important;
+  margin-bottom: 0.5em !important;
+}
+
+.skeletonText {
+  width: 70% !important;
+  height: 12px !important;
+}

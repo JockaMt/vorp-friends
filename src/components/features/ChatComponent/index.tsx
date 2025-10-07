@@ -1,11 +1,24 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@clerk/nextjs';
+import { friendshipService } from '@/services/friendship';
+import type { Friendship } from '@/types/friendship';
 import styles from './chat.module.css';
 import { FaPaperPlane, FaPaperclip, FaSmile, FaComments } from 'react-icons/fa';
 import { IoIosArrowBack } from 'react-icons/io';
 
 export function ChatComponent() {
+    const { userId } = useAuth();
     const [open, setOpen] = useState(false);
+    const [friends, setFriends] = useState<Array<{
+        id: string;
+        name: string;
+        username: string;
+        avatar?: string;
+        online: boolean;
+    }>>([]);
+    const [loading, setLoading] = useState(false);
+    const [selectedFriend, setSelectedFriend] = useState<string | null>(null);
 
     const messages = [
         { id: 1, from: 'friend', text: 'Oi! Tudo bem?', time: '09:10' },
@@ -13,25 +26,43 @@ export function ChatComponent() {
         { id: 3, from: 'friend', text: 'Legal! Parece bom.', time: '09:12' },
     ];
 
-    const friends = [
-        { id: 1, name: 'Amigo 1', online: true },
-        { id: 2, name: 'Amigo 2', online: false },
-        { id: 3, name: 'Amigo 3', online: true },
-        { id: 4, name: 'Amigo 4', online: true },
-        { id: 5, name: 'Amigo 5', online: true },
-        { id: 6, name: 'Amigo 6', online: true },
-        { id: 7, name: 'Amigo 7', online: true },
-        { id: 8, name: 'Amigo 8', online: true },
-        { id: 9, name: 'Amigo 9', online: true },
-        { id: 10, name: 'Amigo 10', online: true },
-        { id: 11, name: 'Amigo 11', online: true },
-    ];
+    // Carregar amigos quando o chat abrir
+    useEffect(() => {
+        if (open && userId && friends.length === 0) {
+            loadFriends();
+        }
+    }, [open, userId]);
 
-    const [selectedFriend, setSelectedFriend] = useState<number | null>(null);
+    const loadFriends = async () => {
+        if (!userId) return;
+        
+        setLoading(true);
+        try {
+            const data = await friendshipService.getFriends('accepted');
+            const friendsList = (data.friendships || []).map((friendship: Friendship) => {
+                // Determinar qual usuário mostrar (o que não é o usuário atual)
+                const friend = friendship.requesterId === userId 
+                    ? friendship.addressee 
+                    : friendship.requester;
+                
+                return {
+                    id: friend.id,
+                    name: friend.displayName,
+                    username: friend.username,
+                    avatar: friend.avatar,
+                    online: Math.random() > 0.5 // Por enquanto status aleatório
+                };
+            });
+            setFriends(friendsList);
+        } catch (error) {
+            console.error('Erro ao carregar amigos para chat:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-    function openWithFriend(id: number) {
+    function openWithFriend(id: string) {
         setSelectedFriend(id);
-        setOpen(true);
     }
 
     return (
@@ -56,14 +87,26 @@ export function ChatComponent() {
                                     setOpen(false)
                                     }} aria-label="Minimizar chat">—</button>
                                 </div>
-                            <ul className={styles.friendsList}>
-                                {friends.map(f => (
-                                    <li key={f.id} className={styles.friendItem} onClick={() => openWithFriend(f.id)}>
-                                        <span className={`${styles.statusDot} ${f.online ? styles.online : styles.offline}`}></span>
-                                        <span className={styles.friendName}>{f.name}</span>
-                                    </li>
-                                ))}
-                            </ul>
+                            {loading ? (
+                                <div className={styles.loading}>Carregando amigos...</div>
+                            ) : friends.length === 0 ? (
+                                <div className={styles.noFriends}>
+                                    <p>Você ainda não tem amigos para conversar.</p>
+                                    <p>Adicione amigos nos perfis de usuários!</p>
+                                </div>
+                            ) : (
+                                <ul className={styles.friendsList}>
+                                    {friends.map(f => (
+                                        <li key={f.id} className={styles.friendItem} onClick={() => openWithFriend(f.id)}>
+                                            <span className={`${styles.statusDot} ${f.online ? styles.online : styles.offline}`}></span>
+                                            <div className={styles.friendInfo}>
+                                                <span className={styles.friendName}>{f.name}</span>
+                                                <span className={styles.friendUsername}>@{f.username}</span>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
                         </div>
                     ) : (
                         <div className={styles.chatScreen}>

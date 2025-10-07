@@ -7,3 +7,5 @@ export { CustomSelect } from './CustomSelect';
 export { UserSearch } from './UserSearch';
 export { EmojiPicker } from './EmojiPicker';
 export { LocationPicker } from './LocationPicker';
+export { FriendButton } from './FriendButton';
+export { default as MiniRequestCards } from './MiniRequestCards';

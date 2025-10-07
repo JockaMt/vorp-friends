@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { useAuth, UserButton } from '@clerk/nextjs';
+import { useAuth, useUser, UserButton } from '@clerk/nextjs';
 import styles from './headerNav.module.css';
 import { UserSearch } from '@/components/features';
 import { RiNotificationBadgeFill } from 'react-icons/ri';
@@ -13,6 +13,7 @@ interface HeaderProps {
 
 export default function HeaderNav({ onOpenChat, onOpenNotifications }: HeaderProps) {
     const { isSignedIn } = useAuth();
+    const { user } = useUser();
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -25,22 +26,23 @@ export default function HeaderNav({ onOpenChat, onOpenNotifications }: HeaderPro
                 <h1 className={styles.headerTitle}>VORP Friends</h1>
                 {mounted && isSignedIn &&
                     <ul className={styles.headerNavList}>
-                        <li className={styles.headerNavItem}>
-                            <a className={styles.active} href="/">Início</a>
-                        </li>
-                        <li className={styles.headerNavItem}>
-                            <a href="/profile">Perfil</a>
-                        </li>
-                        <li className={styles.headerNavItem}>
-                            <a href="/friends">Amigos</a>
-                        </li>
-                        <li className={styles.headerNavItem}>
-                            <a href="/groups">Grupos</a>
-                        </li>
-                        <li className={styles.headerNavItem}>
-                            <a href="/messages">Recados</a>
-                        </li>
-                    </ul>
+                            <li className={styles.headerNavItem}>
+                                <a className={styles.active} href="/">Início</a>
+                            </li>
+                            <li className={styles.headerNavItem}>
+                                {/* Build profile path from username when available, fallback to id or /profile */}
+                                <a href={user ? `/profile/${user.username ?? user.id}` : '/profile'}>Perfil</a>
+                            </li>
+                            <li className={styles.headerNavItem}>
+                                <a href="/friends">Amigos</a>
+                            </li>
+                            <li className={styles.headerNavItem}>
+                                <a href="/groups">Grupos</a>
+                            </li>
+                            <li className={styles.headerNavItem}>
+                                <a href="/messages">Recados</a>
+                            </li>
+                        </ul>
                 }
             </nav>
             {mounted && isSignedIn ? (

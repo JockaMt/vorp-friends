@@ -1,6 +1,7 @@
-'use client';
+ 'use client';
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { SkeletonAvatar, SkeletonText } from "@/components/ui/Skeleton";
 import styles from "./profileSidebar.module.css";
 import Image from "next/image";
 import { FaUserCircle, FaUserFriends } from "react-icons/fa";
@@ -9,6 +10,9 @@ import { TbGlassFullFilled, TbHandFinger } from "react-icons/tb";
 import { FaPen } from "react-icons/fa6";
 import { useUser } from "@clerk/nextjs";
 import type { SerializedUser } from "@/types/serializedUser";
+import { FriendButton } from "../FriendButton";
+import { friendshipService } from '@/services/friendship';
+import type { Friendship } from '@/types/friendship';
 
 export function ProfileSidebar({ profileUser }: { profileUser?: SerializedUser }) {
     const { user, isLoaded } = useUser();
@@ -42,7 +46,7 @@ export function ProfileSidebar({ profileUser }: { profileUser?: SerializedUser }
     const displayName = viewed?.fullName || viewed?.firstName || viewed?.username || 'Usuário';
     const displayImage = viewed?.imageUrl || '';
     const isSelf = Boolean(user && viewed && user.id === viewed.id);
-    
+
     // Gera um identificador para o link do perfil (username, ID ou email)
     const profileIdentifier = viewed?.username || viewed?.id || viewed?.emailAddresses?.[0]?.emailAddress?.split('@')[0];
 
@@ -79,6 +83,83 @@ export function ProfileSidebar({ profileUser }: { profileUser?: SerializedUser }
             const initial = String(user?.publicMetadata?.bio ?? 'Short bio about yourself.');
             setBioValue(initial);
         }
+    }
+
+    // Friends list state (limited preview)
+    const [friends, setFriends] = useState<Array<{ id: string; username?: string; displayName?: string; avatar?: string }>>([]);
+    const [friendsLoading, setFriendsLoading] = useState(false);
+    const [totalFriends, setTotalFriends] = useState<number | null>(null);
+
+    // Formata números grandes para 1k, 2.5k, 4M, etc.
+    function formatNumber(n: number | null | undefined) {
+        if (n == null) return '0';
+        if (n < 1000) return String(n);
+        const units = [
+            { value: 1e9, symbol: 'B' },
+            { value: 1e6, symbol: 'M' },
+            { value: 1e3, symbol: 'k' },
+        ];
+        for (const u of units) {
+            if (n >= u.value) {
+                const v = n / u.value;
+                // mostra uma casa decimal quando necessário (e.g., 2.5k), senão sem decimal (e.g., 12k)
+                const formatted = v >= 10 ? String(Math.round(v)) : String(Math.round(v * 10) / 10);
+                return `${formatted}${u.symbol}`;
+            }
+        }
+        return String(n);
+    }
+    
+    useEffect(() => {
+        // Load accepted friends for either the profile being viewed (profileUser) or the logged-in user
+        let mounted = true;
+        async function load() {
+            setFriendsLoading(true);
+            try {
+                const subjectId = profileUser?.id ?? user?.id;
+                // request friends for the subjectId (profileUser when viewing someone else's profile) - limit to 5 for preview
+                const data = await friendshipService.getFriends('accepted', 1, 5, subjectId);
+                if (!mounted) return;
+                const list: Array<{ id: string; username?: string; displayName?: string; avatar?: string }> = (data.friendships || []).map((f: Friendship) => {
+                    // determine which side of the friendship is the friend relative to the subject
+                    const friend = f.requesterId === subjectId ? f.addressee : f.requester;
+                    return { id: friend.id, username: friend.username, displayName: friend.displayName, avatar: friend.avatar };
+                });
+                setFriends(list);
+                setTotalFriends(data.pagination?.total ?? (list.length || 0));
+            } catch (err) {
+                console.error('Erro ao carregar amigos no sidebar:', err);
+            } finally {
+                if (mounted) setFriendsLoading(false);
+            }
+        }
+
+        // Load when we have either the profileUser info or the authenticated user info
+        if (profileUser || isLoaded) load();
+
+        return () => { mounted = false; };
+    }, [isLoaded, user, profileUser]);
+
+    // Se ainda não carregou os dados do usuário, mostra skeleton
+    if (!isLoaded && !profileUser) {
+        return (
+            <aside className={`${styles.aside} ${styles.loading}`}>
+                <div className={styles.profileContainer}>
+                    <div className={styles.profileImageContainer}>
+                        <SkeletonAvatar size={100} className={styles.skeletonAvatar} />
+                        <div className={styles.skeletonContent}>
+                            <SkeletonText lines={1} className={styles.skeletonName} />
+                            <SkeletonText lines={2} className={styles.skeletonBio} />
+                        </div>
+                    </div>
+                </div>
+                <nav className={styles.nav}>
+                    <div className={styles.skeletonNav}>
+                        <SkeletonText lines={4} />
+                    </div>
+                </nav>
+            </aside>
+        );
     }
 
     return (
@@ -138,16 +219,34 @@ export function ProfileSidebar({ profileUser }: { profileUser?: SerializedUser }
                         )}
                     </div>
                     <div className={styles.profileStats}>
-                        <a href="#" className={styles.statsItem}><FaUserFriends className={styles.statsIcon} /> 250</a>      {/*Amigos*/}
+                        <Link
+                            href={profileIdentifier ? `/friends/${profileIdentifier}` : '/friends'}
+                            className={styles.statsItem}
+                            aria-label={friendsLoading ? 'Carregando número de amigos' : `${totalFriends ?? 0}`}
+                        >
+                            <FaUserFriends className={styles.statsIcon} />
+                            <div className={styles.statsContent}>
+                                <span className={styles.statsNumber}>
+                                    {friendsLoading ? (
+                                        <span>—</span>
+                                    ) : (
+                                        <span>{formatNumber(totalFriends)}</span>
+                                    )}
+                                </span>
+                            </div>
+                        </Link>      {/*Amigos*/}
                         <a href="#" className={styles.statsItem}><MdGroups className={styles.statsIcon} /> 5</a>           {/*Grupos*/}
                         <a href="#" className={styles.statsItem}><TbHandFinger className={styles.statsIcon} /> 20</a>       {/*Cutucadas*/}
                         <a href="#" className={styles.statsItem}><TbGlassFullFilled className={styles.statsIcon} /> 1k</a> {/*Fans*/}
                     </div>
                 </div>
                 {/* Mostrar ações apenas quando NÃO for o próprio usuário */}
-                {!isSelf ? (
+                {(!isSelf && profileUser) ? (
                     <div className={styles.profileActions}>
-                        <button className="buttonPrimary">Adicionar Amigo</button>
+                        <FriendButton
+                            userId={profileUser.id}
+                            username={profileUser.username || profileUser.emailAddresses?.[0]?.emailAddress?.split('@')[0] || 'Usuário'}
+                        />
                         <button className="buttonSecondary">Seguir</button>
                         <button className="buttonSecondary">Mensagem</button>
                         <button className="buttonSecondary">Cutucar</button>
@@ -155,7 +254,7 @@ export function ProfileSidebar({ profileUser }: { profileUser?: SerializedUser }
                 ) : (
                     <div className={styles.profileActions}>
                         {profileIdentifier ? (
-                            <Link className="buttonPrimary" style={{display: 'flex', textDecoration: 'none', width: '100%', justifyContent: 'center'}} href={`/profile/${profileIdentifier}`}>
+                            <Link className="buttonPrimary" style={{ display: 'flex', textDecoration: 'none', width: '100%', justifyContent: 'center' }} href={`/profile/${profileIdentifier}`}>
                                 Ver Perfil
                             </Link>
                         ) : (
@@ -168,17 +267,47 @@ export function ProfileSidebar({ profileUser }: { profileUser?: SerializedUser }
             <div className={styles.friendSection}>
                 <h3 className={styles.sectionTitle}>Amigos</h3>
                 <ul className={styles.friendList}>
-                    <li>
-                        <a href="#" className={styles.friendItem}>
-                            <span className={styles.friendName}>Amigo 1</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" className={styles.friendItem}>
-                            <span className={styles.friendName}>Amigo 2</span>
-                        </a>
-                    </li>
+                    {friendsLoading ? (
+                        // show simple skeleton lines while loading
+                        Array.from({ length: 4 }).map((_, i) => (
+                            <li key={i} className={styles.friendItem}>
+                                <SkeletonAvatar size={36} className={styles.skeletonAvatarSmall} />
+                                <div className={styles.skeletonContentSmall}>
+                                    <SkeletonText lines={1} className={styles.skeletonNameSmall} />
+                                </div>
+                            </li>
+                        ))
+                    ) : friends.length === 0 ? (
+                        <li className={styles.emptyState}>
+                            <p className={styles.emptyStateText}>Nenhum amigo encontrado.</p>
+                        </li>
+                    ) : (
+                        friends.map(f => (
+                            <li key={f.id}>
+                                <Link href={`/profile/${f.username ?? f.id}`} className={styles.friendItem}>
+                                    <div className={styles.friendPreview}>
+                                        {f.avatar ? (
+                                            <Image src={f.avatar} alt={f.displayName || f.username || "avatar"} width={36} height={36} className={styles.friendAvatar} />
+                                        ) : (
+                                            <FaUserCircle className={styles.friendAvatarPlaceholder} />
+                                        )}
+                                        <div className={styles.friendMeta}>
+                                            <div className={styles.friendName}>{f.displayName ?? f.username ?? 'Usuário'}</div>
+                                            {f.username && <div className={styles.friendUsername}>@{f.username}</div>}
+                                        </div>
+                                    </div>
+                                </Link>
+                            </li>
+                        ))
+                    )}
                 </ul>
+                {friends.length > 5 && (
+                    <div className={styles.showMore}>
+                        <Link href={profileIdentifier ? `/friends/${profileIdentifier}` : '/friends'} className={styles.showMoreButton}>
+                            Mostrar mais
+                        </Link>
+                    </div>
+                )}
             </div>
         </aside>
     )

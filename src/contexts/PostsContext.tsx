@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useCallback, useReducer, useEffect } from 'react';
+import React, { createContext, useContext, useCallback, useReducer, useEffect, useRef } from 'react';
 import type { Post } from '@/types/post';
 import { useAuth } from '@clerk/nextjs';
 
@@ -47,9 +47,13 @@ function postsReducer(state: PostsState, action: PostsAction): PostsState {
     case 'SET_POSTS':
       return { ...state, posts: action.payload, isLoading: false, error: null };
     case 'ADD_POSTS':
+      // Filtragem adicional no reducer para prevenir duplicatas
+      const existingIds = new Set(state.posts.map(post => post.id));
+      const filteredNewPosts = action.payload.filter((post: Post) => !existingIds.has(post.id));
+      
       return { 
         ...state, 
-        posts: [...state.posts, ...action.payload], 
+        posts: [...state.posts, ...filteredNewPosts], 
         isLoading: false, 
         error: null 
       };
@@ -109,6 +113,25 @@ const PostsContext = createContext<PostsContextType | null>(null);
 export function PostsProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(postsReducer, initialState);
   const { isSignedIn } = useAuth();
+  
+  // Refs para evitar dependências circulares
+  const filterRef = React.useRef(state.filter);
+  const authorIdRef = React.useRef(state.authorId);
+  const postsRef = React.useRef(state.posts);
+  const loadingRef = React.useRef(false); // Flag para controlar carregamento
+  
+  // Atualizar refs quando o estado muda
+  React.useEffect(() => {
+    filterRef.current = state.filter;
+  }, [state.filter]);
+  
+  React.useEffect(() => {
+    authorIdRef.current = state.authorId;
+  }, [state.authorId]);
+  
+  React.useEffect(() => {
+    postsRef.current = state.posts;
+  }, [state.posts]);
 
   const fetchPosts = useCallback(async (page: number, filter: string, authorId?: string) => {
     let url = `/api/posts/feed?page=${page}&limit=10&filter=${filter}`;
@@ -125,32 +148,66 @@ export function PostsProvider({ children }: { children: React.ReactNode }) {
   const loadPosts = useCallback(async (page = 1, append = false) => {
     if (!isSignedIn) return;
     
+    // Prevenir múltiplas chamadas simultâneas
+    if (loadingRef.current) {
+      console.log('Bloqueando carregamento - já está carregando');
+      return;
+    }
+    
     try {
+      loadingRef.current = true; // Marcar como carregando
       dispatch({ type: 'SET_LOADING', payload: true });
       dispatch({ type: 'SET_ERROR', payload: null });
       
-      const data = await fetchPosts(page, state.filter, state.authorId);
+      // Usar refs para evitar dependências circulares
+      const data = await fetchPosts(page, filterRef.current, authorIdRef.current);
       
       if (append) {
-        // Ao carregar mais, adicionar aos posts existentes
-        dispatch({ type: 'ADD_POSTS', payload: data.data });
+        // Ao carregar mais, filtrar posts duplicados antes de adicionar
+        const existingPostIds = new Set(postsRef.current.map(post => post.id));
+        const newPosts = data.data.filter((post: Post) => !existingPostIds.has(post.id));
+        
+        if (newPosts.length > 0) {
+          dispatch({ type: 'ADD_POSTS', payload: newPosts });
+        }
+        
+        // Se não há novos posts únicos, não há mais posts para carregar
+        dispatch({ 
+          type: 'SET_HAS_MORE', 
+          payload: newPosts.length > 0 && page < data.pagination.totalPages 
+        });
       } else {
         // Ao carregar nova página, substituir todos os posts
         dispatch({ type: 'SET_POSTS', payload: data.data });
+        dispatch({ type: 'SET_HAS_MORE', payload: page < data.pagination.totalPages });
       }
       
-      dispatch({ type: 'SET_HAS_MORE', payload: page < data.pagination.totalPages });
       dispatch({ type: 'SET_PAGE', payload: page });
     } catch (error) {
+      console.error('Error loading posts:', error);
       dispatch({ type: 'SET_ERROR', payload: error instanceof Error ? error.message : 'Erro desconhecido' });
+    } finally {
+      loadingRef.current = false; // Liberar o lock
     }
-  }, [isSignedIn, state.filter, fetchPosts]);
+  }, [isSignedIn, fetchPosts]);
+  
+  // Criar um ref para loadPosts para evitar dependências circulares
+  const loadPostsRef = useRef(loadPosts);
+  loadPostsRef.current = loadPosts;
 
   const loadMore = useCallback(async () => {
-    if (state.hasMore && !state.isLoading) {
-      await loadPosts(state.page + 1, true);
+    // Verificação tripla para evitar carregamentos desnecessários
+    if (!state.hasMore || state.isLoading || loadingRef.current) {
+      console.log('LoadMore bloqueado:', { 
+        hasMore: state.hasMore, 
+        isLoading: state.isLoading, 
+        lockRef: loadingRef.current 
+      });
+      return;
     }
-  }, [state.hasMore, state.isLoading, state.page, loadPosts]);
+    
+    await loadPostsRef.current(state.page + 1, true);
+  }, [state.hasMore, state.isLoading, state.page]);
 
   const createPost = useCallback(async (content: string, location?: { name?: string; address?: string; coordinates?: { lat: number; lng: number } }) => {
     if (!isSignedIn) {
@@ -282,23 +339,25 @@ export function PostsProvider({ children }: { children: React.ReactNode }) {
 
   const refresh = useCallback(async () => {
     dispatch({ type: 'RESET' });
-    await loadPosts(1);
-  }, [loadPosts]);
+    await loadPostsRef.current(1);
+  }, []);
 
   // Carregar posts apenas quando necessário
   useEffect(() => {
     if (isSignedIn && state.posts.length === 0) {
-      loadPosts(1);
+      loadPostsRef.current(1);
     }
-  }, [isSignedIn, loadPosts]);
+  }, [isSignedIn, state.posts.length]);
 
   // Recarregar quando o filtro ou authorId muda
   useEffect(() => {
     if (isSignedIn) {
       dispatch({ type: 'RESET' });
-      loadPosts(1);
+      // Usar setTimeout para evitar conflitos com outros useEffects
+      setTimeout(() => {
+        loadPostsRef.current(1);
+      }, 0);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.filter, state.authorId, isSignedIn]);
 
   const contextValue: PostsContextType = {

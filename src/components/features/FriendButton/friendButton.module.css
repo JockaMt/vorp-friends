@@ -1,0 +1,127 @@
+.friendButton {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.5s ease;
+  min-width: 120px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  position: relative;
+}
+
+.friendButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.addFriend {
+  background: var(--color-primary);
+  color: white;
+}
+
+.addFriend:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
+
+.pending {
+  background: var(--color-secondary);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.accept {
+  background: var(--color-success);
+  color: white;
+  min-width: 80px;
+}
+
+.accept:hover:not(:disabled) {
+  background: var(--color-success-dark);
+}
+
+.reject {
+  background: transparent;
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger);
+  min-width: 80px;
+}
+
+.reject:hover:not(:disabled) {
+  background: var(--color-danger);
+  color: white;
+}
+
+.friends {
+  background: var(--color-success);
+  color: white;
+}
+
+.friends:hover:not(:disabled) {
+  background: var(--color-danger);
+}
+
+.friends .label {
+  display: inline-block;
+}
+
+.friends:hover .label {
+  /* fully remove the label from layout on hover so replacement centers */
+  display: none;
+}
+
+.friends:hover:not(:disabled)::after {
+  /* Show textual 'Remover' centered on the button when hovering */
+  content: 'Remover';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: 600;
+  font-size: 0.95em;
+}
+
+.rejected {
+  background: var(--color-secondary);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.blocked {
+  background: var(--color-secondary);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.loading {
+  background: var(--color-secondary);
+  color: var(--color-text-secondary);
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .friendButton {
+    font-size: 12px;
+    padding: 6px 12px;
+    min-width: 100px;
+    height: 32px;
+  }
+  
+  .buttonGroup {
+    gap: 6px;
+  }
+  
+  .accept,
+  .reject {
+    min-width: 70px;
+  }
+}

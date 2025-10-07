@@ -144,6 +144,7 @@
 
 .avatar {
     border-radius: 50%;
+    background-color: var(--gray-300);
     color: var(--gray-alpha-300);
 }
 
