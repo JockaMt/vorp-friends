@@ -1,15 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import type { RouteHandlerContext } from 'next';
 import { auth } from '@clerk/nextjs/server';
 import { getDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 import type { FriendshipDocument } from '@/lib/models';
 
 // PUT /api/friends/[friendshipId] - Responder solicitação de amizade
-export async function PUT(
-  request: NextRequest,
-  context: RouteHandlerContext
-) {
+export async function PUT(request: NextRequest, context: any) {
   try {
     const { userId } = await auth();
     if (!userId) {
@@ -77,10 +73,7 @@ export async function PUT(
 }
 
 // DELETE /api/friends/[friendshipId] - Remover amizade
-export async function DELETE(
-  request: NextRequest,
-  context: RouteHandlerContext
-) {
+export async function DELETE(request: NextRequest, context: any) {
   try {
     const { userId } = await auth();
     if (!userId) {

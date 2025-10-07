@@ -4,17 +4,14 @@ import { getDatabase } from '@/lib/mongodb';
 import type { FriendshipDocument } from '@/lib/models';
 
 // GET /api/friends/status/[userId] - Verificar status de amizade com um usuário
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { userId: string } }
-) {
+export async function GET(request: NextRequest, context: any) {
   try {
     const { userId: currentUserId } = await auth();
     if (!currentUserId) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 
-  const { userId: targetUserId } = (await params) as { userId: string };
+  const { userId: targetUserId } = context.params as { userId: string };
 
     if (currentUserId === targetUserId) {
       return NextResponse.json({
