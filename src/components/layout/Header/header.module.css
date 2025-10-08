@@ -21,6 +21,7 @@
   position: sticky;
   top: 0;
   z-index: 1000;
+  overflow: visible; /* Ensure menu can appear outside header bounds */
 }
 
 .headerContainer {
@@ -109,6 +110,13 @@
   height: auto;
   flex: 0 1 25em;
   gap: 1em;
+}
+
+/* Hide right sidebar on mobile to save space */
+@media (max-width: 768px) {
+  .rightSidebar {
+    display: none;
+  }
 }
 
 .rightAside {

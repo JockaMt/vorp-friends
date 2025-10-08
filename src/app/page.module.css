@@ -20,6 +20,15 @@
   z-index: 1000;
 }
 
+/* Mobile header adjustments */
+@media (max-width: 768px) {
+  .header {
+    padding: 0.5em 1em;
+    height: var(--mobile-header-height);
+    align-items: center;
+  }
+}
+
 .headerContainer {
   display: flex;
   width: 100%;
@@ -27,6 +36,14 @@
   margin-right: 0.5em;
   text-align: center;
   color: var(--background);
+}
+
+/* Mobile header container */
+@media (max-width: 768px) {
+  .headerContainer {
+    margin-right: 0;
+    align-items: center;
+  }
 }
 
 .headerTitle {
@@ -47,6 +64,18 @@
   margin-left: 1em;
   font-size: small;
   padding: 0;
+}
+
+/* Mobile navigation - hide text, show icons only */
+@media (max-width: 768px) {
+  .headerNavList {
+    gap: 0.5em;
+    margin-left: 0.5em;
+  }
+  
+  .headerNavList .navText {
+    display: none;
+  }
 }
 
 .headerNavItem a {
@@ -95,12 +124,40 @@
   gap: 1em;
 }
 
+/* Mobile-first responsive layout */
+@media (max-width: 768px) {
+  .mainContent {
+    flex-direction: column;
+    padding: 0; /* Remove padding */
+    gap: 0; /* Remove gap */
+    max-width: 100%;
+  }
+}
+
+/* Tablet layout */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .mainContent {
+    padding: 0.75em;
+    gap: 0.75em;
+  }
+}
+
 .filterContainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   margin-top: 1em;
+}
+
+/* Mobile filter container */
+@media (max-width: 768px) {
+  .filterContainer {
+    background-color: var(--background);
+    border-radius: var(--rounded);
+    width: 100%;
+    box-sizing: border-box;
+  }
 }
 
 .content {
@@ -117,6 +174,21 @@
   box-shadow: var(--shadow-sm);
 }
 
+/* Mobile content adjustments */
+@media (max-width: 768px) {
+  .content {
+    flex: 1;
+    max-width: 100%;
+    padding: var(--mobile-padding); /* Add padding back for spacing */
+    border: none; /* Remove border */
+    border-radius: 0; /* Remove border radius */
+    margin: 0;
+    background-color: var(--background);
+    box-shadow: none; /* Remove shadow */
+    order: 2; /* Content comes after sidebar on mobile */
+  }
+}
+
 /* Aside styles */
 .aside {
   flex: 0 1 25em;
@@ -124,6 +196,27 @@
   border-radius: var(--rounded-md);
   padding: 1em;
   height: fit-content;
+}
+
+/* Hide profile sidebar on mobile for home page only */
+.profileSidebarMobile {
+  display: block;
+}
+
+/* Mobile aside - responsive sidebar */
+@media (max-width: 768px) {
+  .aside {
+    flex: none;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: var(--mobile-gap);
+    padding: var(--mobile-padding);
+    order: 1; /* Sidebar comes first on mobile */
+  }
+  
+  .profileSidebarMobile {
+    display: none; /* Hide profile sidebar on mobile */
+  }
 }
 
 @media (prefers-color-scheme: dark) {

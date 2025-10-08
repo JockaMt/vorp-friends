@@ -11,10 +11,25 @@
     box-shadow: var(--shadow-sm);
 }
 
+/* Mobile sidebar adjustments */
+@media (max-width: 768px) {
+    .aside {
+        padding: var(--mobile-padding);
+        border-radius: var(--rounded);
+    }
+}
+
 .loading {
     display: flex;
     max-width: 250px;
     width: 100%;
+}
+
+/* Mobile loading state */
+@media (max-width: 768px) {
+    .loading {
+        max-width: 100%;
+    }
 }
 
 /* Profile styles */
@@ -57,6 +72,22 @@
     /* if you use an <img> inside, ensure it fills the circle */
 }
 
+/* Mobile profile image */
+@media (max-width: 768px) {
+    .profileImage {
+        width: 8em;
+        height: 8em;
+    }
+}
+
+/* Smaller screens (phones in portrait) */
+@media (max-width: 480px) {
+    .profileImage {
+        width: 6em;
+        height: 6em;
+    }
+}
+
 .bioText {
     /* Preserve line breaks and allow long words to break if needed */
     white-space: pre-wrap;
@@ -96,6 +127,21 @@
     width: 10em;
     height: 10em;
     color: var(--gray-alpha-300);
+}
+
+/* Mobile profile placeholder */
+@media (max-width: 768px) {
+    .profileImagePlaceholder {
+        width: 8em;
+        height: 8em;
+    }
+}
+
+@media (max-width: 480px) {
+    .profileImagePlaceholder {
+        width: 6em;
+        height: 6em;
+    }
 }
 
 .profileName {
@@ -185,6 +231,15 @@
     transition: transform 0.2s ease;
 }
 
+/* Mobile button improvements */
+@media (max-width: 768px) {
+    .profileActions button {
+        padding: 0.75em;
+        font-size: 1em;
+        min-height: var(--touch-target-size);
+    }
+}
+
 .profileActions button:hover:first-child {
     background-color: var(--accent-color-hover);
 }
@@ -204,6 +259,24 @@
     color: var(--foreground);
 }
 
+/* Mobile stats layout */
+@media (max-width: 768px) {
+    .profileStats {
+        gap: 0.5em;
+        padding: 0.75em 0.25em 0 0.25em;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .profileStats {
+        gap: 0.25em;
+        padding: 0.5em 0 0 0;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
 .statsItem {
     display: flex;
     align-items: center;
@@ -218,6 +291,17 @@
     color: var(--accent-color);
 }
 
+/* Mobile stats items */
+@media (max-width: 480px) {
+    .statsItem {
+        flex-direction: column;
+        gap: 0.1em;
+        min-width: var(--touch-target-size);
+        min-height: var(--touch-target-size);
+        padding: 0.25em;
+    }
+}
+
 .statsIcon {
     margin-right: 0.5em;
     font-size: 1.2em;
@@ -228,6 +312,13 @@
     border-top: 1px solid var(--gray-alpha-200);
     padding-top: 1em;
     margin-top: 1em;
+}
+
+/* Hide friend section on mobile to save space */
+@media (max-width: 768px) {
+    .friendSection {
+        display: none;
+    }
 }
 
 .sectionTitle {

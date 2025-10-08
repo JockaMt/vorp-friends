@@ -209,6 +209,10 @@
     font-size: 13px;
     padding: 0.4rem 2rem 0.4rem 2rem;
   }
+
+  .searchInput::placeholder {
+    color: var(--gray-alpha-400);
+  }
   
   .resultsDropdown {
     max-height: 300px;

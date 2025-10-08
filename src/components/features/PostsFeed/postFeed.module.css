@@ -33,3 +33,20 @@
   border-radius: var(--rounded-md);
   border: 1px solid var(--gray-alpha-200);
 }
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .postsFeed {
+    gap: var(--mobile-gap);
+    padding-top: var(--mobile-gap);
+  }
+  
+  .loading,
+  .error,
+  .noPosts {
+    margin: 0;
+    border-radius: var(--rounded);
+    width: 100%;
+    box-sizing: border-box;
+  }
+}

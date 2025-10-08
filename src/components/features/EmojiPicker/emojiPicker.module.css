@@ -19,15 +19,13 @@
   align-items: center;
   border-bottom: 1px solid var(--gray-alpha-200);
   background: var(--gray-alpha-50);
-  padding: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.377);
 }
 
 .categories {
   display: flex;
   overflow-x: auto;
   flex: 1;
-  gap: var(--emoji-grid-gap);
-  padding: 12px;
 }
 
 .closeButton {
@@ -50,6 +48,7 @@
 .categoryButton {
   background: none;
   border: none;
+  height: 100%;
   padding: 8px 12px;
   font-size: 12px;
   font-weight: 500;

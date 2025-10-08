@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "@/styles/variables.css";
 import "@/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
-import { Header } from "@/components/layout";
+import { AppLayout } from "@/components/layout";
 import { PostsProvider } from "@/contexts/PostsContext";
 
 const geistSans = Geist({
@@ -31,8 +31,9 @@ export default function RootLayout({
       <PostsProvider>
         <html lang="pt-BR">
           <body style={{ margin: 0, padding: 0, backgroundColor: 'var(--gray-alpha-100)' }} className={`${geistSans.variable} ${geistMono.variable}`}>
-            <Header />
-            {children}
+            <AppLayout>
+              {children}
+            </AppLayout>
           </body>
         </html>
       </PostsProvider>

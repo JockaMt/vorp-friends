@@ -7,9 +7,13 @@ import styles from './chat.module.css';
 import { FaPaperPlane, FaPaperclip, FaSmile, FaComments } from 'react-icons/fa';
 import { IoIosArrowBack } from 'react-icons/io';
 
-export function ChatComponent() {
+interface ChatComponentProps {
+    isOpen?: boolean;
+    onClose?: () => void;
+}
+
+export function ChatComponent({ isOpen = false, onClose }: ChatComponentProps) {
     const { userId } = useAuth();
-    const [open, setOpen] = useState(false);
     const [friends, setFriends] = useState<Array<{
         id: string;
         name: string;
@@ -28,10 +32,10 @@ export function ChatComponent() {
 
     // Carregar amigos quando o chat abrir
     useEffect(() => {
-        if (open && userId && friends.length === 0) {
+        if (isOpen && userId && friends.length === 0) {
             loadFriends();
         }
-    }, [open, userId]);
+    }, [isOpen, userId]);
 
     const loadFriends = async () => {
         if (!userId) return;
@@ -67,25 +71,23 @@ export function ChatComponent() {
 
     return (
         <div className={styles.chatWidget}>
-            {!(open) && (
+            {!isOpen && (
                 <button
                     className={styles.floatingButton}
-                    aria-label={open ? 'Fechar chat' : 'Abrir chat'}
-                    onClick={() => setOpen(v => !v)}
+                    aria-label={isOpen ? 'Fechar chat' : 'Abrir chat'}
+                    onClick={onClose}
                 >
                     <FaComments size={24} />
                 </button>
             )}
 
-            {open && (
+            {isOpen && (
                 <div className={styles.chatShell} role="dialog" aria-label="Chat de amigos">
                     {/* Two separate screens: friends list screen or chat screen */}
                     {selectedFriend == null ? (
                         <div className={styles.friendsScreen}>
                             <div className={styles.friendsHeader}>Amigos 
-                                <button className={styles.minimizeButton} onClick={() => {
-                                    setOpen(false)
-                                    }} aria-label="Minimizar chat">—</button>
+                                <button className={styles.minimizeButton} onClick={onClose} aria-label="Minimizar chat">—</button>
                                 </div>
                             {loading ? (
                                 <div className={styles.loading}>Carregando amigos...</div>
@@ -116,7 +118,7 @@ export function ChatComponent() {
                                     <div className={styles.chatTitle}>{friends.find(f => f.id === selectedFriend)?.name}</div>
                                     <span className={`${styles.statusDot} ${friends.find(f => f.id === selectedFriend)?.online ? styles.online : styles.offline}`}></span>
                                 </div>
-                                <button className={styles.minimizeButton} onClick={() => setOpen(false)} aria-label="Minimizar chat">—</button>
+                                <button className={styles.minimizeButton} onClick={onClose} aria-label="Minimizar chat">—</button>
                             </header>
 
                             <div className={styles.messages}>

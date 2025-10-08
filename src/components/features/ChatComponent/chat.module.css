@@ -8,12 +8,33 @@
     height: 360px;
 }
 
+/* Mobile fullscreen chatShell */
+@media (max-width: 768px) {
+    .chatShell {
+        flex: 1;
+        height: 100vh;
+        border: none;
+        border-radius: 0;
+        gap: 0;
+        flex-direction: column;
+    }
+}
+
 .friendsScreen {
     width: 280px;
     background: var(--background-2);
     /* make the screen layout a column so header + list stack and the list can flex */
     display: flex;
     flex-direction: column;
+}
+
+/* Mobile fullscreen friends screen */
+@media (max-width: 768px) {
+    .friendsScreen {
+        width: 100%;
+        height: 100%;
+        background: var(--background);
+    }
 }
 
 .friendsList {
@@ -41,6 +62,16 @@
     padding-left: 0.8rem;
     color: white;
     background-color: var(--accent-color);
+    min-height: 50px;
+}
+
+/* Mobile friends header */
+@media (max-width: 768px) {
+    .friendsHeader {
+        padding: 1rem;
+        min-height: 60px;
+        font-size: 1.1rem;
+    }
 }
 
 .friendItem {
@@ -121,6 +152,26 @@
     flex-direction: column;
 }
 
+.chatScreen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--background);
+}
+
+/* Mobile adjustments for chat screen */
+@media (max-width: 768px) {
+    .chatWindow {
+        height: 100%;
+        width: 100%;
+    }
+    
+    .chatScreen {
+        height: 100vh;
+        width: 100%;
+    }
+}
+
 /* Floating widget + button */
 .chatWidget {
     position: fixed;
@@ -129,6 +180,21 @@
     z-index: 1200;
     display: flex;
     align-items: flex-end;
+}
+
+/* Mobile fullscreen chat */
+@media (max-width: 768px) {
+    .chatWidget {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 9999;
+        background-color: var(--background);
+        align-items: stretch;
+        justify-content: stretch;
+    }
 }
 
 .floatingButton {
@@ -147,6 +213,13 @@
     z-index: 1300; /* ensure it's above other elements */
 }
 
+/* Hide floating button on mobile */
+@media (max-width: 768px) {
+    .floatingButton {
+        display: none;
+    }
+}
+
 .chatShell {
     margin-left: 0.6rem;
     box-shadow: 0 8px 30px rgba(0,0,0,0.12);
@@ -159,6 +232,16 @@
     background-color: var(--accent-color);
     color: white;
     border-bottom: 1px solid var(--gray-alpha-200);
+    padding: 0.5rem;
+}
+
+/* Mobile chat header adjustments */
+@media (max-width: 768px) {
+    .chatHeader {
+        padding: 1rem;
+        min-height: 60px;
+        box-sizing: border-box;
+    }
 }
 
 .chatHeaderLeft {
@@ -175,6 +258,43 @@
     color: white;
     cursor: pointer;
     padding: 0.8rem 0.8rem;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.backButton:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.minimizeButton {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 0.8rem;
+    font-size: 1.2rem;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.minimizeButton:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Mobile button adjustments */
+@media (max-width: 768px) {
+    .backButton {
+        padding: 1rem;
+        min-width: 44px;
+        min-height: 44px;
+    }
+    
+    .minimizeButton {
+        padding: 1rem;
+        min-width: 44px;
+        min-height: 44px;
+        font-size: 1.4rem;
+    }
 }
 
 .backButton:hover {
@@ -211,6 +331,16 @@
     flex-direction: column;
     gap: 0.6rem;
     background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.02) 100%);
+}
+
+/* Mobile messages area */
+@media (max-width: 768px) {
+    .messages {
+        padding: 1rem;
+        flex: 1;
+        height: calc(100vh - 140px); /* Subtract header and input area height */
+        overflow-y: auto;
+    }
 }
 
 .emptyConversation {
@@ -261,6 +391,19 @@
     gap: 0.5rem;
     padding: 0.5rem;
     border-top: 1px solid var(--gray-alpha-200);
+    background: var(--background);
+}
+
+/* Mobile chat input */
+@media (max-width: 768px) {
+    .chatInputRow {
+        padding: 1rem;
+        gap: 0.75rem;
+        min-height: 70px;
+        box-sizing: border-box;
+        position: relative;
+        bottom: 0;
+    }
 }
 
 .iconButton {
@@ -281,6 +424,23 @@
     padding: 0.5rem;
     border-radius: 8px;
     outline: none;
+    font-size: 14px;
+}
+
+/* Mobile input adjustments */
+@media (max-width: 768px) {
+    .input {
+        min-height: 44px;
+        padding: 0.75rem;
+        font-size: 16px; /* Prevent zoom on iOS */
+        border-radius: 12px;
+    }
+    
+    .iconButton {
+        padding: 0.6rem;
+        min-width: 44px;
+        min-height: 44px;
+    }
 }
 
 .input[contenteditable][data-placeholder]:empty:before {

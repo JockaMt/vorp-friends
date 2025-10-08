@@ -1,20 +1,32 @@
 .requestList {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Mobile adjustments for request list */
+@media (max-width: 768px) {
+  .requestList {
+    gap: 0.75rem;
+  }
 }
 
 .requestItem {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
 }
 
-.requestLink {
+/* Mobile request item spacing */
+@media (max-width: 768px) {
+  .requestItem {
+    gap: 0.75rem;
+  }
+}.requestLink {
     display: inline-flex;
     flex: 1;
     align-items: center;
@@ -26,18 +38,32 @@
     text-decoration: none;
 }
 
-.avatarContainer {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--primary-100);
+/* Mobile touch target for request link */
+@media (max-width: 768px) {
+  .requestLink {
+    width: 48px;
+    height: 48px;
+  }
 }
 
-.avatarImage {
+.avatarContainer {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-100);
+}
+
+/* Larger avatar on mobile for better touch targets */
+@media (max-width: 768px) {
+  .avatarContainer {
+    width: 48px;
+    height: 48px;
+  }
+}.avatarImage {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -67,6 +93,15 @@
     justify-content: center;
     width: 34px;
     height: 34px;
+}
+
+/* Mobile button improvements */
+@media (max-width: 768px) {
+  .miniButton {
+    width: var(--touch-target-size);
+    height: var(--touch-target-size);
+    padding: 0.5rem;
+  }
 }
 
 .miniAcceptButton {

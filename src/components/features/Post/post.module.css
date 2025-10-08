@@ -8,6 +8,17 @@
     width: 100%;
 }
 
+/* Mobile post container */
+@media (max-width: 768px) {
+    .postContainer {
+        padding: var(--mobile-padding);
+        border-radius: var(--rounded);
+        margin-bottom: var(--mobile-gap);
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
 .postHeader {
     display: flex;
     align-items: center;
@@ -210,6 +221,14 @@
     background-color: var(--gray-alpha-100); /* Cor de fundo enquanto a imagem carrega */
 }
 
+/* Mobile media container */
+@media (max-width: 768px) {
+    .mediaContainer {
+        max-height: 300px;
+        border-radius: var(--rounded);
+    }
+}
+
 .postImage {
     width: 100%;
     height: auto;
@@ -242,6 +261,15 @@
     justify-content: center;
     transition: background-color 0.2s ease;
     background-color: var(--gray-alpha-200);
+}
+
+/* Mobile action button improvements */
+@media (max-width: 768px) {
+    .postActionButton {
+        padding: 0.75em;
+        min-height: var(--touch-target-size);
+        font-size: 1em;
+    }
 }
 
 .postActionButton + .postActionButton {

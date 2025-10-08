@@ -1,4 +1,3 @@
-import { ChatComponent } from "@/components/features/ChatComponent";
 import { ProfileSidebar } from "@/components/features/ProfileSidebar";
 import { MainContent } from "@/components/MainContent";
 import styles from "./page.module.css";
@@ -29,9 +28,10 @@ export default async function Home() {
 
   return (
     <div className={styles.page}>
-      <ChatComponent />
       <div className={styles.mainContent}>
-        <ProfileSidebar />
+        <div className={styles.profileSidebarMobile}>
+          <ProfileSidebar />
+        </div>
         <main className={styles.content}>
           <MainContent />
         </main>

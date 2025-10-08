@@ -254,7 +254,7 @@ export function ProfileSidebar({ profileUser }: { profileUser?: SerializedUser }
                 ) : (
                     <div className={styles.profileActions}>
                         {profileIdentifier ? (
-                            <Link className="buttonPrimary" style={{ display: 'flex', textDecoration: 'none', width: '100%', justifyContent: 'center' }} href={`/profile/${profileIdentifier}`}>
+                            <Link className="buttonPrimary" style={{ display: 'flex', fontSize: '1rem', textDecoration: 'none', width: '100%', justifyContent: 'center' }} href={`/profile/${profileIdentifier}`}>
                                 Ver Perfil
                             </Link>
                         ) : (

@@ -27,6 +27,7 @@ export default function Comments({ postId, load = false, onCreateTopComment, onD
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editingText, setEditingText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingNew, setIsSubmittingNew] = useState(false);
   const { userId } = useAuth();
   
   // Ref para focar no input de resposta
@@ -86,16 +87,19 @@ export default function Comments({ postId, load = false, onCreateTopComment, onD
   }
 
   const submitNewComment = async () => {
-    if (!newCommentText.trim()) return;
+    if (!newCommentText.trim() || isSubmittingNew) return;
+    setIsSubmittingNew(true);
     try {
       const created = await postService.createComment({ postId, content: newCommentText.trim(), parentId: null });
       // append new top-level comment so newest is at the bottom
       setComments(prev => [...prev, created]);
       setNewCommentText('');
-  // notify parent that a top-level comment was created
-  if (typeof onCreateTopComment === 'function') onCreateTopComment();
+      // notify parent that a top-level comment was created
+      if (typeof onCreateTopComment === 'function') onCreateTopComment();
     } catch (err) {
       console.error('Erro ao criar comentário', err);
+    } finally {
+      setIsSubmittingNew(false);
     }
   }
 
@@ -245,7 +249,9 @@ export default function Comments({ postId, load = false, onCreateTopComment, onD
             }
           }}
         />
-        <button className={styles.sendReplyButton} onClick={submitNewComment} disabled={!userId || !newCommentText.trim()}>Enviar</button>
+        <button className={styles.sendReplyButton} onClick={submitNewComment} disabled={!userId || !newCommentText.trim() || isSubmittingNew}>
+          {isSubmittingNew ? 'Enviando...' : 'Enviar'}
+        </button>
       </div>
 
       {renderedComments}

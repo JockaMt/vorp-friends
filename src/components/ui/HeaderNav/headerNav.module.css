@@ -6,6 +6,15 @@
   margin-right: var(--spacing-sm);
   text-align: center;
   color: var(--on-accent);
+  position: relative;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .headerContainer {
+    margin-right: 0;
+    align-items: center;
+  }
 }
 
 .headerTitle {
@@ -108,6 +117,129 @@
   }
 }
 
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.headerTitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--on-accent);
+  margin: 0;
+}
+
+/* Mobile Header Layout */
+.mobileHeader {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.searchMode {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: var(--spacing-sm);
+  animation: fadeIn 0.2s ease;
+}
+
+.headerSearchInput {
+  flex: 1;
+  margin: 0;
+}
+
+/* Override UserSearch styles for header */
+.headerSearchInput .searchContainer {
+  max-width: none;
+  width: 100%;
+  margin: 0;
+  opacity: 1;
+}
+
+.headerSearchInput .searchInput {
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--on-accent);
+  font-size: 1rem;
+  padding: 0.75rem 2.5rem 0.75rem 2.5rem;
+  border-radius: 8px;
+}
+
+.headerSearchInput .searchInput::placeholder {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.headerSearchInput .searchInput:focus {
+  background-color: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  outline: none;
+}
+
+.cancelButton {
+  background: none;
+  border: none;
+  color: var(--on-accent);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.cancelButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Animation for search mode */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.actionButton {
+  background: none;
+  border: none;
+  color: var(--on-accent);
+  cursor: pointer;
+  padding: 0.75rem;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+  min-width: var(--touch-target-size);
+  min-height: var(--touch-target-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actionButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Animation for search mode */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .headerNav {
   display: flex;
   align-items: center;
@@ -121,6 +253,266 @@
   margin-left: var(--spacing-md);
   font-size: small;
   padding: 0;
+}
+
+.headerNavItem a {
+  color: var(--on-accent);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.headerNavItem a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.headerNavItem a.active {
+  background-color: rgba(255, 255, 255, 0.15);
+  font-weight: 500;
+}
+
+.navButton {
+  background: none;
+  border: none;
+  color: var(--on-accent);
+  cursor: pointer;
+  padding: 0.5rem;
+  margin: 0 0.25rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.userButton {
+  margin-left: var(--spacing-sm);
+}
+
+.searchInput {
+  margin-right: var(--spacing-md);
+}
+
+/* Desktop and mobile navigation visibility */
+.desktopNav {
+  display: flex;
+}
+
+.desktopRightNav {
+  display: flex;
+}
+
+/* Hamburger button - hidden on desktop */
+.hamburgerButton {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--on-accent);
+  cursor: pointer;
+  padding: 0.75rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  min-width: var(--touch-target-size);
+  min-height: var(--touch-target-size);
+  align-items: center;
+  justify-content: center;
+}
+
+.hamburgerButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.hamburgerButton:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.3);
+  outline-offset: 2px;
+}
+
+/* Mobile overlay menu */
+.mobileMenuOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+}
+
+.mobileMenu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 80%;
+  min-width: 280px;
+  max-width: 320px;
+  height: 100vh;
+  background-color: var(--accent-color);
+  color: var(--on-accent);
+  padding: var(--spacing-lg);
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+  animation: slideInRight 0.3s ease;
+  overflow-y: auto;
+  z-index: 10000;
+  box-sizing: border-box;
+}
+
+/* Ensure menu is fully visible on small screens */
+@media (max-width: 350px) {
+  .mobileMenu {
+    width: 90%;
+    min-width: 250px;
+  }
+}
+
+.mobileMenuHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.mobileMenuHeader h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--on-accent);
+}
+
+.closeMobileMenu {
+  background: none;
+  border: none;
+  color: var(--on-accent);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.closeMobileMenu:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.mobileSearchContainer {
+  margin-bottom: var(--spacing-lg);
+}
+
+.mobileSearchInput {
+  width: 100%;
+}
+
+.mobileNavList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-bottom: var(--spacing-lg);
+}
+
+.mobileNavItem {
+  margin-bottom: var(--spacing-sm);
+}
+
+.mobileNavItem a {
+  display: block;
+  color: var(--on-accent);
+  text-decoration: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+  font-size: 1rem;
+}
+
+.mobileNavItem a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.mobileActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.mobileActionButton {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--on-accent);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.mobileActionButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.mobileUserSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Mobile styles - show mobile header and hide desktop nav */
+@media (max-width: 768px) {
+  .mobileHeader {
+    display: flex !important;
+  }
+  
+  .desktopNav {
+    display: none !important;
+  }
+  
+  .desktopRightNav {
+    display: none !important;
+  }
+  
+  .headerContainer {
+    position: relative;
+  }
+
+  /* Ensure search mode takes full width on mobile */
+  .searchMode {
+    width: 100%;
+  }
+  
+  .headerSearchInput {
+    flex: 1;
+  }
 }
 
 .headerNavItem a {
