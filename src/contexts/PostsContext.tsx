@@ -14,7 +14,7 @@ interface PostsState {
   authorId?: string; // Para filtrar por autor específico
 }
 
-type PostsAction = 
+type PostsAction =
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: string | null }
   | { type: 'SET_POSTS'; payload: Post[] }
@@ -50,24 +50,24 @@ function postsReducer(state: PostsState, action: PostsAction): PostsState {
       // Filtragem adicional no reducer para prevenir duplicatas
       const existingIds = new Set(state.posts.map(post => post.id));
       const filteredNewPosts = action.payload.filter((post: Post) => !existingIds.has(post.id));
-      
-      return { 
-        ...state, 
-        posts: [...state.posts, ...filteredNewPosts], 
-        isLoading: false, 
-        error: null 
+
+      return {
+        ...state,
+        posts: [...state.posts, ...filteredNewPosts],
+        isLoading: false,
+        error: null
       };
     case 'ADD_POST':
-      return { 
-        ...state, 
+      return {
+        ...state,
         posts: [action.payload, ...state.posts],
-        error: null 
+        error: null
       };
     case 'UPDATE_POST':
       return {
         ...state,
-        posts: state.posts.map(post => 
-          post.id === action.payload.id 
+        posts: state.posts.map(post =>
+          post.id === action.payload.id
             ? { ...post, ...action.payload.updates }
             : post
         )
@@ -113,22 +113,22 @@ const PostsContext = createContext<PostsContextType | null>(null);
 export function PostsProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(postsReducer, initialState);
   const { isSignedIn } = useAuth();
-  
+
   // Refs para evitar dependências circulares
   const filterRef = React.useRef(state.filter);
   const authorIdRef = React.useRef(state.authorId);
   const postsRef = React.useRef(state.posts);
   const loadingRef = React.useRef(false); // Flag para controlar carregamento
-  
+
   // Atualizar refs quando o estado muda
   React.useEffect(() => {
     filterRef.current = state.filter;
   }, [state.filter]);
-  
+
   React.useEffect(() => {
     authorIdRef.current = state.authorId;
   }, [state.authorId]);
-  
+
   React.useEffect(() => {
     postsRef.current = state.posts;
   }, [state.posts]);
@@ -147,41 +147,41 @@ export function PostsProvider({ children }: { children: React.ReactNode }) {
 
   const loadPosts = useCallback(async (page = 1, append = false) => {
     if (!isSignedIn) return;
-    
+
     // Prevenir múltiplas chamadas simultâneas
     if (loadingRef.current) {
       console.log('Bloqueando carregamento - já está carregando');
       return;
     }
-    
+
     try {
       loadingRef.current = true; // Marcar como carregando
       dispatch({ type: 'SET_LOADING', payload: true });
       dispatch({ type: 'SET_ERROR', payload: null });
-      
+
       // Usar refs para evitar dependências circulares
       const data = await fetchPosts(page, filterRef.current, authorIdRef.current);
-      
+
       if (append) {
         // Ao carregar mais, filtrar posts duplicados antes de adicionar
         const existingPostIds = new Set(postsRef.current.map(post => post.id));
         const newPosts = data.data.filter((post: Post) => !existingPostIds.has(post.id));
-        
+
         if (newPosts.length > 0) {
           dispatch({ type: 'ADD_POSTS', payload: newPosts });
         }
-        
+
         // Se não há novos posts únicos, não há mais posts para carregar
-        dispatch({ 
-          type: 'SET_HAS_MORE', 
-          payload: newPosts.length > 0 && page < data.pagination.totalPages 
+        dispatch({
+          type: 'SET_HAS_MORE',
+          payload: newPosts.length > 0 && page < data.pagination.totalPages
         });
       } else {
         // Ao carregar nova página, substituir todos os posts
         dispatch({ type: 'SET_POSTS', payload: data.data });
         dispatch({ type: 'SET_HAS_MORE', payload: page < data.pagination.totalPages });
       }
-      
+
       dispatch({ type: 'SET_PAGE', payload: page });
     } catch (error) {
       console.error('Error loading posts:', error);
@@ -190,7 +190,7 @@ export function PostsProvider({ children }: { children: React.ReactNode }) {
       loadingRef.current = false; // Liberar o lock
     }
   }, [isSignedIn, fetchPosts]);
-  
+
   // Criar um ref para loadPosts para evitar dependências circulares
   const loadPostsRef = useRef(loadPosts);
   loadPostsRef.current = loadPosts;
@@ -198,14 +198,14 @@ export function PostsProvider({ children }: { children: React.ReactNode }) {
   const loadMore = useCallback(async () => {
     // Verificação tripla para evitar carregamentos desnecessários
     if (!state.hasMore || state.isLoading || loadingRef.current) {
-      console.log('LoadMore bloqueado:', { 
-        hasMore: state.hasMore, 
-        isLoading: state.isLoading, 
-        lockRef: loadingRef.current 
+      console.log('LoadMore bloqueado:', {
+        hasMore: state.hasMore,
+        isLoading: state.isLoading,
+        lockRef: loadingRef.current
       });
       return;
     }
-    
+
     await loadPostsRef.current(state.page + 1, true);
   }, [state.hasMore, state.isLoading, state.page]);
 
@@ -240,10 +240,10 @@ export function PostsProvider({ children }: { children: React.ReactNode }) {
       }
 
       const result = await response.json();
-      
+
       // Adicionar o novo post no início da lista (cache otimista)
       dispatch({ type: 'ADD_POST', payload: result.data });
-      
+
       // Limpar erro após sucesso
       dispatch({ type: 'SET_ERROR', payload: null });
     } catch (error) {
@@ -270,19 +270,19 @@ export function PostsProvider({ children }: { children: React.ReactNode }) {
       }
 
       const result = await response.json();
-      
+
       // Atualizar o post no cache
-      dispatch({ 
-        type: 'UPDATE_POST', 
-        payload: { 
-          id: postId, 
-          updates: { 
+      dispatch({
+        type: 'UPDATE_POST',
+        payload: {
+          id: postId,
+          updates: {
             content: result.data.content,
             updatedAt: result.data.updatedAt
-          } 
-        } 
+          }
+        }
       });
-      
+
       // Limpar erro após sucesso
       dispatch({ type: 'SET_ERROR', payload: null });
     } catch (error) {
@@ -295,16 +295,16 @@ export function PostsProvider({ children }: { children: React.ReactNode }) {
     try {
       const response = await fetch(`/api/posts/like/${postId}`, { method: 'POST' });
       if (!response.ok) throw new Error('Erro ao curtir post');
-      
-      dispatch({ 
-        type: 'UPDATE_POST', 
-        payload: { 
-          id: postId, 
-          updates: { 
-            isLiked: true, 
-            likesCount: state.posts.find(p => p.id === postId)?.likesCount! + 1 
-          } 
-        } 
+
+      dispatch({
+        type: 'UPDATE_POST',
+        payload: {
+          id: postId,
+          updates: {
+            isLiked: true,
+            likesCount: state.posts.find(p => p.id === postId)?.likesCount! + 1
+          }
+        }
       });
     } catch (error) {
       dispatch({ type: 'SET_ERROR', payload: error instanceof Error ? error.message : 'Erro ao curtir post' });
@@ -315,16 +315,16 @@ export function PostsProvider({ children }: { children: React.ReactNode }) {
     try {
       const response = await fetch(`/api/posts/like/${postId}`, { method: 'DELETE' });
       if (!response.ok) throw new Error('Erro ao descurtir post');
-      
-      dispatch({ 
-        type: 'UPDATE_POST', 
-        payload: { 
-          id: postId, 
-          updates: { 
-            isLiked: false, 
-            likesCount: state.posts.find(p => p.id === postId)?.likesCount! - 1 
-          } 
-        } 
+
+      dispatch({
+        type: 'UPDATE_POST',
+        payload: {
+          id: postId,
+          updates: {
+            isLiked: false,
+            likesCount: state.posts.find(p => p.id === postId)?.likesCount! - 1
+          }
+        }
       });
     } catch (error) {
       dispatch({ type: 'SET_ERROR', payload: error instanceof Error ? error.message : 'Erro ao descurtir post' });
@@ -335,7 +335,7 @@ export function PostsProvider({ children }: { children: React.ReactNode }) {
     try {
       const response = await fetch(`/api/posts/${postId}`, { method: 'DELETE' });
       if (!response.ok) throw new Error('Erro ao deletar post');
-      
+
       dispatch({ type: 'REMOVE_POST', payload: postId });
     } catch (error) {
       dispatch({ type: 'SET_ERROR', payload: error instanceof Error ? error.message : 'Erro ao deletar post' });

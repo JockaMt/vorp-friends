@@ -173,7 +173,8 @@
 }
 
 .postEditable {
-    position: relative; /* ADICIONADO: permite placeholder absoluto */
+    position: relative;
+    /* ADICIONADO: permite placeholder absoluto */
     flex: 1 1 auto;
     min-width: 0;
     box-sizing: border-box;
@@ -230,7 +231,7 @@
         width: 100%;
         box-sizing: border-box;
     }
-    
+
     .postInputContainer {
         padding-bottom: var(--mobile-padding);
         border-bottom: 1px solid var(--gray-alpha-200);
@@ -287,7 +288,7 @@
     position: absolute;
     right: 4px;
     top: 4px;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0, 0, 0, 0.4);
     color: white;
     border: none;
     width: 22px;

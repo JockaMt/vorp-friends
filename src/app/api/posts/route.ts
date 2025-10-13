@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
 
       const locationField = formData.get('location');
       if (locationField && typeof locationField === 'string') {
-        try { location = JSON.parse(locationField); } catch {}
+        try { location = JSON.parse(locationField); } catch { }
       }
 
       // collect File entries from the incoming FormData

@@ -16,7 +16,7 @@ export async function PATCH(
     }
 
     const { postId } = await params;
-    
+
     if (!ObjectId.isValid(postId)) {
       return NextResponse.json({ error: 'ID do post inválido' }, { status: 400 });
     }
@@ -48,11 +48,11 @@ export async function PATCH(
     // Atualizar o post
     const updatedPost = await postsCollection.findOneAndUpdate(
       { _id: new ObjectId(postId) },
-      { 
-        $set: { 
+      {
+        $set: {
           content: content.trim(),
           updatedAt: new Date()
-        } 
+        }
       },
       { returnDocument: 'after' }
     );
@@ -97,7 +97,7 @@ export async function DELETE(
     }
 
     const { postId } = await params;
-    
+
     if (!ObjectId.isValid(postId)) {
       return NextResponse.json({ error: 'ID do post inválido' }, { status: 400 });
     }
@@ -127,37 +127,37 @@ export async function DELETE(
       const failures: Array<{ image: string; tried: string[]; status?: number; body?: string }> = [];
 
       // Tentar deletar cada imagem. Se qualquer deleção falhar, abortar a operação.
-        for (const img of post.images) {
-          if (!img) continue;
+      for (const img of post.images) {
+        if (!img) continue;
 
-          // img can be a string (legacy) or an object { uuid, url }
-          let raw = img as any;
-          let candidateUrl: string | undefined;
-          let id = '';
+        // img can be a string (legacy) or an object { uuid, url }
+        let raw = img as any;
+        let candidateUrl: string | undefined;
+        let id = '';
 
-          if (typeof raw === 'string') {
-            candidateUrl = raw;
-          } else if (raw && typeof raw === 'object') {
-            if (typeof raw.url === 'string') candidateUrl = raw.url;
-            id = raw.uuid || raw.id || '';
-          }
+        if (typeof raw === 'string') {
+          candidateUrl = raw;
+        } else if (raw && typeof raw === 'object') {
+          if (typeof raw.url === 'string') candidateUrl = raw.url;
+          id = raw.uuid || raw.id || '';
+        }
 
-          if (!id) {
-            if (candidateUrl) {
-              try {
-                const parsed = new URL(candidateUrl);
-                const parts = parsed.pathname.split('/').filter(Boolean);
-                id = parts[parts.length - 1] || candidateUrl;
-              } catch (e) {
-                id = candidateUrl;
-              }
-            } else {
-              id = String(raw);
+        if (!id) {
+          if (candidateUrl) {
+            try {
+              const parsed = new URL(candidateUrl);
+              const parts = parsed.pathname.split('/').filter(Boolean);
+              id = parts[parts.length - 1] || candidateUrl;
+            } catch (e) {
+              id = candidateUrl;
             }
+          } else {
+            id = String(raw);
           }
+        }
 
-          // remover extensão se existir
-          const baseId = id.split('.').slice(0, -1).join('.') || id;
+        // remover extensão se existir
+        const baseId = id.split('.').slice(0, -1).join('.') || id;
 
         const candidates = [
           `https://vorpng.caiots.dev/images/${encodeURIComponent(baseId)}`,

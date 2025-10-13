@@ -241,18 +241,18 @@ export function Post(props: PostType) {
                     <FaShare /> <span className={styles.count}>{props.shares || 0}</span>
                 </button>
             </div>
-                    <div className={styles.postFooter}>
-                        <div className={styles.commentSection}>
-                            </div>
-                                {showComments && (
-                                    <Comments
-                                        postId={id!}
-                                        load={showComments}
-                                        onCreateTopComment={() => setCommentsCount(c => c + 1)}
-                                        onDeleteTopComment={() => setCommentsCount(c => Math.max(0, c - 1))}
-                                    />
-                                )}
-                    </div>
+            <div className={styles.postFooter}>
+                <div className={styles.commentSection}>
+                </div>
+                {showComments && (
+                    <Comments
+                        postId={id!}
+                        load={showComments}
+                        onCreateTopComment={() => setCommentsCount(c => c + 1)}
+                        onDeleteTopComment={() => setCommentsCount(c => Math.max(0, c - 1))}
+                    />
+                )}
+            </div>
         </div>
     )
 }

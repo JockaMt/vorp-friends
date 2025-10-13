@@ -10,10 +10,10 @@ import { useAuth } from "@clerk/nextjs";
 import { usePosts } from "@/contexts/PostsContext";
 
 interface Location {
-  id: string;
-  name: string;
-  address: string;
-  type: 'recent' | 'popular' | 'search';
+    id: string;
+    name: string;
+    address: string;
+    type: 'recent' | 'popular' | 'search';
     coordinates?: { lat: number; lng: number } | null;
 }
 
@@ -82,17 +82,17 @@ export function PostInput() {
         setIsPosting(true);
         setError(null);
 
-            try {
-                // include location if selected
-                const locationPayload = selectedLocation ? {
-                    name: selectedLocation.name,
-                    address: selectedLocation.address,
-                    coordinates: selectedLocation.coordinates ? { lat: selectedLocation.coordinates.lat, lng: selectedLocation.coordinates.lng } : undefined
-                } : undefined;
+        try {
+            // include location if selected
+            const locationPayload = selectedLocation ? {
+                name: selectedLocation.name,
+                address: selectedLocation.address,
+                coordinates: selectedLocation.coordinates ? { lat: selectedLocation.coordinates.lat, lng: selectedLocation.coordinates.lng } : undefined
+            } : undefined;
 
-                // Pass images to createPost (service will send FormData)
-                await actions.createPost({ content, images: selectedImages.length ? selectedImages : undefined });
-            
+            // Pass images to createPost (service will send FormData)
+            await actions.createPost({ content, images: selectedImages.length ? selectedImages : undefined });
+
             // Limpar o conteúdo após sucesso
             el.textContent = '';
             el.classList.add(styles.empty);
@@ -124,14 +124,14 @@ export function PostInput() {
         const selection = window.getSelection();
         if (selection && selection.rangeCount > 0) {
             const range = selection.getRangeAt(0);
-            
+
             // Verificar se o cursor está dentro do elemento editável
             if (el.contains(range.commonAncestorContainer)) {
                 // Inserir emoji na posição do cursor
                 const emojiNode = document.createTextNode(emoji);
                 range.deleteContents();
                 range.insertNode(emojiNode);
-                
+
                 // Mover cursor para após o emoji
                 range.setStartAfter(emojiNode);
                 range.setEndAfter(emojiNode);
@@ -140,7 +140,7 @@ export function PostInput() {
             } else {
                 // Se não há cursor válido, adicionar no final
                 el.textContent = (el.textContent || '') + emoji;
-                
+
                 // Mover cursor para o final
                 const newRange = document.createRange();
                 newRange.selectNodeContents(el);
@@ -151,7 +151,7 @@ export function PostInput() {
         } else {
             // Se não há seleção, adicionar no final
             el.textContent = (el.textContent || '') + emoji;
-            
+
             // Mover cursor para o final
             const newSelection = window.getSelection();
             const newRange = document.createRange();
@@ -164,7 +164,7 @@ export function PostInput() {
         // Focar no elemento e atualizar contador
         el.focus();
         handleInput();
-        
+
         // Remover classe empty se necessário
         if (el.textContent && el.textContent.trim().length > 0) {
             el.classList.remove(styles.empty);
@@ -185,7 +185,7 @@ export function PostInput() {
             {selectedLocation && (
                 <div className={styles.selectedLocation}>
                     <div className={styles.locationTag}>
-                        
+
                         <span className={styles.locationTagText}>{selectedLocation.name}</span>
                         <button
                             onClick={removeLocation}
@@ -214,7 +214,7 @@ export function PostInput() {
             <div className={styles.postActions}>
                 <div className={styles.iconActions}>
                     <div className={styles.emojiContainer}>
-                        <button 
+                        <button
                             ref={emojiButtonRef}
                             className={styles.iconButton}
                             onClick={() => setShowEmojiPicker(!showEmojiPicker)}
@@ -240,7 +240,7 @@ export function PostInput() {
                         />
                     </label>
                     <div className={styles.locationContainer}>
-                        <button 
+                        <button
                             ref={locationButtonRef}
                             className={`${styles.iconButton} ${selectedLocation ? styles.active : ''}`}
                             onClick={() => setShowLocationPicker(!showLocationPicker)}
@@ -263,7 +263,7 @@ export function PostInput() {
                         { value: 'public', label: 'Público', icon: <FaGlobe /> },
                         { value: 'friends', label: 'Amigos', icon: <FaUserFriends /> },
                     ]} />
-                    <button 
+                    <button
                         className={styles.submitButton}
                         onClick={handleSubmit}
                         disabled={isPosting || !isSignedIn}
@@ -285,7 +285,7 @@ export function PostInput() {
                     })}
                 </div>
             )}
-            
+
             <div className={styles.charCount}>
                 {length}/{maxLength}
             </div>
