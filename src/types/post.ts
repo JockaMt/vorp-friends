@@ -8,9 +8,8 @@ export interface Post {
     displayName: string;
     avatar?: string;
   };
-  images?: string[];
   images?: { uuid: string; url: string }[];
-  location?: string;
+  location?: { name?: string; address?: string; coordinates?: { lat: number; lng: number } } | null;
   likesCount: number;
   commentsCount: number;
   isLiked?: boolean;

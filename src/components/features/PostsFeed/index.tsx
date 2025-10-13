@@ -2,8 +2,10 @@
 import '@/styles/globals.css';
 import { Post } from '@/components/features/Post';
 import { SkeletonPost } from '@/components/ui/Skeleton';
+import { PostUpdateToast } from '@/components/ui/PostUpdateToast';
 import styles from './postFeed.module.css';
 import { usePosts } from '@/contexts/PostsContext';
+import { usePostUpdates } from '@/hooks/usePostUpdates';
 import { useEffect, useRef, useCallback } from 'react';
 
 interface PostsFeedProps {
@@ -16,6 +18,12 @@ export function PostsFeed({ filter = 'all' }: PostsFeedProps) {
   const observerRef = useRef<IntersectionObserver | null>(null);
   const lastElementRef = useRef<HTMLDivElement | null>(null);
   const loadingRef = useRef(false); // Flag para prevenir múltiplas chamadas
+
+  // Sistema de polling para atualizações
+  const { hasNewPosts, newPostsCount, markAsChecked, refreshPage } = usePostUpdates({
+    intervalMs: 5 * 60 * 1000, // 5 minutos
+    enabled: true
+  });
 
   const handleObserver = useCallback((entries: IntersectionObserverEntry[]) => {
     const first = entries[0];
@@ -125,53 +133,63 @@ export function PostsFeed({ filter = 'all' }: PostsFeedProps) {
   }
 
   return (
-    <div className={styles.postsFeed}>
-      {posts.length === 0 ? (
-        <div className={styles.noPosts}>
-          <p>Nenhum post ainda!</p>
-          <small>Seja o primeiro a postar algo.</small>
-        </div>
-      ) : (
-        <>
-          {posts.map((post, index) => {
-            // ref on the wrapper of the last item
-            const isLast = index === posts.length - 1;
-            return (
-              <div key={post.id} ref={isLast ? lastElementRef : null}>
-                <Post
-                  id={post.id}
-                  avatar={post.author.avatar}
-                  owner={post.author.displayName}
-                  userIdentifier={post.author.username}
-                  authorId={post.authorId}
-                  likes={post.likesCount}
-                  commentsCount={post.commentsCount}
-                  comments={[]}
-                  shares={0}
-                  date={new Date(post.createdAt).toISOString()}
-                  text={post.content}
-                  image={post.images?.[0]}
-                  location={post.location}
-                  isLiked={post.isLiked}
-                  onLike={() => handleLike(post.id, post.isLiked || false)}
-                  onEdit={handleEdit}
-                  onDelete={handleDelete}
-                />
-              </div>
-            );
-          })}
+    <>
+      <div className={styles.postsFeed}>
+        {posts.length === 0 ? (
+          <div className={styles.noPosts}>
+            <p>Nenhum post ainda!</p>
+            <small>Seja o primeiro a postar algo.</small>
+          </div>
+        ) : (
+          <>
+            {posts.map((post, index) => {
+              // ref on the wrapper of the last item
+              const isLast = index === posts.length - 1;
+              return (
+                <div key={post.id} ref={isLast ? lastElementRef : null}>
+                  <Post
+                    id={post.id}
+                    avatar={post.author.avatar}
+                    owner={post.author.displayName}
+                    userIdentifier={post.author.username}
+                    authorId={post.authorId}
+                    likes={post.likesCount}
+                    commentsCount={post.commentsCount}
+                    comments={[]}
+                    shares={0}
+                    date={new Date(post.createdAt).toISOString()}
+                    text={post.content}
+                    image={post.images?.[0]}
+                    location={post.location}
+                    isLiked={post.isLiked}
+                    onLike={() => handleLike(post.id, post.isLiked || false)}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                  />
+                </div>
+              );
+            })}
 
-          {state.hasMore && (
-            <div style={{ textAlign: 'center', padding: '2rem' }}>
-              {isLoading ? (
-                <SkeletonPost />
-              ) : (
-                <p>Carregando mais posts...</p>
-              )}
-            </div>
-          )}
-        </>
-      )}
-    </div>
+            {state.hasMore && (
+              <div style={{ textAlign: 'center', padding: '2rem' }}>
+                {isLoading ? (
+                  <SkeletonPost />
+                ) : (
+                  <p>Carregando mais posts...</p>
+                )}
+              </div>
+            )}
+          </>
+        )}
+      </div>
+      
+      {/* Toast de atualizações */}
+      <PostUpdateToast
+        show={hasNewPosts}
+        newPostsCount={newPostsCount}
+        onRefresh={refreshPage}
+        onDismiss={markAsChecked}
+      />
+    </>
   );
 }

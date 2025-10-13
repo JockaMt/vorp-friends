@@ -305,3 +305,57 @@
     background-color: var(--like-background-hover);
     color: var(--danger, #dc2626);
 }
+
+/* Embed / Share modal styles */
+.embedModalOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.embedModal {
+    width: min(680px, 94%);
+    background: var(--background);
+    border-radius: var(--rounded-md);
+    padding: 1rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+
+.embedPreview {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.embedPreviewImage {
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: var(--gray-alpha-100);
+}
+
+.embedPreviewContent {
+    display: flex;
+    flex-direction: column;
+}
+
+.embedActions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    justify-content: flex-end;
+}
+
+.embedInput {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--gray-alpha-200);
+    border-radius: var(--rounded-md);
+    font-family: monospace;
+    font-size: 0.85rem;
+}

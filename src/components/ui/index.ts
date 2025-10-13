@@ -5,3 +5,4 @@ export { EmptyState } from './EmptyState';
 export { default as HeaderNav } from './HeaderNav';
 export { default as BottomNav } from './BottomNav';
 export { Skeleton, SkeletonText, SkeletonAvatar, SkeletonCard, SkeletonPost } from './Skeleton';
+export { PostUpdateToast } from './PostUpdateToast';

@@ -106,6 +106,7 @@ export function Post(props: PostType) {
         }
     };
 
+
     const handleCancelEdit = () => {
         setEditContent(text);
         setIsEditing(false);
@@ -237,7 +238,23 @@ export function Post(props: PostType) {
                 <button className={styles.postActionButton} onClick={() => setShowComments(s => !s)}>
                     <FaComment /> <span className={styles.count}>{commentsCount || 0}</span>
                 </button>
-                <button className={styles.postActionButton}>
+                <button className={styles.postActionButton} onClick={async () => {
+                    const postUrl = typeof window !== 'undefined' ? `${window.location.origin}/post/${id}` : `/post/${id}`;
+                    try {
+                        await navigator.clipboard.writeText(postUrl);
+                        // feedback mínimo
+                        alert('Link do post copiado');
+                    } catch (e) {
+                        // fallback: abrir a caixa de seleção
+                        const ta = document.createElement('textarea');
+                        ta.value = postUrl;
+                        document.body.appendChild(ta);
+                        ta.select();
+                        document.execCommand('copy');
+                        ta.remove();
+                        alert('Link do post copiado');
+                    }
+                }}>
                     <FaShare /> <span className={styles.count}>{props.shares || 0}</span>
                 </button>
             </div>
@@ -253,6 +270,8 @@ export function Post(props: PostType) {
                     />
                 )}
             </div>
+
+            
         </div>
     )
 }

@@ -16,14 +16,19 @@ export async function GET(request: NextRequest) {
   const limit = parseInt(searchParams.get('limit') || '10');
   const skip = (page - 1) * limit;
   const authorId = searchParams.get('authorId') || undefined;
+  const since = searchParams.get('since'); // Nova funcionalidade para polling
 
     const db = await getDatabase();
     const postsCollection = db.collection<PostDocument>('posts');
 
-    // Construir filtro (opcionalmente filtrar por author)
+    // Construir filtro (opcionalmente filtrar por author e/ou data)
     const filter: any = {};
     if (authorId) {
       filter.authorId = authorId;
+    }
+    if (since) {
+      // Filtrar posts criados após a data especificada
+      filter.createdAt = { $gt: new Date(since) };
     }
 
     // Buscar posts ordenados por data de criação (mais recentes primeiro)
