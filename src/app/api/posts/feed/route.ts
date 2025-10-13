@@ -11,12 +11,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     }
 
-  const { searchParams } = new URL(request.url);
-  const page = parseInt(searchParams.get('page') || '1');
-  const limit = parseInt(searchParams.get('limit') || '10');
-  const skip = (page - 1) * limit;
-  const authorId = searchParams.get('authorId') || undefined;
-  const since = searchParams.get('since'); // Nova funcionalidade para polling
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '10');
+    const skip = (page - 1) * limit;
+    const authorId = searchParams.get('authorId') || undefined;
+    const since = searchParams.get('since'); // Nova funcionalidade para polling
 
     const db = await getDatabase();
     const postsCollection = db.collection<PostDocument>('posts');
@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
     }));
 
     // Contar total de posts para paginação
-  const total = await postsCollection.countDocuments(filter);
+    const total = await postsCollection.countDocuments(filter);
     const totalPages = Math.ceil(total / limit);
 
     return NextResponse.json({

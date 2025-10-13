@@ -1,7 +1,8 @@
 .postContainer {
     display: flex;
     flex-direction: column;
-    background-color: var(--background-light); /* Um pouco mais claro que o fundo principal */
+    background-color: var(--background-light);
+    /* Um pouco mais claro que o fundo principal */
     border: 1px solid var(--gray-alpha-200);
     border-radius: var(--rounded-md);
     padding: 1.2em;
@@ -206,19 +207,22 @@
     margin-bottom: 1em;
     line-height: 1.5;
     color: var(--foreground-secondary);
-    white-space: pre-wrap; /* Preserva quebras de linha e espaços */
+    white-space: pre-wrap;
+    /* Preserva quebras de linha e espaços */
 }
 
 .mediaContainer {
     margin-top: 0.5em;
     border-radius: var(--rounded-md);
     overflow: hidden;
-    max-height: 400px; /* Limita a altura máxima da imagem */
+    max-height: 400px;
+    /* Limita a altura máxima da imagem */
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 1em;
-    background-color: var(--gray-alpha-100); /* Cor de fundo enquanto a imagem carrega */
+    background-color: var(--gray-alpha-100);
+    /* Cor de fundo enquanto a imagem carrega */
 }
 
 /* Mobile media container */
@@ -232,7 +236,8 @@
 .postImage {
     width: 100%;
     height: auto;
-    object-fit: cover; /* Cobre o container, cortando se necessário */
+    object-fit: cover;
+    /* Cobre o container, cortando se necessário */
 }
 
 .postVideo {
@@ -272,7 +277,7 @@
     }
 }
 
-.postActionButton + .postActionButton {
+.postActionButton+.postActionButton {
     margin-left: 0.5em;
 }
 
@@ -310,7 +315,7 @@
 .embedModalOverlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.45);
+    background: rgba(0, 0, 0, 0.45);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -322,7 +327,7 @@
     background: var(--background);
     border-radius: var(--rounded-md);
     padding: 1rem;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 .embedPreview {

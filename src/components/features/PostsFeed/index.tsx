@@ -27,15 +27,15 @@ export function PostsFeed({ filter = 'all' }: PostsFeedProps) {
 
   const handleObserver = useCallback((entries: IntersectionObserverEntry[]) => {
     const first = entries[0];
-    
+
     // Verificação rigorosa para evitar múltiplas chamadas
-    if (first.isIntersecting && 
-        state.hasMore && 
-        !state.isLoading && 
-        !loadingRef.current) {
-      
+    if (first.isIntersecting &&
+      state.hasMore &&
+      !state.isLoading &&
+      !loadingRef.current) {
+
       loadingRef.current = true; // Bloquear novas chamadas
-      
+
       actions.loadMore().finally(() => {
         // Liberar após 1 segundo para evitar chamadas muito rápidas
         setTimeout(() => {
@@ -66,7 +66,7 @@ export function PostsFeed({ filter = 'all' }: PostsFeedProps) {
     if (lastElementRef.current && observerRef.current) {
       // Desconectar observações anteriores
       observerRef.current.disconnect();
-      
+
       // Observar apenas o último elemento
       observerRef.current.observe(lastElementRef.current);
     }
@@ -121,7 +121,7 @@ export function PostsFeed({ filter = 'all' }: PostsFeedProps) {
     return (
       <div className={styles.error}>
         <p>Erro: {error}</p>
-        <button 
+        <button
           onClick={() => actions.refresh()}
           style={{ marginTop: '1rem' }}
           className="buttonPrimary"
@@ -182,7 +182,7 @@ export function PostsFeed({ filter = 'all' }: PostsFeedProps) {
           </>
         )}
       </div>
-      
+
       {/* Toast de atualizações */}
       <PostUpdateToast
         show={hasNewPosts}

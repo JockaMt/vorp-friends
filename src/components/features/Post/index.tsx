@@ -271,7 +271,7 @@ export function Post(props: PostType) {
                 )}
             </div>
 
-            
+
         </div>
     )
 }
