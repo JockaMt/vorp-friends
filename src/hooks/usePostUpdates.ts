@@ -13,7 +13,7 @@ interface PostUpdate {
     latestPostDate: Date | null;
 }
 
-export function usePostUpdates({ intervalMs = 5 * 60 * 1000, enabled = true }: UsePostUpdatesOptions = {}) {
+export function usePostUpdates({ intervalMs = 3 * 60 * 1000, enabled = true }: UsePostUpdatesOptions = {}) {
     const [lastCheckDate, setLastCheckDate] = useState<Date>(new Date());
     const [updateInfo, setUpdateInfo] = useState<PostUpdate>({
         hasNewPosts: false,
