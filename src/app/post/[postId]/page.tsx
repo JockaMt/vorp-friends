@@ -32,11 +32,11 @@ function serializeUser(user: User): SerializedUser {
 }
 
 interface PageProps {
-    params: { postId: string };
+    params: Promise<{ postId: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps) {
-    const { postId } = params;
+    const { postId } = await params;
     if (!ObjectId.isValid(postId)) return {};
 
     const db = await getDatabase();
@@ -99,7 +99,7 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export default async function PostPage({ params }: PageProps) {
-    const { postId } = params;
+    const { postId } = await params;
     const { userId: currentUserId } = await auth();
 
     // Se não estiver logado, redireciona para login
