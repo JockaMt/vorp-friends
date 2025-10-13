@@ -109,3 +109,20 @@ O projeto utiliza um design system consistente com:
 - **Path aliases**: `@/*` aponta para `./src/*`
 - **TypeScript**: Configuração estrita habilitada
 - **CSS**: Modules com variáveis customizadas
+
+## 🔗 Integração com serviço de imagens (vorpng)
+
+Este projeto pode enviar imagens para o serviço vorpng (https://vorpng.caiots.dev/). Existem duas abordagens:
+
+- Upload direto do servidor: o endpoint de backend `/api/posts` enviará imagens para o vorpng usando a variável de ambiente `VORPNG_API_TOKEN`.
+- Proxy interno (opcional): há também um proxy em `/api/images/upload` que encaminha multipart/form-data para o vorpng usando `VORPNG_API_TOKEN`.
+
+Variáveis de ambiente esperadas:
+
+- `VORPNG_API_TOKEN` - token Bearer usado para autenticar requests para o vorpng (coloque no seu `.env.local`).
+- `NEXT_PUBLIC_BASE_URL` - (opcional) usado internamente para compor URLs ao chamar rotas internas durante desenvolvimento.
+
+Notas:
+
+- O frontend (`PostInput`) permite selecionar até 4 imagens e as envia como multipart/form-data para `/api/posts`.
+- Se `VORPNG_API_TOKEN` não estiver configurada, as imagens serão ignoradas e o post será criado sem imagens (será mostrado um warning no servidor).

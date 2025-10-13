@@ -97,7 +97,7 @@ interface PostsContextType {
   actions: {
     loadPosts: (page?: number, append?: boolean) => Promise<void>;
     loadMore: () => Promise<void>;
-    createPost: (content: string, location?: { name?: string; address?: string; coordinates?: { lat: number; lng: number } }) => Promise<void>;
+    createPost: (postData: { content: string; images?: File[]; location?: { name?: string; address?: string; coordinates?: { lat: number; lng: number } } }) => Promise<void>;
     editPost: (postId: string, content: string) => Promise<void>;
     likePost: (postId: string) => Promise<void>;
     unlikePost: (postId: string) => Promise<void>;
@@ -209,17 +209,30 @@ export function PostsProvider({ children }: { children: React.ReactNode }) {
     await loadPostsRef.current(state.page + 1, true);
   }, [state.hasMore, state.isLoading, state.page]);
 
-  const createPost = useCallback(async (content: string, location?: { name?: string; address?: string; coordinates?: { lat: number; lng: number } }) => {
+  const createPost = useCallback(async (postData: { content: string; images?: File[]; location?: { name?: string; address?: string; coordinates?: { lat: number; lng: number } } }) => {
     if (!isSignedIn) {
       throw new Error('Você precisa estar logado para postar');
     }
 
     try {
-      const response = await fetch('/api/posts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content, location }),
-      });
+      let response: Response;
+      if (postData.images && postData.images.length > 0) {
+        const form = new FormData();
+        form.append('content', postData.content);
+        if (postData.location) form.append('location', JSON.stringify(postData.location as any));
+        postData.images.forEach(img => form.append('images', img));
+
+        response = await fetch('/api/posts', {
+          method: 'POST',
+          body: form,
+        });
+      } else {
+        response = await fetch('/api/posts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content: postData.content, location: postData.location }),
+        });
+      }
 
       if (!response.ok) {
         const data = await response.json();

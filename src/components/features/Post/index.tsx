@@ -23,7 +23,7 @@ interface PostType {
     shares?: number;
     date?: string;
     text: string;
-    image?: string;
+    image?: string | { uuid?: string; url?: string };
     video?: string;
     location?: string | { name?: string; address?: string; coordinates?: { lat: number; lng: number } } | null;
     isLiked?: boolean;
@@ -212,7 +212,17 @@ export function Post(props: PostType) {
                 )}
                 {image && (
                     <div className={styles.mediaContainer}>
-                        <img src={image} alt="Post Image" className={styles.postImage} />
+                        {/* Support either a string URL or an object { uuid, url } */}
+                        {/* Use server-side proxy when we have a uuid so token isn't exposed to client */}
+                        <img
+                            src={
+                                typeof image === 'string'
+                                    ? image
+                                    : (image?.uuid ? `/api/images/${encodeURIComponent(image.uuid)}` : image?.url)
+                            }
+                            alt="Post Image"
+                            className={styles.postImage}
+                        />
                     </div>
                 )}
             </div>

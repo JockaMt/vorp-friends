@@ -28,6 +28,7 @@ export function PostInput() {
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [showLocationPicker, setShowLocationPicker] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
+    const [selectedImages, setSelectedImages] = useState<File[]>([]);
     const { isSignedIn } = useAuth();
     const { actions } = usePosts();
 
@@ -89,7 +90,8 @@ export function PostInput() {
                     coordinates: selectedLocation.coordinates ? { lat: selectedLocation.coordinates.lat, lng: selectedLocation.coordinates.lng } : undefined
                 } : undefined;
 
-                await actions.createPost(content, locationPayload);
+                // Pass images to createPost (service will send FormData)
+                await actions.createPost({ content, images: selectedImages.length ? selectedImages : undefined });
             
             // Limpar o conteúdo após sucesso
             el.textContent = '';
@@ -100,6 +102,18 @@ export function PostInput() {
         } finally {
             setIsPosting(false);
         }
+    };
+
+    const handleFilesSelected = (files: FileList | null) => {
+        if (!files) return;
+        const arr = Array.from(files).filter(f => f.type.startsWith('image/'));
+        // limit to 4 images for now
+        const limited = arr.slice(0, 4);
+        setSelectedImages(limited);
+    };
+
+    const removeImage = (index: number) => {
+        setSelectedImages(prev => prev.filter((_, i) => i !== index));
     };
 
     const handleEmojiSelect = (emoji: string) => {
@@ -215,7 +229,16 @@ export function PostInput() {
                             buttonRef={emojiButtonRef}
                         />
                     </div>
-                    <button className={styles.iconButton} type="button"><FaCamera /></button>
+                    <label className={`${styles.iconButton} ${styles.fileLabel}`} title="Adicionar imagem">
+                        <FaCamera />
+                        <input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            className={styles.fileInput}
+                            onChange={(e) => handleFilesSelected(e.target.files)}
+                        />
+                    </label>
                     <div className={styles.locationContainer}>
                         <button 
                             ref={locationButtonRef}
@@ -249,6 +272,19 @@ export function PostInput() {
                     </button>
                 </div>
             </div>
+            {selectedImages && selectedImages.length > 0 && (
+                <div className={styles.imagePreviewRow}>
+                    {selectedImages.map((file, idx) => {
+                        const url = URL.createObjectURL(file);
+                        return (
+                            <div key={idx} className={styles.previewItem}>
+                                <img src={url} alt={file.name} className={styles.previewImage} />
+                                <button type="button" className={styles.removeImageButton} onClick={() => removeImage(idx)} title="Remover imagem">×</button>
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
             
             <div className={styles.charCount}>
                 {length}/{maxLength}

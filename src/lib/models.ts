@@ -9,7 +9,7 @@ export interface PostDocument {
     address?: string;
     coordinates?: { lat: number; lng: number };
   } | null;
-  images?: string[];
+  images?: { uuid: string; url: string }[];
   likes: string[]; // Array de IDs dos usuários que curtiram
   likesCount: number;
   commentsCount: number;
@@ -52,7 +52,7 @@ export interface PostData {
     address?: string;
     coordinates?: { lat: number; lng: number };
   } | null;
-  images?: string[];
+  images?: { uuid: string; url: string }[];
   likesCount: number;
   commentsCount: number;
   isLiked?: boolean;
