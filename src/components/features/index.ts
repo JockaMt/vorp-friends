@@ -9,3 +9,4 @@ export { EmojiPicker } from './EmojiPicker';
 export { LocationPicker } from './LocationPicker';
 export { FriendButton } from './FriendButton';
 export { default as MiniRequestCards } from './MiniRequestCards';
+export { NotificationsPanel } from './NotificationsPanel';

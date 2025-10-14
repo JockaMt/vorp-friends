@@ -6,10 +6,11 @@ import { friendshipService } from '@/services/friendship';
 import { FriendButton } from '@/components/features/FriendButton';
 import { ProfileSidebar } from '@/components/features/ProfileSidebar';
 import { SkeletonCard } from '@/components/ui/Skeleton';
+import MiniRequestCards from '@/components/features/MiniRequestCards';
 import type { Friendship } from '@/types/friendship';
 import styles from '@/app/page.module.css'; // Usar o mesmo estilo da página principal
 import friendsStyles from './friends.module.css';
-import { FaUser, FaUserFriends, FaUserClock, FaUserTimes, FaCheck, FaTimes } from 'react-icons/fa';
+import { FaUser, FaUserFriends, FaUserClock, FaUserTimes } from 'react-icons/fa';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -278,89 +279,16 @@ export default function FriendsPage() {
                     {pendingRequests.length > 0 && (
                         <aside className={friendsStyles.rightAside}>
                             <h3 className={friendsStyles.rightAsideTitle}>
-                                <FaUserClock style={{ marginRight: '0.5rem', color: 'var(--color-primary)' }} />
-                                Solicitações Pendentes
+                                Pedidos de amizade
                             </h3>
-                            <div className={friendsStyles.pendingRequestsContainer}>
-                                {pendingRequests.slice(0, 3).map((friendship) => {
-                                    const otherUser = friendship.requesterId === userId 
-                                        ? friendship.addressee 
-                                        : friendship.requester;
-                                    const isReceived = friendship.addresseeId === userId;
-                                    
-                                    return (
-                                        <div key={friendship.id} className={friendsStyles.miniRequestCard}>
-                                            <Link href={`/profile/${otherUser.username}`} className={friendsStyles.miniRequestInfo}>
-                                                <div className={friendsStyles.miniAvatar}>
-                                                    {otherUser.avatar ? (
-                                                        <Image
-                                                            src={otherUser.avatar}
-                                                            alt={otherUser.displayName}
-                                                            width={32}
-                                                            height={32}
-                                                            className={friendsStyles.miniAvatarImage}
-                                                        />
-                                                    ) : (
-                                                        <FaUser className={friendsStyles.miniAvatarPlaceholder} />
-                                                    )}
-                                                </div>
-                                                <div className={friendsStyles.miniDetails}>
-                                                    <div className={friendsStyles.miniName}>{otherUser.displayName}</div>
-                                                    <div className={friendsStyles.miniUsername}>@{otherUser.username}</div>
-                                                </div>
-                                            </Link>
-                                            {isReceived && (
-                                                <div className={friendsStyles.miniActions}>
-                                                    <button
-                                                        className={`${friendsStyles.miniButton} ${friendsStyles.miniAcceptButton}`}
-                                                        onClick={() => {
-                                                            // Aceitar solicitação
-                                                            friendshipService.respondToFriendRequest(friendship.id, 'accept')
-                                                                .then(() => handleFriendshipUpdate())
-                                                                .catch(err => console.error('Erro ao aceitar:', err));
-                                                        }}
-                                                        title="Aceitar solicitação"
-                                                    >
-                                                        <FaCheck />
-                                                    </button>
-                                                    <button
-                                                        className={`${friendsStyles.miniButton} ${friendsStyles.miniRejectButton}`}
-                                                        onClick={() => {
-                                                            // Rejeitar solicitação
-                                                            friendshipService.respondToFriendRequest(friendship.id, 'reject')
-                                                                .then(() => handleFriendshipUpdate())
-                                                                .catch(err => console.error('Erro ao rejeitar:', err));
-                                                        }}
-                                                        title="Rejeitar solicitação"
-                                                    >
-                                                        <FaTimes />
-                                                    </button>
-                                                </div>
-                                            )}
-                                        </div>
-                                    );
-                                })}
-                                {pendingRequests.length > 3 && (
-                                    <div style={{ textAlign: 'center', marginTop: '0.5rem' }}>
-                                        <button
-                                            className={friendsStyles.miniButton}
-                                            onClick={() => setActiveTab('pending')}
-                                            style={{ 
-                                                background: 'var(--color-secondary)',
-                                                color: 'var(--color-text-primary)',
-                                                borderColor: 'var(--color-border)',
-                                                fontSize: '0.75rem',
-                                                padding: '0.4rem 0.8rem'
-                                            }}
-                                        >
-                                            Ver todas ({pendingRequests.length})
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
+                            <MiniRequestCards
+                                requests={pendingRequests.filter(f => f.addresseeId === userId)}
+                                onUpdate={handleFriendshipUpdate}
+                                maxVisible={3}
+                            />
                         </aside>
                     )}
-                    
+
                     <aside className={friendsStyles.rightAside}>
                         <h3 className={friendsStyles.rightAsideTitle}>Sugestões</h3>
                         <p className={friendsStyles.rightAsideText}>

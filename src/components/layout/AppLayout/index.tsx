@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Header } from '../Header';
 import { BottomNav } from '@/components/ui';
-import { ChatComponent } from '@/components/features/ChatComponent';
+import { ChatComponent, NotificationsPanel } from '@/components/features';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -10,6 +10,7 @@ interface AppLayoutProps {
 
 export function AppLayout({ children }: AppLayoutProps) {
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
   const handleOpenChat = () => {
     setIsChatOpen(true);
@@ -19,12 +20,21 @@ export function AppLayout({ children }: AppLayoutProps) {
     setIsChatOpen(false);
   };
 
+  const handleOpenNotifications = () => {
+    setIsNotificationsOpen(true);
+  };
+
+  const handleCloseNotifications = () => {
+    setIsNotificationsOpen(false);
+  };
+
   return (
     <>
-      <Header onOpenChat={handleOpenChat} />
+      <Header onOpenChat={handleOpenChat} onOpenNotifications={handleOpenNotifications} />
       {children}
       <BottomNav onOpenChat={handleOpenChat} />
       {isChatOpen && <ChatComponent isOpen={isChatOpen} onClose={handleCloseChat} />}
+      <NotificationsPanel isOpen={isNotificationsOpen} onClose={handleCloseNotifications} />
     </>
   );
 }

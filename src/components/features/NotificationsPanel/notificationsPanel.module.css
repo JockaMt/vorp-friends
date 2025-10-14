@@ -1,0 +1,332 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding-top: 60px;
+    padding-right: 20px;
+    background: transparent;
+    animation: fadeIn 0.2s ease;
+}
+
+.container {
+    background: var(--background);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--gray-alpha-200);
+    max-width: 360px;
+    width: 360px;
+    max-height: 70vh;
+    overflow: hidden;
+    animation: slideDown 0.3s ease;
+    position: relative;
+}
+
+/* Seta apontando para cima */
+.container::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: 50px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid var(--gray-alpha-200);
+}
+
+.container::after {
+    content: '';
+    position: absolute;
+    top: -7px;
+    right: 50px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid var(--background-color);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--gray-alpha-200);
+    background: var(--background-color);
+}
+
+.headerActions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.markAllButton {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.markAllButton:hover {
+    background: color-mix(in srgb, var(--accent-color) 80%, black);
+}
+
+.header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    padding: 4px;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.closeButton:hover {
+    background-color: var(--gray-alpha-100);
+}
+
+.content {
+    max-height: calc(80vh - 80px);
+    overflow-y: auto;
+}
+
+.emptyState {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.emptyState p {
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.notificationsList {
+    padding: 0;
+}
+
+.notificationItem {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--gray-alpha-100);
+    transition: background-color 0.2s ease;
+}
+
+.notificationItem:hover {
+    background-color: var(--gray-alpha-50);
+}
+
+.notificationItem:last-child {
+    border-bottom: none;
+}
+
+.notificationContent {
+    margin-bottom: 8px;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.notificationIcon {
+    font-size: 18px;
+    min-width: 24px;
+}
+
+.notificationContent strong {
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+.notificationMeta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.time {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.markSeenButton {
+    background: none;
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.markSeenButton:hover {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .overlay {
+        padding-top: 60px;
+        padding-right: 10px;
+    }
+
+    .container {
+        max-width: 300px;
+        width: 300px;
+        max-height: 60vh;
+        border-radius: 12px;
+    }
+
+    .container::before {
+        right: 40px;
+    }
+
+    .container::after {
+        right: 40px;
+    }
+
+    .header {
+        padding: 12px 16px;
+    }
+
+    .header h3 {
+        font-size: 1rem;
+    }
+
+    .markAllButton {
+        padding: 4px 8px;
+        font-size: 0.75rem;
+    }
+
+    .content {
+        max-height: calc(60vh - 60px);
+    }
+
+    .notificationItem {
+        padding: 10px 16px;
+    }
+
+    .notificationContent {
+        font-size: 0.9rem;
+        margin-bottom: 6px;
+    }
+
+    .notificationIcon {
+        font-size: 16px;
+        min-width: 20px;
+    }
+
+    .notificationMeta {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .markSeenButton {
+        padding: 2px 6px;
+        font-size: 12px;
+        border-radius: 3px;
+    }
+
+    .time {
+        font-size: 0.75rem;
+    }
+
+    .emptyState {
+        padding: 30px 20px;
+    }
+
+    .emptyState p {
+        font-size: 0.9rem;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+    .overlay {
+        padding-top: 55px;
+        padding-right: 5px;
+    }
+
+    .container {
+        max-width: 280px;
+        width: 280px;
+        max-height: 55vh;
+    }
+
+    .container::before {
+        right: 35px;
+    }
+
+    .container::after {
+        right: 35px;
+    }
+
+    .content {
+        max-height: calc(55vh - 50px);
+    }
+
+    .header {
+        padding: 10px 12px;
+    }
+
+    .header h3 {
+        font-size: 0.95rem;
+    }
+
+    .notificationItem {
+        padding: 8px 12px;
+    }
+
+    .notificationContent {
+        font-size: 0.85rem;
+    }
+}

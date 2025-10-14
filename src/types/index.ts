@@ -3,6 +3,8 @@ export * from './post';
 export * from './chat';
 export * from './serializedUser';
 export * from './friendship';
+export * from './poke';
+export * from './notification';
 
 export interface ApiResponse<T> {
   data: T;

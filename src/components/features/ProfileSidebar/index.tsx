@@ -1,4 +1,4 @@
- 'use client';
+'use client';
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { SkeletonAvatar, SkeletonText } from "@/components/ui/Skeleton";
@@ -13,13 +13,17 @@ import type { SerializedUser } from "@/types/serializedUser";
 import { FriendButton } from "../FriendButton";
 import { friendshipService } from '@/services/friendship';
 import type { Friendship } from '@/types/friendship';
+import { usePokes } from '@/hooks/usePokes';
 
 export function ProfileSidebar({ profileUser }: { profileUser?: SerializedUser }) {
     const { user, isLoaded } = useUser();
+    const { pokeStats, canPokeUser, sendPoke } = usePokes();
     const [editing, setEditing] = useState(false);
     const [bioValue, setBioValue] = useState<string>('');
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [pokingUser, setPokingUser] = useState(false);
+    const [pokeMessage, setPokeMessage] = useState('');
     const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
     useEffect(() => {
@@ -72,6 +76,19 @@ export function ProfileSidebar({ profileUser }: { profileUser?: SerializedUser }
         }
     }
 
+    async function handlePoke() {
+        if (!viewed?.id || pokingUser || !canPokeUser(viewed.id)) return;
+
+        try {
+            await sendPoke(viewed.id);
+            setPokeMessage('Cutucada enviada!');
+            setTimeout(() => setPokeMessage(''), 3000);
+        } catch (error) {
+            setPokeMessage('Erro ao enviar cutucada');
+            setTimeout(() => setPokeMessage(''), 3000);
+        }
+    }
+
     function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -109,7 +126,7 @@ export function ProfileSidebar({ profileUser }: { profileUser?: SerializedUser }
         }
         return String(n);
     }
-    
+
     useEffect(() => {
         // Load accepted friends for either the profile being viewed (profileUser) or the logged-in user
         let mounted = true;
@@ -236,7 +253,7 @@ export function ProfileSidebar({ profileUser }: { profileUser?: SerializedUser }
                             </div>
                         </Link>      {/*Amigos*/}
                         <a href="#" className={styles.statsItem}><MdGroups className={styles.statsIcon} /> 5</a>           {/*Grupos*/}
-                        <a href="#" className={styles.statsItem}><TbHandFinger className={styles.statsIcon} /> 20</a>       {/*Cutucadas*/}
+                        <a href="#" className={styles.statsItem}><TbHandFinger className={styles.statsIcon} /> {pokeStats.received}</a>       {/*Cutucadas*/}
                         <a href="#" className={styles.statsItem}><TbGlassFullFilled className={styles.statsIcon} /> 1k</a> {/*Fans*/}
                     </div>
                 </div>
@@ -249,7 +266,26 @@ export function ProfileSidebar({ profileUser }: { profileUser?: SerializedUser }
                         />
                         <button className="buttonSecondary">Seguir</button>
                         <button className="buttonSecondary">Mensagem</button>
-                        <button className="buttonSecondary">Cutucar</button>
+                        <button
+                            className="buttonSecondary"
+                            onClick={handlePoke}
+                            disabled={pokingUser || !canPokeUser(viewed?.id || '')}
+                        >
+                            {pokingUser ? 'Cutucando...' : 'Cutucar'}
+                        </button>
+                        {pokeMessage && (
+                            <div style={{
+                                marginTop: '10px',
+                                padding: '8px',
+                                borderRadius: '4px',
+                                backgroundColor: pokeMessage.includes('Erro') ? '#fee' : '#efe',
+                                color: pokeMessage.includes('Erro') ? '#c33' : '#373',
+                                fontSize: '0.9rem',
+                                textAlign: 'center'
+                            }}>
+                                {pokeMessage}
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <div className={styles.profileActions}>

@@ -5,6 +5,8 @@ import styles from './headerNav.module.css';
 import { UserSearch } from '@/components/features';
 import { FaSearch } from 'react-icons/fa';
 import { FaMessage } from 'react-icons/fa6';
+import { FaBell } from 'react-icons/fa';
+import { useNotifications } from '@/hooks';
 
 interface HeaderProps {
     onOpenChat?: () => void;
@@ -16,6 +18,7 @@ export default function HeaderNav({ onOpenChat, onOpenNotifications }: HeaderPro
     const { user } = useUser();
     const [mounted, setMounted] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const { unreadCount, hasUnread } = useNotifications();
 
     useEffect(() => {
         setMounted(true);
@@ -39,7 +42,7 @@ export default function HeaderNav({ onOpenChat, onOpenNotifications }: HeaderPro
             };
 
             document.addEventListener('keydown', handleKeyDown);
-            
+
             return () => {
                 clearTimeout(timer);
                 document.removeEventListener('keydown', handleKeyDown);
@@ -63,7 +66,7 @@ export default function HeaderNav({ onOpenChat, onOpenNotifications }: HeaderPro
                     {!isSearchOpen ? (
                         <>
                             <h1 className={styles.headerTitle}>VORP Friends</h1>
-                            
+
                             {mounted && isSignedIn && (
                                 <button
                                     className={styles.actionButton}
@@ -94,11 +97,11 @@ export default function HeaderNav({ onOpenChat, onOpenNotifications }: HeaderPro
                 {/* Desktop Navigation - unchanged for desktop */}
                 <nav className={`${styles.headerNav} ${styles.desktopNav}`}>
                     <h1 className={styles.headerTitle}>VORP Friends</h1>
-                    
+
                     {mounted && isSignedIn &&
                         <ul className={styles.headerNavList}>
                             <li className={styles.headerNavItem}>
-                                <a className={styles.active} href="/">Início</a>
+                                <a href="/">Início</a>
                             </li>
                             <li className={styles.headerNavItem}>
                                 <a href={user ? `/profile/${user.username ?? user.id}` : '/profile'}>Perfil</a>
@@ -129,6 +132,18 @@ export default function HeaderNav({ onOpenChat, onOpenNotifications }: HeaderPro
                             aria-label="Mensagens"
                         >
                             <FaMessage size={14} />
+                        </button>
+                        <button
+                            className={`${styles.navButton} ${hasUnread ? styles.hasNotifications : ''}`}
+                            onClick={onOpenNotifications}
+                            aria-label="Notificações"
+                        >
+                            <FaBell size={16} />
+                            {hasUnread && (
+                                <span className={styles.notificationBadge}>
+                                    {unreadCount}
+                                </span>
+                            )}
                         </button>
                         <div className={styles.userButton}>
                             <UserButton
