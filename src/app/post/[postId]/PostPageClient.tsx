@@ -53,7 +53,7 @@ export function PostPageClient({ postData }: PostPageClientProps) {
             shares={0}
             date={new Date(postData.createdAt).toISOString()}
             text={postData.content}
-            image={postData.images?.[0]}
+            images={postData.images}
             location={postData.location}
             isLiked={postData.isLiked}
             onLike={handleLike}

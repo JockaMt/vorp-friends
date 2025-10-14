@@ -10,6 +10,7 @@ import { useAuth } from "@clerk/nextjs";
 import Comments from '@/components/features/Comments';
 import { postService } from '@/services/posts';
 import { formatTimeAgo } from "@/utils/formatters";
+import { ImageModal, ImageCarousel } from '@/components/ui';
 
 interface PostType {
     id?: string; // ID do post para operações
@@ -24,6 +25,7 @@ interface PostType {
     date?: string;
     text: string;
     image?: string | { uuid?: string; url?: string };
+    images?: { uuid: string; url: string }[];
     video?: string;
     location?: string | { name?: string; address?: string; coordinates?: { lat: number; lng: number } } | null;
     isLiked?: boolean;
@@ -33,7 +35,7 @@ interface PostType {
 }
 
 export function Post(props: PostType) {
-    const { id, avatar, owner, userIdentifier, authorId, likes, date, text, image, video, location, isLiked, onLike, onEdit, onDelete, commentsCount: initialCommentsCount = 0 } = props;
+    const { id, avatar, owner, userIdentifier, authorId, likes, date, text, image, images, video, location, isLiked, onLike, onEdit, onDelete, commentsCount: initialCommentsCount = 0 } = props;
     const [commentsCount, setCommentsCount] = useState<number>(() => {
         return initialCommentsCount ?? (props.comments ? props.comments.length : 0);
     });
@@ -43,8 +45,11 @@ export function Post(props: PostType) {
     const [editContent, setEditContent] = useState(text);
     const [showOptions, setShowOptions] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
+    const [showImageModal, setShowImageModal] = useState(false);
+    const [modalImageIndex, setModalImageIndex] = useState(0);
     const { userId } = useAuth();
     const optionsRef = useRef<HTMLDivElement>(null);
+    const postRef = useRef<HTMLDivElement>(null);
 
     // Verificar se o usuário atual é o autor do post
     const isAuthor = userId === authorId;
@@ -112,8 +117,32 @@ export function Post(props: PostType) {
         setIsEditing(false);
     };
 
+    // Preparar imagens para o modal
+    const getModalImages = () => {
+        if (images && images.length > 0) {
+            return images;
+        } else if (image) {
+            return [typeof image === 'string' ? { uuid: '', url: image } : image];
+        }
+        return [];
+    };
+
+    const handleImageClick = (index: number = 0) => {
+        setModalImageIndex(index);
+        setShowImageModal(true);
+    };
+
+    // Debug log
+    useEffect(() => {
+        if (images && images.length > 0) {
+            console.log('Post: Rendering carousel with images:', images);
+        } else if (image) {
+            console.log('Post: Rendering single image:', image);
+        }
+    }, [images, image]);
+
     return (
-        <div className={styles.postContainer}>
+        <div className={styles.postContainer} ref={postRef}>
             <div className={styles.postHeader}>
                 <Image
                     src={avatar || '/default-avatar.png'}
@@ -211,18 +240,26 @@ export function Post(props: PostType) {
                         </video>
                     </div>
                 )}
-                {image && (
+                {/* Render carousel for multiple images or single image */}
+                {(images && images.length > 0) ? (
                     <div className={styles.mediaContainer}>
-                        {/* Support either a string URL or an object { uuid, url } */}
-                        {/* Use server-side proxy when we have a uuid so token isn't exposed to client */}
+                        <ImageCarousel
+                            images={images}
+                            onImageClick={handleImageClick}
+                        />
+                    </div>
+                ) : image && (
+                    <div className={styles.mediaContainer}>
+                        {/* Support either a string URL or an object { uuid, url } for backward compatibility */}
                         <img
                             src={
                                 typeof image === 'string'
                                     ? image
-                                    : (image?.uuid ? `/api/images/${encodeURIComponent(image.uuid)}` : image?.url)
+                                    : (image?.uuid ? `/api/images/${encodeURIComponent(image.uuid)}` : image?.url || '')
                             }
                             alt="Post Image"
                             className={styles.postImage}
+                            onClick={() => handleImageClick(0)}
                         />
                     </div>
                 )}
@@ -271,6 +308,14 @@ export function Post(props: PostType) {
                 )}
             </div>
 
+            {/* Image Modal */}
+            {showImageModal && (
+                <ImageModal
+                    images={getModalImages()}
+                    initialIndex={modalImageIndex}
+                    onClose={() => setShowImageModal(false)}
+                />
+            )}
 
         </div>
     )

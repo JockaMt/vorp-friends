@@ -6,3 +6,6 @@ export { default as HeaderNav } from './HeaderNav';
 export { default as BottomNav } from './BottomNav';
 export { Skeleton, SkeletonText, SkeletonAvatar, SkeletonCard, SkeletonPost } from './Skeleton';
 export { PostUpdateToast } from './PostUpdateToast';
+export { ImageModal } from './ImageModal';
+export { ImageCarousel } from './ImageCarousel';
+export { OptimizedImage } from './OptimizedImage';

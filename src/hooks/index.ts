@@ -3,3 +3,4 @@ export * from './usePosts';
 export * from './useAuthenticatedFetch';
 export * from './usePostFilter';
 export * from './usePendingFriendRequests';
+export * from './useImageCache';

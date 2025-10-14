@@ -22,7 +22,8 @@ export function PostsFeed({ filter = 'all' }: PostsFeedProps) {
   // Sistema de polling para atualizações
   const { hasNewPosts, newPostsCount, markAsChecked, refreshPage } = usePostUpdates({
     intervalMs: 5 * 60 * 1000, // 5 minutos
-    enabled: true
+    enabled: true,
+    currentFirstPostId: posts.length > 0 ? posts[0].id : undefined
   });
 
   const handleObserver = useCallback((entries: IntersectionObserverEntry[]) => {
@@ -159,7 +160,7 @@ export function PostsFeed({ filter = 'all' }: PostsFeedProps) {
                     shares={0}
                     date={new Date(post.createdAt).toISOString()}
                     text={post.content}
-                    image={post.images?.[0]}
+                    images={post.images}
                     location={post.location}
                     isLiked={post.isLiked}
                     onLike={() => handleLike(post.id, post.isLiked || false)}

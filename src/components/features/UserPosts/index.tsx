@@ -21,19 +21,19 @@ export function UserPosts({ authorId }: UserPostsProps) {
   const fetchUserPosts = async (pageNum = 1, reset = false) => {
     if (isLoading) return;
     setIsLoading(true);
-    
+
     try {
       const response = await fetch(`/api/posts/feed?authorId=${encodeURIComponent(authorId)}&page=${pageNum}&limit=10`);
       if (!response.ok) throw new Error('Erro ao carregar posts');
-      
+
       const data = await response.json();
-      
+
       if (reset) {
         setPosts(data.data);
       } else {
         setPosts(prev => [...prev, ...data.data]);
       }
-      
+
       setHasMore(pageNum < data.pagination.totalPages);
       setPage(pageNum);
     } catch (error) {
@@ -59,12 +59,12 @@ export function UserPosts({ authorId }: UserPostsProps) {
 
   const handleLike = async (postId: string, isLiked: boolean) => {
     // Optimistic update
-    setPosts(prev => prev.map(p => 
-      p.id === postId 
-        ? { ...p, isLiked: !isLiked, likesCount: (p.likesCount || 0) + (isLiked ? -1 : 1) } 
+    setPosts(prev => prev.map(p =>
+      p.id === postId
+        ? { ...p, isLiked: !isLiked, likesCount: (p.likesCount || 0) + (isLiked ? -1 : 1) }
         : p
     ));
-    
+
     try {
       if (isLiked) {
         await actions.unlikePost(postId);
@@ -74,9 +74,9 @@ export function UserPosts({ authorId }: UserPostsProps) {
     } catch (err) {
       console.error('Erro ao curtir/descurtir:', err);
       // Revert on error
-      setPosts(prev => prev.map(p => 
-        p.id === postId 
-          ? { ...p, isLiked: isLiked, likesCount: (p.likesCount || 0) + (isLiked ? 1 : -1) } 
+      setPosts(prev => prev.map(p =>
+        p.id === postId
+          ? { ...p, isLiked: isLiked, likesCount: (p.likesCount || 0) + (isLiked ? 1 : -1) }
           : p
       ));
     }
@@ -86,7 +86,7 @@ export function UserPosts({ authorId }: UserPostsProps) {
     try {
       await actions.editPost(postId, newContent);
       // Atualizar post local
-      setPosts(prev => prev.map(p => 
+      setPosts(prev => prev.map(p =>
         p.id === postId ? { ...p, content: newContent } : p
       ));
     } catch (err) {
@@ -107,7 +107,7 @@ export function UserPosts({ authorId }: UserPostsProps) {
   return (
     <div>
       <h2 style={{ marginBottom: '1rem' }}>Posts</h2>
-      
+
       {isLoading && posts.length === 0 ? (
         <div className={styles.list}>
           {[...Array(3)].map((_, index) => (
@@ -134,7 +134,7 @@ export function UserPosts({ authorId }: UserPostsProps) {
               shares={0}
               date={new Date(p.createdAt).toISOString()}
               text={p.content}
-              image={p.images?.[0]}
+              images={p.images}
               location={p.location}
               isLiked={p.isLiked}
               onLike={() => handleLike(p.id, !!p.isLiked)}
@@ -149,9 +149,9 @@ export function UserPosts({ authorId }: UserPostsProps) {
 
           {hasMore && !isLoading && (
             <div style={{ textAlign: 'center', padding: '1rem' }}>
-              <button 
-                className="buttonPrimary" 
-                onClick={handleLoadMore} 
+              <button
+                className="buttonPrimary"
+                onClick={handleLoadMore}
                 disabled={isLoading}
               >
                 Carregar mais

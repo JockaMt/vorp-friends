@@ -21,6 +21,7 @@ export function PostInput() {
     const divRef = useRef<HTMLDivElement>(null);
     const emojiButtonRef = useRef<HTMLButtonElement>(null);
     const locationButtonRef = useRef<HTMLButtonElement>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const maxLength = 500;
     const [length, setLength] = useState(0);
     const [isPosting, setIsPosting] = useState(false);
@@ -29,6 +30,7 @@ export function PostInput() {
     const [showLocationPicker, setShowLocationPicker] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
     const [selectedImages, setSelectedImages] = useState<File[]>([]);
+    const [uploadProgress, setUploadProgress] = useState<string | null>(null);
     const { isSignedIn } = useAuth();
     const { actions } = usePosts();
 
@@ -83,6 +85,11 @@ export function PostInput() {
         setError(null);
 
         try {
+            // Mostrar progresso se há múltiplas imagens
+            if (selectedImages.length > 1) {
+                setUploadProgress(`Enviando ${selectedImages.length} imagens...`);
+            }
+
             // include location if selected
             const locationPayload = selectedLocation ? {
                 name: selectedLocation.name,
@@ -97,8 +104,23 @@ export function PostInput() {
             el.textContent = '';
             el.classList.add(styles.empty);
             setLength(0);
+
+            // Limpar imagens selecionadas
+            setSelectedImages([]);
+
+            // Limpar input de arquivo
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '';
+            }
+
+            // Limpar localização selecionada
+            setSelectedLocation(null);
+
+            // Limpar progresso
+            setUploadProgress(null);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Erro ao criar post');
+            setUploadProgress(null);
         } finally {
             setIsPosting(false);
         }
@@ -232,6 +254,7 @@ export function PostInput() {
                     <label className={`${styles.iconButton} ${styles.fileLabel}`} title="Adicionar imagem">
                         <FaCamera />
                         <input
+                            ref={fileInputRef}
                             type="file"
                             accept="image/*"
                             multiple
@@ -268,22 +291,29 @@ export function PostInput() {
                         onClick={handleSubmit}
                         disabled={isPosting || !isSignedIn}
                     >
-                        {isPosting ? 'Postando...' : 'Postar'}
+                        {uploadProgress || (isPosting ? 'Postando...' : 'Postar')}
                     </button>
                 </div>
             </div>
             {selectedImages && selectedImages.length > 0 && (
-                <div className={styles.imagePreviewRow}>
-                    {selectedImages.map((file, idx) => {
-                        const url = URL.createObjectURL(file);
-                        return (
-                            <div key={idx} className={styles.previewItem}>
-                                <img src={url} alt={file.name} className={styles.previewImage} />
-                                <button type="button" className={styles.removeImageButton} onClick={() => removeImage(idx)} title="Remover imagem">×</button>
-                            </div>
-                        );
-                    })}
-                </div>
+                <>
+                    <div className={styles.imagePreviewRow}>
+                        {selectedImages.map((file, idx) => {
+                            const url = URL.createObjectURL(file);
+                            return (
+                                <div key={idx} className={styles.previewItem}>
+                                    <img src={url} alt={file.name} className={styles.previewImage} />
+                                    <button type="button" className={styles.removeImageButton} onClick={() => removeImage(idx)} title="Remover imagem">×</button>
+                                </div>
+                            );
+                        })}
+                    </div>
+                    {selectedImages.length > 1 && (
+                        <div className={styles.multiImageInfo}>
+                            <small>📸 {selectedImages.length} imagens serão enviadas sequencialmente</small>
+                        </div>
+                    )}
+                </>
             )}
 
             <div className={styles.charCount}>

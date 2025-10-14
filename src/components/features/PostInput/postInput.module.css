@@ -299,3 +299,13 @@
     justify-content: center;
     cursor: pointer;
 }
+
+.multiImageInfo {
+    text-align: center;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: var(--gray-alpha-100);
+    border-radius: var(--rounded-md);
+    color: var(--gray-alpha-600);
+    font-size: 0.85rem;
+}

@@ -212,15 +212,9 @@
 }
 
 .mediaContainer {
-    margin-top: 0.5em;
+    margin-top: 1em;
     border-radius: var(--rounded-md);
     overflow: hidden;
-    max-height: 400px;
-    /* Limita a altura máxima da imagem */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 1em;
     background-color: var(--gray-alpha-100);
     /* Cor de fundo enquanto a imagem carrega */
 }
@@ -228,7 +222,6 @@
 /* Mobile media container */
 @media (max-width: 768px) {
     .mediaContainer {
-        max-height: 300px;
         border-radius: var(--rounded);
     }
 }
@@ -238,6 +231,39 @@
     height: auto;
     object-fit: cover;
     /* Cobre o container, cortando se necessário */
+}
+
+.imagesGrid {
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    max-height: 400px;
+    overflow: hidden;
+}
+
+.imagesGrid .postImage {
+    height: 200px;
+    object-fit: cover;
+    border-radius: var(--rounded-md);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.imagesGrid .postImage:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Mobile images grid */
+@media (max-width: 768px) {
+    .imagesGrid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        max-height: 300px;
+    }
+
+    .imagesGrid .postImage {
+        height: 150px;
+    }
 }
 
 .postVideo {

@@ -124,45 +124,56 @@ export async function POST(request: NextRequest) {
         if (!vorpngToken) {
           console.error('VORPNG_API_TOKEN not set; skipping image upload');
         } else {
-          // try field names with 'file' first
-          const tryFieldNames = ['file', 'files', 'image', 'images', 'file[]'];
-          let uploadResp: Response | null = null;
+          // Upload each image individually to ensure compatibility
+          const uploadedImages: { uuid: string; url: string }[] = [];
 
-          for (const fieldName of tryFieldNames) {
-            const forward = new FormData();
-            for (const f of files) forward.append(fieldName, f);
+          for (const file of files) {
+            let uploadSuccessful = false;
+            const tryFieldNames = ['file', 'files', 'image', 'images'];
 
-            try {
-              uploadResp = await fetch('https://vorpng.caiots.dev/images/upload', {
-                method: 'POST',
-                headers: { Authorization: `Bearer ${vorpngToken}` },
-                body: forward as any
-              });
-            } catch (e) {
-              console.error('Erro ao conectar ao vorpng:', e);
-              uploadResp = null;
+            for (const fieldName of tryFieldNames) {
+              const singleFileForm = new FormData();
+              singleFileForm.append(fieldName, file);
+
+              try {
+                const uploadResp = await fetch('https://vorpng.caiots.dev/images/upload', {
+                  method: 'POST',
+                  headers: { Authorization: `Bearer ${vorpngToken}` },
+                  body: singleFileForm as any
+                });
+
+                if (uploadResp.ok) {
+                  const uplJson = await uploadResp.json();
+                  const refs = await extractImageRefsFromVorpngResponse(uplJson);
+                  if (refs.length > 0) {
+                    uploadedImages.push(refs[0]); // Take the first (and should be only) image
+                    uploadSuccessful = true;
+                    console.log(`Successfully uploaded image with field name '${fieldName}':`, refs[0]);
+                    break;
+                  }
+                } else {
+                  const bodyText = await uploadResp.text().catch(() => '');
+                  if (uploadResp.status === 400 && /Unexpected field/i.test(bodyText)) {
+                    console.warn(`vorpng rejected field '${fieldName}' for file ${file.name}, trying next`);
+                    continue;
+                  }
+                  console.warn(`Upload failed for ${file.name} with field '${fieldName}':`, uploadResp.status, bodyText);
+                  break;
+                }
+              } catch (e) {
+                console.error(`Erro ao conectar ao vorpng para arquivo ${file.name}:`, e);
+                break;
+              }
             }
 
-            if (!uploadResp) continue;
-            if (uploadResp.ok) break;
-
-            const bodyText = await uploadResp.text().catch(() => '');
-            if (uploadResp.status === 400 && /Unexpected field/i.test(bodyText)) {
-              console.warn(`vorpng rejected field '${fieldName}', trying next`);
-              continue;
+            if (!uploadSuccessful) {
+              console.warn(`Failed to upload file: ${file.name}`);
+              // Continue with other files even if one fails
             }
-
-            console.warn('Upload para vorpng falhou:', uploadResp.status, bodyText);
-            break;
           }
 
-          if (uploadResp && uploadResp.ok) {
-            const uplJson = await uploadResp.json();
-            const refs = await extractImageRefsFromVorpngResponse(uplJson);
-            images = refs;
-          } else {
-            console.warn('Vorpng upload not successful');
-          }
+          images = uploadedImages;
+          console.log(`Successfully uploaded ${uploadedImages.length} out of ${files.length} images`);
         }
       }
     } else {
